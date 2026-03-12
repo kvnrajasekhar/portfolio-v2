@@ -1,13 +1,15 @@
 import HeroSection  from "./components/hero/HeroSection";
 import Navbar from "./components/navbar/Navbar";
+import SkillConstellation from "./components/SkillConstellation";
+
 
 function App() {
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-[#e4decd] dark:bg-[#000000] text-[#5cbdb9] dark:text-[#fbe3e8] transition-colors duration-300">
       <Navbar />
-
       <div className="">
           <HeroSection />
+          <SkillConstellation />
       </div>
     </div>
   );

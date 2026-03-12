@@ -24,137 +24,125 @@ const Navbar = () => {
         flex items-center justify-between
         w-[90%] max-w-6xl
         px-6 py-3
-        border border-black/20 dark:border-white/20
+        border border-[#5cbdb9]/20
+        dark:border-[#fbe3e8]/20
         rounded-full
         backdrop-blur-xl
-        bg-white/60 dark:bg-black/60
+        
         shadow-lg
         transition-colors duration-300
         "
       >
         {/* Logo */}
-        <h1 className="text-black dark:text-white font-semibold text-lg tracking-wide">
+        <h1 className="text-[#5cbdb9] dark:text-[#fbe3e8] font-semibold text-lg tracking-wide">
           Raja
         </h1>
 
         {/* Desktop Links */}
-       <ul className="hidden md:flex items-center gap-3">
-      {navLinks.map((nav, i) => (
-        <li
-          key={i}
-          className="relative"
-          onMouseEnter={() => setOpenDropdown(i)}
-          onMouseLeave={() => setOpenDropdown(null)}
-        >
-          {/* NORMAL LINK */}
-          {!nav.dropdown && (
-            <motion.a
-              whileHover={{ scale: 1.05 }}
-              href={nav.link}
-              className="
-              px-4 py-2 text-sm
-              text-black/80 dark:text-white/80
-              hover:text-white hover:bg-black/80
-              dark:hover:bg-white dark:hover:text-black
-              rounded-full transition
-              "
+        <ul className="hidden md:flex items-center gap-3">
+          {navLinks.map((nav, i) => (
+            <li
+              key={i}
+              className="relative"
+              onMouseEnter={() => setOpenDropdown(i)}
+              onMouseLeave={() => setOpenDropdown(null)}
             >
-              {nav.name}
-            </motion.a>
-          )}
-
-          {/* DROPDOWN BUTTON */}
-          {nav.dropdown && (
-            <>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="
-                flex items-center gap-1
-                px-4 py-2 text-sm
-                text-black/80 dark:text-white/80
-                hover:text-white hover:bg-black/80
-                dark:hover:bg-white dark:hover:text-black
-                rounded-full transition
-                "
-              >
-                {nav.name}
-
-                <motion.span
-                  animate={{ rotate: openDropdown === i ? 180 : 0 }}
-                  transition={{ duration: 0.25 }}
+              {!nav.dropdown && (
+                <motion.a
+                  whileHover={{ scale: 1.05 }}
+                  href={nav.link}
+                  className="
+                  px-4 py-2 text-sm
+                  text-[#5cbdb9] dark:text-[#fbe3e8]
+                  hover:bg-[#fbe3e8] hover:text-[#262626] hover:drop-shadow-[0_0_1px_rgba(0,0,0,1)]
+                  dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626] dark:hover:drop-shadow-[0_0_1px_white]
+                  rounded-full transition
+                  "
                 >
-                  <FiChevronDown size={14} />
-                </motion.span>
-              </motion.button>
+                  {nav.name}
+                </motion.a>
+              )}
 
-              {/* DROPDOWN MENU */}
-              <AnimatePresence>
-                {openDropdown === i && (
-                  <motion.ul
-                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
+              {nav.dropdown && (
+                <>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
                     className="
-                    absolute top-12 right-0
-                    w-44
-                    bg-white/70 dark:bg-black/70
-                    backdrop-blur-xl
-                    border border-black/10 dark:border-white/10
-                    rounded-xl
-                    shadow-xl
-                    p-2
-                    origin-top
+                    flex items-center gap-1
+                    px-4 py-2 text-sm
+                    text-[#5cbdb9] dark:text-[#fbe3e8] 
+                    hover:bg-[#fbe3e8] hover:text-[#262626] 
+                    dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626]
+                    rounded-full transition
                     "
                   >
-                    {nav.dropdown.map((item, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
+                    {nav.name}
+
+                    <motion.span
+                      animate={{ rotate: openDropdown === i ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <FiChevronDown size={14} />
+                    </motion.span>
+                  </motion.button>
+
+                  <AnimatePresence>
+                    {openDropdown === i && (
+                      <motion.ul
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        className="
+                        absolute top-12 right-0
+                        w-44
+                        backdrop-blur-xl
+                        border border-[#5cbdb9]/20
+                        rounded-xl
+                        shadow-xl
+                        p-2
+                        "
                       >
-                        <a
-                          href={item.link}
-                          className="
-                          block px-3 py-2 rounded-lg text-sm
-                          text-black/80 dark:text-white/80
-                          hover:bg-black/90 hover:text-white
-                          dark:hover:bg-white/90 dark:hover:text-black
-                          transition
-                          "
-                        >
-                          {item.name}
-                        </a>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
-            </>
-          )}
-        </li>
-      ))}
-    </ul>
+                        {nav.dropdown.map((item, index) => (
+                          <motion.li
+                            key={index}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                          >
+                            <a
+                              href={item.link}
+                              className="
+                              block px-3 py-2 rounded-lg text-sm
+                              text-[#5cbdb9] dark:text-[#fbe3e8]
+                              hover:bg-[#fbe3e8] hover:text-[#262626] hover:drop-shadow-[0_0_1px_rgba(0,0,0,1)]
+                              dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626] dark:hover:drop-shadow-[0_0_1px_white]
+                              transition
+                              "
+                            >
+                              {item.name}
+                            </a>
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
 
         {/* Right Icons */}
         <div className="flex items-center gap-4">
-          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="
-            text-xl
-            text-black dark:text-white
-            hover:scale-110
-            transition
-            "
+            className="text-xl text-[#5cbdb9] dark:text-[#fbe3e8] hover:scale-110 transition"
           >
             {theme === "dark" ? <FiSun /> : <FiMoon />}
           </button>
 
-          {/* Mobile Menu */}
           <button
-            className="md:hidden text-xl text-black dark:text-white"
+            className="md:hidden text-xl text-[#5cbdb9] dark:text-[#fbe3e8]"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <FiX /> : <FiMenu />}
@@ -170,16 +158,12 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="
-            absolute
-            top-24
+            absolute top-24
             w-[90%]
-            bg-white/80 dark:bg-black/70
+            bg-white/90 dark:bg-[#262626]/90
             backdrop-blur-xl
-            border border-black/10 dark:border-white/10
             rounded-2xl
-            shadow-xl
-            p-6
-            md:hidden
+            p-6 md:hidden
             "
           >
             <ul className="flex flex-col gap-6 text-center">
@@ -189,12 +173,7 @@ const Navbar = () => {
                     <a
                       href={nav.link}
                       onClick={() => setMenuOpen(false)}
-                      className="
-                      text-black dark:text-white
-                      text-lg
-                      hover:opacity-70
-                      px-4 py-2 rounded-full transition
-                      "
+                      className="text-[#5cbdb9] dark:text-[#fbe3e8] text-lg"
                     >
                       {nav.name}
                     </a>
@@ -204,19 +183,13 @@ const Navbar = () => {
                         onClick={() =>
                           setMobileMoreOpen(!mobileMoreOpen)
                         }
-                        className="
-                        flex items-center justify-center gap-2
-                        text-black dark:text-white
-                        text-lg font-semibold
-                        "
+                        className="flex items-center justify-center gap-2 text-lg font-semibold"
                       >
                         {nav.name}
-
                         <motion.span
                           animate={{
                             rotate: mobileMoreOpen ? 180 : 0,
                           }}
-                          transition={{ duration: 0.2 }}
                         >
                           <FiChevronDown />
                         </motion.span>
@@ -238,12 +211,7 @@ const Navbar = () => {
                                   setMenuOpen(false);
                                   setMobileMoreOpen(false);
                                 }}
-                                className="
-                                text-black/80 dark:text-white/80
-                                hover:opacity-70
-                                px-4 py-2 rounded-full
-                                transition
-                                "
+                                className="text-[#5cbdb9] dark:text-[#fbe3e8]"
                               >
                                 {item.name}
                               </a>
