@@ -1,6 +1,7 @@
 import HeroSection  from "./components/hero/HeroSection";
 import Navbar from "./components/navbar/Navbar";
 import SkillConstellation from "./components/SkillConstellation";
+import WarpTransition from "./components/transition/WrapTransition";
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
       <Navbar />
       <div className="">
           <HeroSection />
+          <WarpTransition />
           <SkillConstellation />
       </div>
     </div>

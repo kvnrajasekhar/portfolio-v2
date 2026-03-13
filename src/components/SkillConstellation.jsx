@@ -540,6 +540,7 @@ export default function SkillConstellation() {
         minHeight: isMobile ? "100vh" : "100vh",
       }}
     >
+      
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
