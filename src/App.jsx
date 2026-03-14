@@ -1,3 +1,4 @@
+import EngineeringManifesto from "./components/EngineeringManifesto";
 import HeroSection  from "./components/hero/HeroSection";
 import Navbar from "./components/navbar/Navbar";
 import SkillConstellation from "./components/SkillConstellation";
@@ -12,6 +13,7 @@ function App() {
           <HeroSection />
           <WarpTransition />
           <SkillConstellation />
+          <EngineeringManifesto />
       </div>
     </div>
   );
