@@ -564,7 +564,7 @@ export default function SkillConstellation() {
         }}>
           Skills Constellation
         </h2>
-        <p style={{ color: "#ffffff44", fontSize: 12, marginTop: 10, letterSpacing: "0.15em" }}>
+        <p style={{ color: "#ffffff44", fontSize: 13, marginTop: 10, letterSpacing: "0.15em" }}>
           {isMobile ? "Tap a category to expand" : "Hover over a cluster to explore — each star is a skill"}
         </p>
       </motion.div>

@@ -198,7 +198,7 @@ export default function WarpTransition() {
         ctx.fillText("✦  Now! We are  ✦", cx, cy - (W < 500 ? 36 : 52));
 
         // Main label
-        ctx.font        = `bold ${W < 500 ? 18 : 36}px 'Courier New', monospace`;
+        ctx.font        = `bold ${W < 500 ? 14 : 36}px 'Courier New', monospace`;
         ctx.fillStyle   = "#ffffff";
         ctx.textAlign   = "center";
         ctx.shadowBlur  = 18;

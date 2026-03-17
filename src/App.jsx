@@ -4,6 +4,7 @@ import HeroSection  from "./components/hero/HeroSection";
 import Navbar from "./components/navbar/Navbar";
 import SkillConstellation from "./components/SkillConstellation";
 import WarpTransition from "./components/transition/WrapTransition";
+import BentoGrid from "./components/BentoGrid";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <SkillConstellation />
           <EngineeringManifesto />
           <RibbonBanners />
+          <BentoGrid />
       </div>
     </div>
   );
