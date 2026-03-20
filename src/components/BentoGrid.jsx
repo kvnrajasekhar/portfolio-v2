@@ -416,7 +416,7 @@ export default function BentoGrid() {
         <section style={{
             width: "100%",
             background: isDark ? "#000000" : "#ffffff",
-            padding: "clamp(56px,9vw,110px) clamp(16px,6vw,80px)",
+            padding: "clamp(45px,3vw,110px) clamp(16px,6vw,80px)",
             transition: "background 0.4s ease",
             fontFamily: "'Courier New', monospace",
         }}>

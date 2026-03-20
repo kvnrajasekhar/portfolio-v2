@@ -5,6 +5,7 @@ import Navbar from "./components/navbar/Navbar";
 import SkillConstellation from "./components/SkillConstellation";
 import WarpTransition from "./components/transition/WrapTransition";
 import BentoGrid from "./components/BentoGrid";
+import PreFooter from "./components/PreFooter";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <EngineeringManifesto />
           <RibbonBanners />
           <BentoGrid />
+          <PreFooter />
       </div>
     </div>
   );
