@@ -14,141 +14,124 @@ const BIG_WORDS = [
 // ── Glowing meta circle ───────────────────────────────────────────────────────
 function MetaCircle({ isDark }) {
   const canvasRef = useRef(null);
-  const animRef   = useRef(null);
-  const tickRef   = useRef(0);
+  const requestRef = useRef();
+  const timeRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const dpr = window.devicePixelRatio || 1;
-    const S   = 400;
-    canvas.width  = S * dpr;
-    canvas.height = S * dpr;
-    ctx.scale(dpr, dpr);
-    const cx = S / 2, cy = S / 2;
 
-    const draw = () => {
-      tickRef.current += 0.006;
-      const t = tickRef.current;
-      ctx.clearRect(0, 0, S, S);
-
-      // ── Outer diffused halo layers ──
-      const haloColors = isDark
-        ? ["#5cbdb9", "#c9b8f5", "#fbe3e8"]
-        : ["#2a9e9a", "#6040c0", "#c04070"];
-
-      haloColors.forEach((col, i) => {
-        const r   = 155 + i * 18 + 12 * Math.sin(t * 0.6 + i * 1.2);
-        const off = 18 * Math.sin(t * 0.4 + i * 2.1);
-        const g   = ctx.createRadialGradient(cx + off, cy + off * 0.6, 0, cx, cy, r);
-        g.addColorStop(0,   col + (isDark ? "44" : "55"));
-        g.addColorStop(0.55, col + "18");
-        g.addColorStop(1,   col + "00");
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.fillStyle = g;
-        ctx.fill();
-      });
-
-      // ── Main sphere ──
-      const sphereR = 95 + 3 * Math.sin(t * 0.8);
-      const sg = ctx.createRadialGradient(
-        cx - sphereR * 0.32, cy - sphereR * 0.32, sphereR * 0.05,
-        cx, cy, sphereR
-      );
-      if (isDark) {
-        sg.addColorStop(0,    "rgba(255,255,255,0.22)");
-        sg.addColorStop(0.2,  "rgba(92,189,185,0.85)");
-        sg.addColorStop(0.55, "rgba(201,184,245,0.75)");
-        sg.addColorStop(0.85, "rgba(251,227,232,0.55)");
-        sg.addColorStop(1,    "rgba(92,189,185,0.15)");
-      } else {
-        sg.addColorStop(0,    "rgba(255,255,255,0.55)");
-        sg.addColorStop(0.2,  "rgba(42,158,154,0.82)");
-        sg.addColorStop(0.55, "rgba(96,64,192,0.72)");
-        sg.addColorStop(0.85, "rgba(192,64,112,0.55)");
-        sg.addColorStop(1,    "rgba(42,158,154,0.18)");
-      }
-      ctx.save();
-      ctx.shadowBlur  = isDark ? 48 : 32;
-      ctx.shadowColor = isDark ? "#5cbdb9" : "#2a9e9a";
-      ctx.beginPath();
-      ctx.arc(cx, cy, sphereR, 0, Math.PI * 2);
-      ctx.fillStyle = sg;
-      ctx.fill();
-      ctx.restore();
-
-      // ── Specular highlight ──
-      const hl = ctx.createRadialGradient(
-        cx - sphereR * 0.3, cy - sphereR * 0.35, 0,
-        cx - sphereR * 0.2, cy - sphereR * 0.2, sphereR * 0.55
-      );
-      hl.addColorStop(0,   "rgba(255,255,255,0.55)");
-      hl.addColorStop(0.5, "rgba(255,255,255,0.08)");
-      hl.addColorStop(1,   "rgba(255,255,255,0)");
-      ctx.beginPath();
-      ctx.arc(cx, cy, sphereR, 0, Math.PI * 2);
-      ctx.fillStyle = hl;
-      ctx.fill();
-
-      // ── Rim glow ring ──
-      const ringR = sphereR + 10 + 4 * Math.sin(t * 1.2);
-      const rg = ctx.createRadialGradient(cx, cy, sphereR - 4, cx, cy, ringR + 8);
-      rg.addColorStop(0,   isDark ? "rgba(92,189,185,0.55)" : "rgba(42,158,154,0.5)");
-      rg.addColorStop(0.5, isDark ? "rgba(201,184,245,0.2)" : "rgba(96,64,192,0.2)");
-      rg.addColorStop(1,   "rgba(0,0,0,0)");
-      ctx.beginPath();
-      ctx.arc(cx, cy, ringR + 8, 0, Math.PI * 2);
-      ctx.fillStyle = rg;
-      ctx.fill();
-
-      // ── Orbiting dot ──
-      const orbitR  = sphereR + 22 + 4 * Math.sin(t * 0.5);
-      const orbitX  = cx + Math.cos(t * 0.7) * orbitR;
-      const orbitY  = cy + Math.sin(t * 0.7) * orbitR * 0.45;
-      const dotCol  = isDark ? "#fbe3e8" : "#c04070";
-      ctx.save();
-      ctx.shadowBlur  = 14;
-      ctx.shadowColor = dotCol;
-      ctx.beginPath();
-      ctx.arc(orbitX, orbitY, 4.5, 0, Math.PI * 2);
-      ctx.fillStyle = dotCol;
-      ctx.fill();
-      ctx.restore();
-
-      // ── Second smaller orbiting dot ──
-      const orbit2X = cx + Math.cos(t * 0.5 + Math.PI) * (orbitR - 10);
-      const orbit2Y = cy + Math.sin(t * 0.5 + Math.PI) * (orbitR - 10) * 0.4;
-      const dot2Col = isDark ? "#c9b8f5" : "#6040c0";
-      ctx.save();
-      ctx.shadowBlur  = 10;
-      ctx.shadowColor = dot2Col;
-      ctx.beginPath();
-      ctx.arc(orbit2X, orbit2Y, 3, 0, Math.PI * 2);
-      ctx.fillStyle = dot2Col;
-      ctx.fill();
-      ctx.restore();
-
-      animRef.current = requestAnimationFrame(draw);
+    const resize = () => {
+      canvas.width = 500 * dpr;
+      canvas.height = 500 * dpr;
+      ctx.scale(dpr, dpr);
     };
 
-    animRef.current = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(animRef.current);
+    resize();
+
+    const draw = () => {
+      timeRef.current += 0.015;
+      const t = timeRef.current;
+      const { width, height } = canvas.getBoundingClientRect();
+      const cx = 250;
+      const cy = 250;
+
+      ctx.clearRect(0, 0, 500, 500);
+
+      // --- 1. Background Glow Ring ---
+      const gradient = ctx.createRadialGradient(cx, cy, 140, cx, cy, 180);
+      gradient.addColorStop(0, isDark ? "rgba(186, 42, 226, 0)" : "rgba(42, 158, 154, 0)");
+      gradient.addColorStop(0.5, isDark ? "rgba(226, 42, 158, 0.4)" : "rgba(42, 158, 154, 0.3)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, 180, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // --- 2. Dynamic Glowing Ring ---
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 150, 0, Math.PI * 2);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = isDark ? "#ff2ae0" : "#2a9e9a";
+      ctx.shadowBlur = 25;
+      ctx.shadowColor = isDark ? "#ff2ae0" : "#2a9e9a";
+      ctx.stroke();
+      ctx.restore();
+
+      // --- 3. Abstract Waves (The "Fluid" part) ---
+      // We use 'lighter' to make overlapping lines glow brighter
+      ctx.globalCompositeOperation = "lighter";
+
+      const drawWave = (offset, color, amplitude, freq) => {
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = color;
+
+        for (let i = 0; i <= 360; i += 2) {
+          const angle = (i * Math.PI) / 180;
+          // Deform the radius using multiple sine waves
+          const p = (angle + t * freq) * 3;
+          const deformation = Math.sin(p + offset) * amplitude;
+          const r = 130 + deformation;
+
+          const x = cx + Math.cos(angle) * r;
+          const y = cy + Math.sin(angle) * r;
+
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      };
+
+      // Wave Layers
+      if (isDark) {
+        drawWave(0, "rgba(0, 255, 255, 0.6)", 25, 0.5);   // Cyan
+        drawWave(2, "rgba(186, 42, 226, 0.5)", 35, -0.3); // Purple
+        drawWave(4, "rgba(42, 92, 255, 0.4)", 15, 0.8);  // Blue
+      } else {
+        drawWave(0, "rgba(0, 255, 255, 0.6)", 20, 0.4);  // Teal
+        drawWave(2, "rgba(186, 42, 226, 0.5)", 35, -0.3);
+        drawWave(4, "rgba(96, 64, 192, 0.4)", 30, -0.2);  // Violet
+      }
+
+      // --- 4. Particles (Floating Dots) ---
+      for (let i = 0; i < 5; i++) {
+        const pAngle = t * 0.5 + (i * Math.PI) / 2.5;
+        const px = cx + Math.cos(pAngle) * 190;
+        const py = cy + Math.sin(pAngle) * 190;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? "#fff" : "#2a9e9a";
+        ctx.fill();
+      }
+
+      requestRef.current = requestAnimationFrame(draw);
+    };
+
+    requestRef.current = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(requestRef.current);
   }, [isDark]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        width:  "clamp(200px, 30vw, 340px)",
-        height: "clamp(200px, 30vw, 340px)",
-        display: "block",
-        flexShrink: 0,
-      }}
-    />
+    <div className="flex items-center justify-center p-4">
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: "400px",
+          height: "400px",
+          filter: "contrast(1.1) brightness(1.1)",
+        }}
+      />
+    </div>
   );
-}
+};
 
 // ── Stacked big words — NO gradient, uses solid + outline alternation ─────────
 function BigWords({ isDark }) {
@@ -169,8 +152,8 @@ function BigWords({ isDark }) {
     }}>
       {BIG_WORDS.map((word, i) => {
         const isOutline = i % 2 === 1;
-        const color     = solidColors[i];
-        const delay     = i * 0.08;
+        const color = solidColors[i];
+        const delay = i * 0.08;
 
         return (
           <motion.div
@@ -212,12 +195,12 @@ function BigWords({ isDark }) {
 // ── Main export ───────────────────────────────────────────────────────────────
 export default function PreFooter() {
   const { theme } = useTheme();
-  const isDark    = theme === "dark";
-  const ref       = useRef(null);
-  const inView    = useInView(ref, { once: true, margin: "-80px" });
+  const isDark = theme === "dark";
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const bg      = isDark ? "#000000" : "#ffffff";
-  const textSec = isDark ? "rgba(255,255,255,0.42)" : "rgba(10,18,18,0.52)";
+  const bg = isDark ? "#000000" : "#ffffff";
+  const textSec = isDark ? "rgba(255,255,255,0.42)" : "rgb(10, 18, 18)";
   const borderC = isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)";
 
   return (
@@ -260,10 +243,10 @@ export default function PreFooter() {
         <div key={i} style={{
           position: "absolute", ...pos,
           width: 18, height: 18, pointerEvents: "none",
-          borderTop:    i < 2  ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
+          borderTop: i < 2 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
           borderBottom: i >= 2 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
-          borderLeft:   i % 2 === 0 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
-          borderRight:  i % 2 === 1 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
+          borderLeft: i % 2 === 0 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
+          borderRight: i % 2 === 1 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
         }} />
       ))}
 
@@ -283,7 +266,7 @@ export default function PreFooter() {
           initial={{ opacity: 0, y: -12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          style={{ display: "flex", alignItems: "center", gap: 12 , padding:`clamp(0px, 0vw, 0px) clamp(12px, 3vw, 28px)`}}
+          style={{ display: "flex", alignItems: "center", gap: 12, padding: `clamp(0px, 0vw, 0px) clamp(12px, 3vw, 28px)` }}
         >
           <div style={{ width: 28, height: 1.5, background: isDark ? "#5cbdb9" : "#2a9e9a" }} />
           <span style={{
@@ -381,13 +364,13 @@ export default function PreFooter() {
           {/* Stat chips */}
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {[
-              { label: "Projects Shipped", value: "4+",    color: isDark ? "#5cbdb9"  : "#2a9e9a" },
-              { label: "Stack Depth",      value: "Full",   color: isDark ? "#c9b8f5"  : "#6040c0" },
-              { label: "Experience",       value: "1+ Yrs", color: isDark ? "#fbe3e8"  : "#c04070" },
+              { label: "Projects Shipped", value: "4+", color: isDark ? "#5cbdb9" : "#2a9e9a" },
+              { label: "Stack Depth", value: "Full", color: isDark ? "#c9b8f5" : "#6040c0" },
+              { label: "Experience", value: "1+ Yrs", color: isDark ? "#fbe3e8" : "#c04070" },
             ].map(chip => (
               <div key={chip.label} style={{
                 display: "flex", flexDirection: "column", alignItems: "center",
-                background: isDark ? `${chip.color}10` : "#ffffff",
+                background: isDark ? `${chip.color}10` : `${chip.color}25`,
                 border: `1px solid ${chip.color}${isDark ? "33" : "77"}`,
                 borderRadius: 6,
                 padding: "8px 16px",
@@ -424,7 +407,7 @@ export default function PreFooter() {
           <div style={{ flex: 1, height: 1, background: borderC }} />
           <span style={{
             fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase",
-            color: isDark ? "rgba(255,255,255,0.18)" : "rgba(10,80,70,0.4)",
+            color: isDark ? "rgba(255,255,255,0.18)" : "rgba(10, 80, 70, 0.96)",
           }}>
             V N Rajasekhar  — Portfolio — {new Date().getFullYear()}
           </span>

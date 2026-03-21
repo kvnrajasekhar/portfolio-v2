@@ -678,7 +678,7 @@ export default function BentoGrid() {
                     <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.18)" }} />
                     <span style={{
                         fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase",
-                        color: isDark ? "rgba(255,255,255,0.2)" : "rgba(10,80,70,0.45)",
+                        color: isDark ? "rgba(255,255,255,0.2)" : "rgb(10, 80, 70)",
                     }}>
                         Rajasekhar — Verticals of Excellence — v1.0
                     </span>

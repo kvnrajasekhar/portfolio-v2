@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiMapPin, FiLayers } from "react-icons/fi";
+import { useTheme } from "../../context/ThemeContext";
+import GlowingName from "./GlowingNamw";
 
 const HeroSection = () => {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -13,6 +15,9 @@ const HeroSection = () => {
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
   }, []);
+
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <section className="h-screen w-full flex flex-col justify-center items-center relative px-8 text-center overflow-hidden">
@@ -35,26 +40,7 @@ const HeroSection = () => {
       <div className="flex flex-col items-center gap-6 z-10">
 
         {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 80 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9 }}
-          className="
-          text-[12vw]
-          font-extrabold
-          tracking-tight
-          dark:bg-[#fbe3e8]
-          dark:drop-shadow-[0_0_1px_white]
-          bg-[#5cbdb9]
-          drop-shadow-[0_0_1px_rgba(0,0,0,1)]
-          bg-[length:200%]
-          animate-gradient
-          bg-clip-text
-          text-transparent
-          "
-        >
-          Rajasekhar
-        </motion.h1>
+        <GlowingName />
 
         <motion.p
           initial={{ opacity: 0 }}
@@ -82,12 +68,12 @@ const HeroSection = () => {
           <FiMapPin className="text-[#5cbdb9]" />
           <p className="font-semibold uppercase">Hyderabad</p>
           <p className="text-gray-400 uppercase text-xs">
-           <span className="text-orange-400 font-bold">I</span>
-           <span className="text-orange-400 font-bold">N</span>
-           <span className="dark:text-white font-bold">D</span> 
-           <span className="text-green-400 font-bold">I</span> 
-           <span className="text-green-400 font-bold">A</span> 
-           </p>
+            <span className="text-orange-400 font-bold">I</span>
+            <span className="text-orange-400 font-bold">N</span>
+            <span className="dark:text-white font-bold">D</span>
+            <span className="text-green-400 font-bold">I</span>
+            <span className="text-green-400 font-bold">A</span>
+          </p>
         </div>
 
         <div className="flex flex-col items-center gap-1">
