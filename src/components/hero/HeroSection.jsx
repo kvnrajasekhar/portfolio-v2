@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiMapPin, FiLayers } from "react-icons/fi";
 import { useTheme } from "../../context/ThemeContext";
-import GlowingName from "./GlowingNamw";
+import GlowingName from "./GlowingName";
 
 const HeroSection = () => {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -87,11 +87,35 @@ const HeroSection = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 1.5 }}
-        className="absolute bottom-6 w-[2px] h-8 bg-[#5cbdb9] dark:bg-[#fbe3e8]"
-      />
+      <div className="absolute bottom-2 flex flex-col items-center gap-3">
+        {/* The Mouse Body */}
+        <div className="w-5 h-8 border-2 border-[#5cbdb9] dark:border-[#fbe3e8] rounded-full relative flex justify-center p-1">
+
+          {/* The Animated Scroll Wheel (The Dot) */}
+          <motion.div
+            animate={{
+              y: [0, 12, 0],
+              opacity: [0, 1, 0]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="w-1.5 h-1.5 bg-[#5cbdb9] dark:bg-[#fbe3e8] rounded-full"
+          />
+        </div>
+
+        {/* Optional: The "Scroll" Text */}
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="text-[10px] uppercase tracking-widest text-[#5cbdb9] dark:text-[#fbe3e8] font-medium"
+        >
+          Scroll
+        </motion.span>
+      </div>  
 
     </section>
   );

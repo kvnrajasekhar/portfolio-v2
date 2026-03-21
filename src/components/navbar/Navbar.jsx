@@ -9,6 +9,8 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import { useTheme } from "../../context/ThemeContext";
+import darkLogo from "../../assets/portfolio-dark-logo.png";
+import lightLogo from "../../assets/portfolio-light-logo.png";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,6 +18,7 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 py-6 flex justify-center">
@@ -34,9 +37,15 @@ const Navbar = () => {
         "
       >
         {/* Logo */}
-        <h1 className="text-[#5cbdb9] dark:text-[#fbe3e8] font-semibold text-lg tracking-wide">
-          Raja
-        </h1>
+        <a href="/" >
+          <img
+            src={isDark ? darkLogo : lightLogo}
+            alt="Logo"
+            width={38}
+            height={38}
+            className="inline-block mr-2"
+          />
+        </a>
 
         {/* Desktop Links */}
         <ul className="hidden md:flex items-center gap-3">
