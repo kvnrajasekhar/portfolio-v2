@@ -384,7 +384,7 @@ export default function MasterFooter() {
   const inView       = useInView(footerRef, { once: true, margin: "-60px" });
 
   const accent  = isDark ? "#fbe3e8" : "#5cbdb9";
-  const bg      = isDark ? "#0101010" : "#ffffff";
+  const bg      = isDark ? "#010101" : "#ffffff";
   const border  = isDark ? "rgba(255,255,255,0.08)" : "rgba(92,189,185,0.16)";
   const muted   = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.42)";
   const text    = isDark ? "rgba(255,255,255,0.8)"  : "rgba(10,18,18,0.8)";
