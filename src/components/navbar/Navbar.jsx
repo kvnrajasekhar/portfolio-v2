@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom"; // Added for Client-Side Routing
 import navLinks from "./Navlinks";
 import {
   FiMoon,
@@ -31,13 +32,12 @@ const Navbar = () => {
         dark:border-[#fbe3e8]/20
         rounded-full
         backdrop-blur-xl
-        
         shadow-lg
         transition-colors duration-300
         "
       >
-        {/* Logo */}
-        <a href="/" >
+        {/* Logo - Changed <a> to <Link> */}
+        <Link to="/" >
           <img
             src={isDark ? darkLogo : lightLogo}
             alt="Logo"
@@ -45,7 +45,7 @@ const Navbar = () => {
             height={38}
             className="inline-block mr-2"
           />
-        </a>
+        </Link>
 
         {/* Desktop Links */}
         <ul className="hidden md:flex items-center gap-3">
@@ -57,19 +57,20 @@ const Navbar = () => {
               onMouseLeave={() => setOpenDropdown(null)}
             >
               {!nav.dropdown && (
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  href={nav.link}
-                  className="
-                  px-4 py-2 text-sm
-                  text-[#5cbdb9] dark:text-[#fbe3e8]
-                  hover:bg-[#fbe3e8] hover:text-[#262626] hover:drop-shadow-[0_0_1px_rgba(0,0,0,1)]
-                  dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626] dark:hover:drop-shadow-[0_0_1px_white]
-                  rounded-full transition
-                  "
-                >
-                  {nav.name}
-                </motion.a>
+                <motion.div whileHover={{ scale: 1.05 }}>
+                  <Link
+                    to={nav.link} // Changed 'href' to 'to'
+                    className="
+                    px-4 py-2 text-sm
+                    text-[#5cbdb9] dark:text-[#fbe3e8]
+                    hover:bg-[#fbe3e8] hover:text-[#262626] hover:drop-shadow-[0_0_1px_rgba(0,0,0,1)]
+                    dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626] dark:hover:drop-shadow-[0_0_1px_white]
+                    rounded-full transition
+                    "
+                  >
+                    {nav.name}
+                  </Link>
+                </motion.div>
               )}
 
               {nav.dropdown && (
@@ -118,8 +119,8 @@ const Navbar = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
                           >
-                            <a
-                              href={item.link}
+                            <Link
+                              to={item.link} // Changed 'href' to 'to'
                               className="
                               block px-3 py-2 rounded-lg text-sm
                               text-[#5cbdb9] dark:text-[#fbe3e8]
@@ -129,7 +130,7 @@ const Navbar = () => {
                               "
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           </motion.li>
                         ))}
                       </motion.ul>
@@ -179,20 +180,20 @@ const Navbar = () => {
               {navLinks.map((nav, i) => (
                 <li key={i}>
                   {!nav.dropdown ? (
-                    <a
-                      href={nav.link}
+                    <Link
+                      to={nav.link} // Changed 'href' to 'to'
                       onClick={() => setMenuOpen(false)}
-                      className="text-[#5cbdb9] dark:text-[#fbe3e8] text-lg"
+                      className="text-[#5cbdb9] dark:text-[#fbe3e8] text-lg block"
                     >
                       {nav.name}
-                    </a>
+                    </Link>
                   ) : (
                     <div className="flex flex-col gap-3">
                       <button
                         onClick={() =>
                           setMobileMoreOpen(!mobileMoreOpen)
                         }
-                        className="flex items-center justify-center gap-2 text-lg font-semibold"
+                        className="flex items-center justify-center gap-2 text-lg font-semibold text-[#5cbdb9] dark:text-[#fbe3e8]"
                       >
                         {nav.name}
                         <motion.span
@@ -210,20 +211,20 @@ const Navbar = () => {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="flex flex-col gap-3"
+                            className="flex flex-col gap-3 overflow-hidden"
                           >
                             {nav.dropdown.map((item, index) => (
-                              <a
+                              <Link
                                 key={index}
-                                href={item.link}
+                                to={item.link} // Changed 'href' to 'to'
                                 onClick={() => {
                                   setMenuOpen(false);
                                   setMobileMoreOpen(false);
                                 }}
-                                className="text-[#5cbdb9] dark:text-[#fbe3e8]"
+                                className="text-[#5cbdb9] dark:text-[#fbe3e8] opacity-80 hover:opacity-100"
                               >
                                 {item.name}
-                              </a>
+                              </Link>
                             ))}
                           </motion.div>
                         )}

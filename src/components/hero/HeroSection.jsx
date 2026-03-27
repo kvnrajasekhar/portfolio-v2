@@ -48,7 +48,7 @@ const HeroSection = () => {
           transition={{ delay: 0.5 }}
           className="uppercase tracking-[0.4em] text-sm text-gray-600 dark:text-gray-400"
         >
-          Passionate about doing new things
+          Always chasing the next breakthrough
         </motion.p>
 
         <motion.p
@@ -57,7 +57,7 @@ const HeroSection = () => {
           transition={{ delay: 0.7 }}
           className="text-4xl font-oleo text-[#5cbdb9] dark:text-[#fbe3e8] max-w-2xl drop-shadow-[0_0_0.3px_rgba(0,0,0,1)] dark:drop-shadow-[0_0_0.3px_white]"
         >
-          learning new technologies.
+          learning, building, evolving.
         </motion.p>
       </div>
 
