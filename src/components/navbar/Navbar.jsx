@@ -22,7 +22,7 @@ const Navbar = () => {
   const isDark = theme === "dark";
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 py-6 flex justify-center">
+    <header className="fixed top-0 left-0 w-full z-50 py-6 flex justify-center ">
       <nav
         className="
         flex items-center justify-between

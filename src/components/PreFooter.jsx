@@ -120,7 +120,7 @@ function MetaCircle({ isDark }) {
   }, [isDark]);
 
   return (
-    <div className="flex items-center justify-center p-4">
+    <div className="flex items-center justify-center">
       <canvas
         ref={canvasRef}
         style={{
@@ -281,13 +281,21 @@ export default function PreFooter() {
         {/* ── Main row: words + circle ── */}
         <div style={{
           display: "flex",
+          // column for mobile, row for desktop
+          flexDirection: window.innerWidth < 768 ? "column" : "row",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "clamp(8px, 3vw, 30px)",
+          gap: "clamp(20px, 5vw, 40px)",
           flexWrap: "wrap",
         }}>
           <BigWords isDark={isDark} />
-          <MetaCircle isDark={isDark} />
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            width: window.innerWidth < 768 ? "100%" : "auto"
+          }}>
+            <MetaCircle isDark={isDark} />
+          </div>
         </div>
 
         {/* ── Tagline ── */}

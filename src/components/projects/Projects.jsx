@@ -1,269 +1,906 @@
 import { useRef, useState, useEffect } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
-import AtomicTransition from "../transition/AtomicTransition";
+import GitHubSnake from "./GitHubSnake";
 
-// ── DATA CONSTANTS (KEEPING ALL YOUR SPECS) ──────────────────────────────────
-const GITHUB_LINKS = {
-  food: "https://github.com/kvnrajasekhar/food-ordering-system",
-  qotes: "https://github.com/kvnrajasekhar/qotes-server",
-};
-
+// ─── PROJECT DATA ─────────────────────────────────────────────────────────────
 const PROJECTS = [
   {
-    id: "food",
-    systemId: "SYSTEM_ARCH_01",
+    id: "SYS_ARCH_01",
     codename: "DISTRIBUTED_FOOD_GENIUS",
+    title: "Integrated Food Management System",
     identity: "Full-Stack Enterprise Ordering Solution",
     philosophy: "Seamless CRUD Orchestration and Relational Data Integrity.",
+    github: "https://github.com/kvnrajasekhar/food-ordering-system",
+    terminalPath: "cat projects/food-ordering/Main.java",
     color: "#5cbdb9",
-    stack: ["Java", "Spring Boot", "Spring Security", "PostgreSQL", "REST API", "JWT"],
-    terminalPath: "cat projects/food-management/Main.java",
+    status: "DEPLOYED",
+    stack: ["Java", "Spring Boot", "Spring MVC", "MySQL", "REST API", "Hibernate"],
+    schematic: {
+      nodes: [
+        { id: "CLIENT", label: "Client Layer", sub: "Multi-role UI", x: 15, y: 20 },
+        { id: "AUTH", label: "Auth Guard", sub: "Session Validation", x: 40, y: 10 },
+        { id: "CTRL", label: "REST Controllers", sub: "Browse→Order→Track", x: 70, y: 20 },
+        { id: "SVC", label: "Service Layer", sub: "State Machine Logic", x: 40, y: 48 },
+        { id: "DB", label: "Persistence Layer", sub: "Relational Schema", x: 15, y: 70 },
+        { id: "ADMIN", label: "Admin Panel", sub: "Menu & Order Mgmt", x: 70, y: 70 },
+      ],
+      edges: [
+        ["CLIENT", "AUTH"], ["AUTH", "CTRL"], ["CTRL", "SVC"],
+        ["SVC", "DB"], ["SVC", "ADMIN"], ["CLIENT", "SVC"],
+      ],
+    },
     constraint: {
-      challenge: "Role-Based State Management",
-      detail: "Ensuring a Customer can only view and order while a Restaurant Admin can modify live menus and update order statuses.",
-      solution: "Implemented Service-Oriented Logic where every request is validated against the user's session role.",
+      label: "ROLE-BASED STATE MANAGEMENT",
+      problem: "Ensuring Customer vs. Admin roles couldn't cross-contaminate live order data or menu state during concurrent sessions.",
+      solution: "Designed a Service-Oriented validation layer + state-machine logic for orders: Pending → Confirmed → Out for Delivery.",
     },
     optimization: {
-      title: "Relational Integrity at Scale",
-      before: "Cascading deletes broke historical order logs",
-      after: "Schema redesign preserves all historical data on menu item removal",
-      metric: "0 data integrity violations in production",
+      label: "RELATIONAL INTEGRITY",
+      before: "Cascading deletes broke historical order logs on menu removal.",
+      after: "Schema redesign preserved all historical data while handling live menu updates without orphaned records.",
+      metric: { label: "Data Integrity", before: "Broken", after: "100%" },
     },
-    stateFlow: ["Pending", "Confirmed", "Preparing", "Out for Delivery", "Delivered"],
+    dossier: [
+      { tag: "IDENTITY", text: "Full-Stack Enterprise Ordering Solution" },
+      { tag: "PHILOSOPHY", text: "Seamless CRUD Orchestration and Relational Data Integrity" },
+      { tag: "ARCH", text: "Java Full-Stack — Clean separation of UI, Logic, and Persistence" },
+      { tag: "CHALLENGE", text: "Role-based access control without cross-contaminating order state" },
+      { tag: "RESOLUTION", text: "State-machine order workflow + session-validated service layer" },
+    ],
   },
   {
-    id: "qotes",
-    systemId: "SYSTEM_ARCH_02",
-    codename: "QOTES_SERVER",
+    id: "SYS_ARCH_02",
+    codename: "HIGH_THROUGHPUT_SOCIAL_ENGINE",
+    title: "Qotes Server",
     identity: "High-Throughput Social Media Engine",
     philosophy: "Latency Elimination through Event-Driven Streams.",
-    color: "#c9b8f5",
-    stack: ["Node.js", "Express", "Redis", "Kafka", "MongoDB", "WebSockets"],
+    github: "https://github.com/kvnrajasekhar/qotes-server",
     terminalPath: "cat projects/qotes-server/index.js",
+    color: "#c9b8f5",
+    status: "ACTIVE",
+    stack: ["Node.js", "Express", "Redis", "Kafka", "MongoDB", "Mongoose"],
+    schematic: {
+      nodes: [
+        { id: "CLIENT", label: "Client", sub: "API Consumers", x: 10, y: 35 },
+        { id: "EXPRESS", label: "Express Engine", sub: "Event Loop Core", x: 38, y: 15 },
+        { id: "REDIS", label: "Redis Cache", sub: "Hot Content Store", x: 65, y: 10 },
+        { id: "KAFKA", label: "Kafka Broker", sub: "Analytics Offload", x: 65, y: 50 },
+        { id: "MONGO", label: "MongoDB", sub: "Document Store", x: 45, y: 75 },
+        { id: "WORKER", label: "Workers", sub: "Async Processors", x: 15, y: 75 },
+      ],
+      edges: [
+        ["CLIENT", "EXPRESS"], ["EXPRESS", "REDIS"], ["EXPRESS", "KAFKA"],
+        ["EXPRESS", "MONGO"], ["KAFKA", "WORKER"], ["WORKER", "MONGO"],
+      ],
+    },
     constraint: {
-      challenge: "The Viral Traffic Bottleneck",
-      detail: "Handling a surge of read requests for popular content without overwhelming the primary MongoDB instance.",
-      solution: "Implemented a Cache-Aside Strategy with Redis — serving high-frequency data from memory.",
+      label: "VIRAL TRAFFIC BOTTLENECK",
+      problem: "Read surges on popular content caused primary database overload — response times spiked above 300ms under load.",
+      solution: "Cache-Aside Strategy with Redis reduced DB query load dramatically; Kafka offloaded non-critical analytics writes.",
     },
     optimization: {
-      title: "Latency Elimination",
-      before: "Direct DB reads: ~280ms avg response",
-      after: "Redis cache-aside: <45ms avg response",
-      metric: "~84% latency reduction on hot content",
+      label: "LATENCY ELIMINATION",
+      before: "300ms+ response times on hot content under stress load.",
+      after: "Sub-100ms responses via Redis cache-hit serving popular content from memory.",
+      metric: { label: "API Response Time", before: "300ms+", after: "<100ms" },
     },
-    stateFlow: ["POST /create", "Kafka Emit", "Cache Warm", "DB Persist", "Client ACK"],
+    dossier: [
+      { tag: "IDENTITY", text: "High-Throughput Social Media Engine" },
+      { tag: "PHILOSOPHY", text: "Latency Elimination through Event-Driven Streams" },
+      { tag: "ARCH", text: "Node.js async stack — Cache → Broker → Document DB pipeline" },
+      { tag: "CHALLENGE", text: "Viral traffic spikes overwhelming the primary database layer" },
+      { tag: "RESOLUTION", text: "Redis Cache-Aside + Kafka decoupling for sub-100ms throughput" },
+    ],
   },
 ];
 
-const CICD_STEPS = [
-  { icon: "⬆", label: "git push", sub: "Feature Branch", color: "#5cbdb9" },
-  { icon: "🧪", label: "Unit Tests", sub: "JUnit / Jest", color: "#c9b8f5" },
-  { icon: "🚀", label: "Deploy", sub: "Vercel / Render", color: "#fbe3e8" },
-];
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `${r},${g},${b}`;
+}
 
-// ── COMPONENT: System Core Visual ──────────────────────────────────────────
-function SystemCore({ project, isDark }) {
-  const accent = project.color;
+// ─── SCHEMATIC CANVAS ─────────────────────────────────────────────────────────
+function SchematicCanvas({ project, isDark, activeNode }) {
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+  const tickRef = useRef(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth;
+    const H = canvas.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+
+    const nodes = project.schematic.nodes.map(n => ({
+      ...n,
+      px: (n.x / 100) * W,
+      py: (n.y / 100) * H,
+    }));
+    const nodeMap = Object.fromEntries(nodes.map(n => [n.id, n]));
+
+    const draw = () => {
+      tickRef.current += 0.015;
+      const t = tickRef.current;
+      ctx.clearRect(0, 0, W, H);
+
+      // Edges
+      project.schematic.edges.forEach(([a, b]) => {
+        const na = nodeMap[a], nb = nodeMap[b];
+        if (!na || !nb) return;
+        const isActive = activeNode === a || activeNode === b;
+        ctx.beginPath();
+        ctx.moveTo(na.px, na.py);
+        ctx.lineTo(nb.px, nb.py);
+        ctx.strokeStyle = isActive
+          ? project.color
+          : isDark ? `rgba(255,255,255,0.12)` : `rgba(${hexToRgb(project.color)},0.25)`;
+        ctx.lineWidth = isActive ? 1.8 : 0.8;
+        ctx.setLineDash(isActive ? [] : [4, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Animated particle along active edge
+        if (isActive) {
+          const tp = (t * 0.6) % 1;
+          const px = na.px + (nb.px - na.px) * tp;
+          const py = na.py + (nb.py - na.py) * tp;
+          ctx.save();
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = project.color;
+          ctx.beginPath();
+          ctx.arc(px, py, 3, 0, Math.PI * 2);
+          ctx.fillStyle = project.color;
+          ctx.fill();
+          ctx.restore();
+        }
+      });
+
+      // Nodes
+      nodes.forEach(n => {
+        const isActive = activeNode === n.id;
+        const pulse = 1 + 0.1 * Math.sin(t * 1.5 + n.px * 0.05);
+        const r = (isActive ? 22 : 16) * pulse;
+
+        ctx.save();
+        ctx.shadowBlur = isActive ? 28 : 8;
+        ctx.shadowColor = project.color;
+        ctx.beginPath();
+        ctx.arc(n.px, n.py, r, 0, Math.PI * 2);
+        ctx.fillStyle = isActive
+          ? project.color
+          : isDark ? `rgba(${hexToRgb(project.color)},0.18)` : `rgba(${hexToRgb(project.color)},0.12)`;
+        ctx.fill();
+        ctx.strokeStyle = project.color + (isActive ? "ff" : "66");
+        ctx.lineWidth = isActive ? 2 : 1;
+        ctx.stroke();
+        ctx.restore();
+
+        // Label
+        ctx.font = `bold ${isActive ? 10 : 9}px 'Courier New',monospace`;
+        ctx.fillStyle = isActive ? project.color : (isDark ? "rgba(255,255,255,0.65)" : "rgba(10,18,18,0.65)");
+        ctx.textAlign = "center";
+        ctx.fillText(n.label, n.px, n.py + r + 12);
+        ctx.font = `400 8px 'Courier New',monospace`;
+        ctx.fillStyle = isDark ? "rgba(255,255,255,0.3)" : "rgba(10,18,18,0.35)";
+        ctx.fillText(n.sub, n.px, n.py + r + 22);
+      });
+
+      animRef.current = requestAnimationFrame(draw);
+    };
+    animRef.current = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [project, isDark, activeNode]);
+
   return (
-    <div className="relative w-full aspect-square flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800 p-4">
-      {/* Central Pulsing Node */}
-      <motion.div
-        animate={{ 
-          scale: [1, 1.05, 1],
-          boxShadow: isDark ? [`0 0 20px ${accent}22`, `0 0 40px ${accent}44`, `0 0 20px ${accent}22`] : [`0 0 10px ${accent}11`, `0 0 20px ${accent}22`, `0 0 10px ${accent}11`] 
-        }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="w-32 h-32 rounded-3xl border-2 flex flex-col items-center justify-center bg-white dark:bg-black"
-        style={{ borderColor: accent }}
-      >
-        <span className="text-4xl font-black" style={{ color: accent }}>{project.id[0].toUpperCase()}</span>
-        <span className="text-[8px] font-mono mt-2 tracking-widest opacity-50 uppercase">{project.id}_CORE</span>
-      </motion.div>
+    <canvas
+      ref={canvasRef}
+      style={{ width: "100%", height: "100%", display: "block" }}
+    />
+  );
+}
 
-      {/* Orbiting Tech Particles */}
-      {project.stack.slice(0, 4).map((tech, i) => (
-        <motion.div
-          key={tech}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 10 + i * 2, repeat: Infinity, ease: "linear" }}
-          className="absolute w-full h-full pointer-events-none"
-        >
-          <div 
-            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-2 py-1 rounded-md text-[8px] font-bold border whitespace-nowrap bg-white dark:bg-zinc-900"
-            style={{ color: accent, borderColor: `${accent}44` }}
-          >
-            {tech}
-          </div>
-        </motion.div>
+// ─── DOSSIER REVEAL ───────────────────────────────────────────────────────────
+function DossierBlock({ items, color, isDark }) {
+  const [revealed, setRevealed] = useState([]);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!inView) return;
+    items.forEach((_, i) => {
+      setTimeout(() => setRevealed(r => [...r, i]), i * 180);
+    });
+  }, [inView, items]);
+
+  return (
+    <div ref={ref} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {items.map((item, i) => (
+        <div key={i} style={{
+          opacity: revealed.includes(i) ? 1 : 0,
+          transform: revealed.includes(i) ? "translateX(0)" : "translateX(-12px)",
+          transition: "opacity 0.4s ease, transform 0.4s ease",
+          display: "flex", gap: 10, alignItems: "flex-start",
+        }}>
+          <span style={{
+            fontFamily: "'Courier New',monospace",
+            fontSize: 9, fontWeight: 800,
+            letterSpacing: "0.2em",
+            color,
+            background: `rgba(${hexToRgb(color)},0.12)`,
+            border: `1px solid ${color}44`,
+            borderRadius: 3,
+            padding: "2px 7px",
+            flexShrink: 0,
+            marginTop: 2,
+          }}>
+            [{item.tag}]
+          </span>
+          <span style={{
+            fontFamily: "'Courier New',monospace",
+            fontSize: "clamp(11px,1.2vw,13px)",
+            fontWeight: 600,
+            color: isDark ? "rgba(255,255,255,0.78)" : "rgba(10,18,18,0.78)",
+            lineHeight: 1.7,
+          }}>
+            {item.text}
+          </span>
+        </div>
       ))}
     </div>
   );
 }
 
-// ── COMPONENT: Flagship Project Card ────────────────────────────────────────
-function FlagshipProject({ project, isDark, index }) {
+// ─── METRIC BAR ───────────────────────────────────────────────────────────────
+function MetricBar({ label, before, after, color, isDark }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true });
+  return (
+    <div ref={ref} style={{
+      background: isDark ? `rgba(${hexToRgb(color)},0.06)` : `rgba(${hexToRgb(color)},0.06)`,
+      border: `1px solid ${color}33`,
+      borderLeft: `3px solid ${color}`,
+      borderRadius: "0 6px 6px 0",
+      padding: "14px 18px",
+      display: "flex", flexDirection: "column", gap: 10,
+    }}>
+      <span style={{
+        fontFamily: "'Courier New',monospace",
+        fontSize: 9, fontWeight: 800,
+        letterSpacing: "0.25em", textTransform: "uppercase",
+        color,
+      }}>
+        // OPTIMIZATION → {label}
+      </span>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 28px 1fr", alignItems: "center", gap: 8 }}>
+        <div style={{
+          background: isDark ? "rgba(255,0,0,0.08)" : "rgba(200,0,0,0.06)",
+          border: "1px solid rgba(220,50,50,0.3)",
+          borderRadius: 5, padding: "8px 12px",
+        }}>
+          <div style={{ fontSize: 8, color: "rgba(220,80,80,0.8)", letterSpacing: "0.2em", marginBottom: 4, fontFamily: "'Courier New',monospace", fontWeight: 700 }}>BEFORE</div>
+          <div style={{ fontFamily: "'Courier New',monospace", fontSize: "clamp(12px,1.4vw,15px)", fontWeight: 800, color: isDark ? "rgba(255,120,120,0.9)" : "rgba(180,40,40,0.9)" }}>{before}</div>
+        </div>
+        <div style={{ textAlign: "center", color, fontWeight: 800, fontSize: 14 }}>→</div>
+        <div style={{
+          background: `rgba(${hexToRgb(color)},0.1)`,
+          border: `1px solid ${color}55`,
+          borderRadius: 5, padding: "8px 12px",
+        }}>
+          <div style={{ fontSize: 8, color: color + "cc", letterSpacing: "0.2em", marginBottom: 4, fontFamily: "'Courier New',monospace", fontWeight: 700 }}>AFTER</div>
+          <div style={{ fontFamily: "'Courier New',monospace", fontSize: "clamp(12px,1.4vw,15px)", fontWeight: 800, color }}>{after}</div>
+        </div>
+      </div>
+      <div style={{ fontSize: "clamp(10px,1.1vw,12px)", color: isDark ? "rgba(255,255,255,0.6)" : "rgba(10,18,18,0.65)", fontFamily: "'Courier New',monospace", lineHeight: 1.7 }}>
+        <span style={{ color, fontWeight: 800 }}>[PROBLEM] </span>{before_text => before}
+      </div>
+    </div>
+  );
+}
+
+// ─── CONSTRAINT BLOCK ─────────────────────────────────────────────────────────
+function ConstraintBlock({ constraint, color, isDark }) {
+  return (
+    <div style={{
+      border: `1px solid ${isDark ? "rgba(255,80,80,0.25)" : "rgba(180,40,40,0.2)"}`,
+      borderLeft: "3px solid rgba(220,60,60,0.7)",
+      borderRadius: "0 6px 6px 0",
+      padding: "14px 18px",
+      background: isDark ? "rgba(255,0,0,0.05)" : "rgba(200,0,0,0.04)",
+      display: "flex", flexDirection: "column", gap: 10,
+    }}>
+      <span style={{
+        fontFamily: "'Courier New',monospace",
+        fontSize: 9, fontWeight: 800,
+        letterSpacing: "0.25em",
+        color: isDark ? "rgba(255,100,100,0.85)" : "rgba(180,40,40,0.85)",
+      }}>
+        [PROBLEM_DETECTED] → {constraint.label}
+      </span>
+      <p style={{
+        margin: 0,
+        fontFamily: "'Courier New',monospace",
+        fontSize: "clamp(11px,1.2vw,13px)",
+        fontWeight: 600,
+        color: isDark ? "rgba(255,255,255,0.72)" : "rgba(10,18,18,0.72)",
+        lineHeight: 1.75,
+      }}>
+        {constraint.problem}
+      </p>
+      <span style={{
+        fontFamily: "'Courier New',monospace",
+        fontSize: 9, fontWeight: 800,
+        letterSpacing: "0.25em",
+        color: color,
+      }}>
+        [PATCH_APPLIED] → RESOLUTION
+      </span>
+      <p style={{
+        margin: 0,
+        fontFamily: "'Courier New',monospace",
+        fontSize: "clamp(11px,1.2vw,13px)",
+        fontWeight: 600,
+        color: isDark ? "rgba(255,255,255,0.72)" : "rgba(10,18,18,0.72)",
+        lineHeight: 1.75,
+      }}>
+        {constraint.solution}
+      </p>
+    </div>
+  );
+}
+
+// ─── PROJECT CARD ─────────────────────────────────────────────────────────────
+function ProjectCard({ project, index, isDark }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [activeNode, setActiveNode] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  const isEven = index % 2 === 0;
   const color = project.color;
+  const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
+  const text = isDark ? "rgba(255,255,255,0.82)" : "rgba(10,18,18,0.82)";
+  const border = isDark ? `${color}22` : `${color}44`;
+  const cardBg = isDark ? `rgba(${hexToRgb(color)},0.04)` : "#ffffff";
+
+  const copyTerminal = () => {
+    navigator.clipboard?.writeText(project.terminalPath);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.2 }}
-      className="flex flex-col lg:flex-row w-full mb-16 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] overflow-hidden bg-white dark:bg-[#080808] shadow-xl dark:shadow-2xl"
+      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        position: "relative",
+        background: cardBg,
+        border: `1px solid ${border}`,
+        borderTop: `3px solid ${color}`,
+        borderRadius: 8,
+        overflow: "hidden",
+        boxShadow: isDark ? "none" : `0 4px 32px rgba(${hexToRgb(color)},0.1)`,
+        transition: "box-shadow 0.3s ease",
+      }}
     >
-      {/* Left: Visual Panel */}
-      <div className="w-full lg:w-[42%] p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center gap-4 mb-8">
-          <span className="font-mono text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-900 uppercase tracking-tighter" style={{ color }}>
-            {project.systemId}
-          </span>
-          <div className="h-[1px] flex-1 bg-zinc-100 dark:bg-zinc-900" />
+      {/* Blueprint micro-grid */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.02)" : `rgba(${hexToRgb(color)},0.05)`} 1px, transparent 1px),
+          linear-gradient(90deg, ${isDark ? "rgba(255,255,255,0.02)" : `rgba(${hexToRgb(color)},0.05)`} 1px, transparent 1px)`,
+        backgroundSize: "32px 32px",
+        zIndex: 0,
+      }} />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+
+        {/* ── Header bar ── */}
+        <div style={{
+          padding: "clamp(16px,2.5vw,24px) clamp(20px,3vw,32px)",
+          borderBottom: `1px solid ${border}`,
+          display: "flex", alignItems: "flex-start",
+          justifyContent: "space-between",
+          flexWrap: "wrap", gap: 12,
+        }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {/* Mission ID */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              <div style={{ width: 14, height: 1.5, background: color, borderRadius: 1 }} />
+              <span style={{
+                fontFamily: "'Courier New',monospace",
+                fontSize: 9, fontWeight: 800,
+                letterSpacing: "0.3em",
+                color,
+              }}>
+                {project.id} :: {project.codename}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 style={{
+              margin: 0,
+              fontFamily: "'Courier New',monospace",
+              fontSize: "clamp(18px,2.5vw,28px)",
+              fontWeight: 900,
+              color: isDark ? "#ffffff" : "#0a1212",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.1,
+            }}>
+              {project.title}
+            </h3>
+            <p style={{
+              margin: "6px 0 0",
+              fontFamily: "'Courier New',monospace",
+              fontSize: "clamp(11px,1.2vw,13px)",
+              fontWeight: 600,
+              color: muted,
+              letterSpacing: "0.05em",
+              fontStyle: "italic",
+            }}>
+              {project.philosophy}
+            </p>
+          </div>
+
+          {/* Status badge */}
+          <div style={{
+            display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8,
+            flexShrink: 0,
+          }}>
+            <div style={{
+              display: "flex", alignItems: "center", gap: 6,
+              background: `rgba(${hexToRgb(color)},0.12)`,
+              border: `1px solid ${color}55`,
+              borderRadius: 5,
+              padding: "5px 12px",
+            }}>
+              <motion.div
+                animate={{ scale: [1, 1.8, 1], opacity: [0.8, 0, 0.8] }}
+                transition={{ repeat: Infinity, duration: 1.8 }}
+                style={{ width: 7, height: 7, borderRadius: "50%", background: color }}
+              />
+              <span style={{
+                fontFamily: "'Courier New',monospace",
+                fontSize: 9, fontWeight: 800,
+                letterSpacing: "0.2em",
+                color,
+              }}>
+                {project.status}
+              </span>
+            </div>
+          </div>
         </div>
-        
-        <h2 className="text-3xl font-black mb-8 tracking-tighter dark:text-white text-zinc-900 uppercase italic">
-          {project.codename}
-        </h2>
 
-        <SystemCore project={project} isDark={isDark} />
-
-        <div className="mt-8 flex flex-wrap gap-2">
-          {project.stack.map(s => (
-            <span key={s} className="text-[9px] font-bold border px-2 py-1 rounded uppercase tracking-widest" style={{ color: color, borderColor: `${color}33`, backgroundColor: `${color}05` }}>
-              {s}
+        {/* ── Tech stack bar ── */}
+        <div style={{
+          padding: "12px clamp(20px,3vw,32px)",
+          borderBottom: `1px solid ${border}`,
+          display: "flex", alignItems: "center",
+          gap: 8, flexWrap: "wrap",
+        }}>
+          <span style={{ fontSize: 9, fontWeight: 800, color: muted, letterSpacing: "0.25em", textTransform: "uppercase", fontFamily: "'Courier New',monospace", flexShrink: 0 }}>
+            STACK //
+          </span>
+          {project.stack.map(tech => (
+            <span key={tech} style={{
+              fontFamily: "'Courier New',monospace",
+              fontSize: "clamp(9px,1vw,11px)",
+              fontWeight: 700,
+              color,
+              background: `rgba(${hexToRgb(color)},0.1)`,
+              border: `1px solid ${color}44`,
+              borderRadius: 4,
+              padding: "3px 9px",
+              letterSpacing: "0.05em",
+            }}>
+              {tech}
             </span>
           ))}
         </div>
-      </div>
 
-      {/* Right: Specs Panel */}
-      <div className="w-full lg:w-[58%] p-8 lg:p-12 flex flex-col justify-between bg-zinc-50/30 dark:bg-transparent">
-        <div className="space-y-10">
-          <section>
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 mb-3">// 01_IDENTITY</h3>
-            <p className="text-2xl font-black dark:text-zinc-100 text-zinc-900 leading-tight mb-2">{project.identity}</p>
-            <p className="text-sm italic text-zinc-500 font-mono">"{project.philosophy}"</p>
-          </section>
+        {/* ── Main content: schematic + details ── */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%,320px),1fr))",
+          gap: 0,
+        }}>
 
-          <section className="p-6 rounded-2xl border-l-4 bg-white dark:bg-zinc-900 shadow-sm" style={{ borderColor: color }}>
-            <h4 className="text-[9px] font-bold uppercase text-zinc-400 mb-3 tracking-widest">Engineering Challenge</h4>
-            <p className="font-bold dark:text-white text-zinc-900 mb-2 text-sm">⚠ {project.constraint.challenge}</p>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed mb-3">{project.constraint.detail}</p>
-            <p className="text-xs font-bold font-mono" style={{ color }}>✓ {project.constraint.solution}</p>
-          </section>
-
-          <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl border border-red-100 dark:border-red-900/20 bg-red-50/30 dark:bg-red-900/5">
-              <span className="text-[8px] font-bold text-red-500 uppercase tracking-widest">Legacy/Before</span>
-              <p className="text-[11px] text-zinc-500 mt-1 font-medium">{project.optimization.before}</p>
+          {/* Schematic panel */}
+          <div style={{
+            borderRight: `1px solid ${border}`,
+            padding: "clamp(20px,3vw,32px)",
+            display: "flex", flexDirection: "column", gap: 14,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ width: 14, height: 1.5, background: color, borderRadius: 1 }} />
+              <span style={{
+                fontFamily: "'Courier New',monospace",
+                fontSize: 9, fontWeight: 800,
+                letterSpacing: "0.28em", textTransform: "uppercase", color,
+              }}>
+                System Architecture
+              </span>
             </div>
-            <div className="p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/20 bg-emerald-50/30 dark:bg-emerald-900/5">
-              <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">Optimized/After</span>
-              <p className="text-[11px] text-zinc-500 mt-1 font-medium">{project.optimization.after}</p>
-            </div>
-          </section>
-        </div>
 
-        <div className="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
-          <motion.a 
-            href={GITHUB_LINKS[project.id]}
-            target="_blank"
-            whileHover={{ x: 5 }}
-            className="inline-flex items-center gap-3 font-mono text-[11px] font-bold"
-            style={{ color }}
-          >
-            <span>$ {project.terminalPath}</span>
-            <span className="w-2 h-4 bg-current animate-pulse" />
-          </motion.a>
-          <span className="text-[10px] font-bold text-zinc-400 font-mono">{project.optimization.metric}</span>
+            {/* Canvas area */}
+            <div style={{
+              height: "clamp(220px,28vw,320px)",
+              background: isDark ? "rgba(0,0,0,0.4)" : `rgba(${hexToRgb(color)},0.3)`,
+              border: `1px solid ${border}`,
+              borderRadius: 6,
+              overflow: "hidden",
+              position: "relative",
+            }}>
+              <SchematicCanvas project={project} isDark={isDark} activeNode={activeNode} />
+              <div style={{
+                position: "absolute", bottom: 8, left: 10,
+                fontFamily: "'Courier New',monospace",
+                fontSize: 8, color: muted,
+                letterSpacing: "0.15em",
+              }}>
+                HOVER LAYER NODES →
+              </div>
+            </div>
+
+            {/* Node list — hover to highlight */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {project.schematic.nodes.map(n => (
+                <div
+                  key={n.id}
+                  onMouseEnter={() => setActiveNode(n.id)}
+                  onMouseLeave={() => setActiveNode(null)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                    padding: "6px 10px",
+                    borderRadius: 5,
+                    background: activeNode === n.id
+                      ? `rgba(${hexToRgb(color)},0.12)` : "transparent",
+                    border: `1px solid ${activeNode === n.id ? color + "55" : "transparent"}`,
+                    cursor: "pointer",
+                    transition: "all 0.18s ease",
+                  }}
+                >
+                  <div style={{
+                    width: 7, height: 7, borderRadius: "50%",
+                    background: activeNode === n.id ? color : (isDark ? "rgba(255,255,255,0.2)" : `rgba(${hexToRgb(color)},0.3)`),
+                    boxShadow: activeNode === n.id ? `0 0 8px ${color}` : "none",
+                    transition: "all 0.18s ease",
+                    flexShrink: 0,
+                  }} />
+                  <span style={{
+                    fontFamily: "'Courier New',monospace",
+                    fontSize: "clamp(10px,1.1vw,12px)",
+                    fontWeight: 700,
+                    color: activeNode === n.id ? color : text,
+                    transition: "color 0.18s ease",
+                  }}>
+                    {n.label}
+                  </span>
+                  <span style={{
+                    fontFamily: "'Courier New',monospace",
+                    fontSize: 9, color: muted,
+                    marginLeft: "auto",
+                  }}>
+                    {n.sub}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Details panel */}
+          <div style={{
+            padding: "clamp(20px,3vw,32px)",
+            display: "flex", flexDirection: "column", gap: 24,
+          }}>
+
+            {/* Dossier */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                <div style={{ width: 14, height: 1.5, background: color, borderRadius: 1 }} />
+                <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color }}>
+                  Mission Dossier
+                </span>
+              </div>
+              <DossierBlock items={project.dossier} color={color} isDark={isDark} />
+            </div>
+
+            {/* Constraint */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                <div style={{ width: 14, height: 1.5, background: "rgba(220,60,60,0.7)", borderRadius: 1 }} />
+                <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color: isDark ? "rgba(255,100,100,0.8)" : "rgba(180,40,40,0.8)" }}>
+                  Technical Constraint
+                </span>
+              </div>
+              <ConstraintBlock constraint={project.constraint} color={color} isDark={isDark} />
+            </div>
+
+            {/* Before/After optimization */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                <div style={{ width: 14, height: 1.5, background: color, borderRadius: 1 }} />
+                <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.28em", textTransform: "uppercase", color }}>
+                  Optimization Log
+                </span>
+              </div>
+              <div style={{
+                background: isDark ? `rgba(${hexToRgb(color)},0.06)` : `rgba(${hexToRgb(color)},0.05)`,
+                border: `1px solid ${color}33`,
+                borderLeft: `3px solid ${color}`,
+                borderRadius: "0 6px 6px 0",
+                padding: "14px 18px",
+                display: "flex", flexDirection: "column", gap: 12,
+              }}>
+                <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.25em", color }}>
+                  // {project.optimization.label}
+                </span>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 24px 1fr", alignItems: "center", gap: 8 }}>
+                  {[
+                    { label: "BEFORE", val: project.optimization.metric.before, bad: true },
+                    null,
+                    { label: "AFTER", val: project.optimization.metric.after, bad: false },
+                  ].map((item, i) =>
+                    item === null ? (
+                      <span key={i} style={{ textAlign: "center", color, fontWeight: 900, fontSize: 16 }}>→</span>
+                    ) : (
+                      <div key={i} style={{
+                        background: item.bad
+                          ? (isDark ? "rgba(255,0,0,0.07)" : "rgba(200,0,0,0.05)")
+                          : `rgba(${hexToRgb(color)},0.1)`,
+                        border: `1px solid ${item.bad ? "rgba(220,50,50,0.3)" : color + "44"}`,
+                        borderRadius: 5, padding: "8px 12px",
+                      }}>
+                        <div style={{ fontSize: 8, fontFamily: "'Courier New',monospace", fontWeight: 800, letterSpacing: "0.2em", marginBottom: 4, color: item.bad ? "rgba(220,80,80,0.8)" : color }}>
+                          {item.label}
+                        </div>
+                        <div style={{ fontFamily: "'Courier New',monospace", fontSize: "clamp(13px,1.5vw,16px)", fontWeight: 900, color: item.bad ? (isDark ? "rgba(255,120,120,0.9)" : "rgba(180,40,40,0.9)") : color }}>
+                          {item.val}
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+                <p style={{ margin: 0, fontFamily: "'Courier New',monospace", fontSize: "clamp(10px,1.1vw,12px)", fontWeight: 600, color: text, lineHeight: 1.75 }}>
+                  {project.optimization.after}
+                </p>
+              </div>
+            </div>
+
+            {/* Terminal command link */}
+            <motion.a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ x: 4 }}
+              onClick={copyTerminal}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                background: isDark ? "rgba(0,0,0,0.5)" : "rgba(10,18,18,0.04)",
+                border: `1px solid ${color}44`,
+                borderRadius: 6,
+                padding: "10px 16px",
+                textDecoration: "none",
+                width: "fit-content",
+                transition: "border-color 0.2s ease",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = color}
+              onMouseLeave={e => e.currentTarget.style.borderColor = color + "44"}
+            >
+              <span style={{ color, fontWeight: 800, fontSize: 12 }}>$</span>
+              <span style={{
+                fontFamily: "'Courier New',monospace",
+                fontSize: "clamp(10px,1.1vw,12px)",
+                fontWeight: 700,
+                color,
+                letterSpacing: "0.04em",
+              }}>
+                {project.terminalPath}
+              </span>
+              <span style={{
+                fontFamily: "'Courier New',monospace",
+                fontSize: 9, color: muted, marginLeft: "auto",
+              }}>
+                {copied ? "COPIED ✓" : "↗ GITHUB"}
+              </span>
+            </motion.a>
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-// ── MAIN PAGE: ProjectsPage ────────────────────────────────────────────────
+// ─── AXIS LINE ────────────────────────────────────────────────────────────────
+function AxisLine({ isDark }) {
+  return (
+    <div style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      padding: "8px 0",
+    }}>
+      <div style={{
+        width: 1.5, height: 48,
+        background: isDark
+          ? "linear-gradient(180deg, rgba(92,189,185,0.6), rgba(201,184,245,0.6))"
+          : "linear-gradient(180deg, rgba(92,189,185,0.8), rgba(201,184,245,0.8))",
+        borderRadius: 1,
+      }} />
+      <div style={{
+        width: 10, height: 10, borderRadius: "50%",
+        background: isDark ? "#5cbdb9" : "#2a9e9a",
+        boxShadow: `0 0 12px ${isDark ? "#5cbdb9" : "#2a9e9a"}`,
+      }} />
+      <div style={{
+        width: 1.5, height: 48,
+        background: isDark
+          ? "linear-gradient(180deg, rgba(201,184,245,0.6), rgba(92,189,185,0.6))"
+          : "linear-gradient(180deg, rgba(201,184,245,0.8), rgba(92,189,185,0.8))",
+        borderRadius: 1,
+      }} />
+    </div>
+  );
+}
+
+// ─── PAGE HEADER ─────────────────────────────────────────────────────────────
+function PageHeader({ isDark }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  const teal = isDark ? "#5cbdb9" : "#2a9e9a";
+  const text = isDark ? "#ffffff" : "#0a1212";
+  const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.42)";
+
+  return (
+    <div ref={ref} style={{ marginTop: "clamp(40px,6vw,64px)" }}>
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={inView ? { opacity: 1, x: 0 } : {}}
+        transition={{ duration: 0.5 }}
+        style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}
+      >
+        <div style={{ width: 28, height: 1.5, background: teal, borderRadius: 1 }} />
+        <span style={{ fontFamily: "'Courier New',monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.35em", textTransform: "uppercase", color: teal }}>
+          The Execution Log
+        </span>
+        <div style={{ width: 28, height: 1.5, background: teal, borderRadius: 1 }} />
+      </motion.div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.65, delay: 0.1 }}
+        style={{
+          margin: 0,
+          fontFamily: "'Courier New',monospace",
+          fontSize: "clamp(28px,5vw,56px)",
+          fontWeight: 900,
+          letterSpacing: "-0.03em",
+          lineHeight: 1.05,
+          color: text,
+        }}
+      >
+        Flagship{" "}
+        <span style={{
+          display: "inline-block",
+          padding: "4px 16px",
+          margin: "0 4px",
+          borderRadius: "12px",
+          backgroundColor: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
+          border: `1px solid ${isDark ? "rgba(92, 189, 185, 0.3)" : "rgba(42, 158, 154, 0.3)"}`,
+          color: isDark ? "#5cbdb9" : "#2a9e9a",
+          fontSize: "0.95em", // Slightly smaller to look like a tag
+          verticalAlign: "middle"
+        }}>
+          Systems.
+        </span>
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.55, delay: 0.2 }}
+        style={{
+          margin: "14px 0 0",
+          fontFamily: "'Courier New',monospace",
+          fontSize: "clamp(12px,1.3vw,14px)",
+          fontWeight: 600,
+          color: muted,
+          letterSpacing: "0.06em",
+          maxWidth: 520,
+          lineHeight: 1.75,
+        }}
+      >
+        Deep architecture breakdowns. Every constraint documented. Every optimization measured.
+      </motion.p>
+
+      <motion.div
+        initial={{ scaleX: 0, originX: 0 }}
+        animate={inView ? { scaleX: 1 } : {}}
+        transition={{ duration: 1, delay: 0.3 }}
+        style={{
+          marginTop: 24, height: 1.5,
+          background: isDark
+            ? "linear-gradient(90deg, #5cbdb9, #c9b8f5 45%, #fbe3e8 75%, transparent)"
+            : "linear-gradient(90deg, #2a9e9a, #6040c0 45%, #c04070 75%, transparent)",
+          opacity: isDark ? 0.45 : 0.6,
+        }}
+      />
+    </div>
+  );
+}
+
+// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function ProjectsPage() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const bg = isDark ? "#000000" : "#ffffff";
+  const gridLine = isDark ? "rgba(255,255,255,0.025)" : "rgba(92,189,185,0.07)";
 
   return (
-    <AtomicTransition>
-      <section className="relative w-full min-h-screen pt-32 pb-20 px-6 lg:px-12 bg-white dark:bg-black transition-colors duration-500">
-        
-        {/* Engineering Blueprint Grid */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]" 
-          style={{ 
-            backgroundImage: `radial-gradient(${isDark ? '#fff' : '#5cbdb9'} 1px, transparent 0)`,
-            backgroundSize: '40px 40px' 
-          }} 
-        />
+    <div style={{
+      minHeight: "100vh",
+      background: bg,
+      padding: "clamp(56px,9vw,100px) clamp(16px,5vw,72px)",
+      fontFamily: "'Courier New',monospace",
+      transition: "background 0.4s ease",
+      position: "relative",
+    }}>
+      {/* Blueprint grid */}
+      <div style={{
+        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+        backgroundImage: `
+          linear-gradient(${gridLine} 1px, transparent 1px),
+          linear-gradient(90deg, ${gridLine} 1px, transparent 1px)
+        `,
+        backgroundSize: "48px 48px",
+      }} />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          
-          {/* Header Section */}
-          <header className="mb-20">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-4 mb-6"
-            >
-              <div className="w-12 h-[2px] bg-[#5cbdb9]" />
-              <span className="font-mono text-xs font-black text-[#5cbdb9] tracking-[0.4em] uppercase">System Execution Log</span>
-            </motion.div>
-            
-            <h1 className="text-5xl lg:text-7xl font-black dark:text-white text-zinc-900 tracking-tighter mb-6 uppercase italic">
-              Selected <br /> <span className="text-[#5cbdb9]">Architectures.</span>
-            </h1>
-            
-            <p className="max-w-2xl text-zinc-500 dark:text-zinc-400 text-sm lg:text-base leading-relaxed font-medium">
-              A documentation of high-throughput systems, distributed services, and enterprise logic. 
-              Focused on relational integrity, event-driven patterns, and latency optimization.
-            </p>
-          </header>
+      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        <PageHeader isDark={isDark} />
 
-          {/* Projects List */}
-          <div className="space-y-12">
-            {PROJECTS.map((project, i) => (
-              <FlagshipProject key={project.id} project={project} isDark={isDark} index={i} />
-            ))}
-          </div>
-
-          {/* CI/CD Mini Section */}
-          <footer className="mt-32 pt-20 border-t border-zinc-200 dark:border-zinc-800">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-              <div>
-                <h3 className="font-mono text-[10px] font-black text-zinc-400 tracking-widest uppercase mb-4">// Deployment_Workflow</h3>
-                <p className="text-xs text-zinc-500 leading-loose">
-                  Every system listed follows a strict CI/CD pipeline involving automated unit testing, linting, and multi-stage deployment.
-                </p>
-              </div>
-              
-              <div className="lg:col-span-2 flex justify-between items-center gap-4">
-                {CICD_STEPS.map((step) => (
-                  <div key={step.label} className="flex flex-col items-center gap-2 group">
-                    <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center text-lg transition-all group-hover:scale-110" 
-                      style={{ borderColor: step.color, color: step.color, backgroundColor: `${step.color}10` }}>
-                      {step.icon}
-                    </div>
-                    <span className="text-[8px] font-black uppercase tracking-tighter text-zinc-400">{step.label}</span>
-                  </div>
-                ))}
-              </div>
+        {/* ── Central axis + cards ── */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 0 }}>
+          {PROJECTS.map((project, i) => (
+            <div key={project.id}>
+              <ProjectCard project={project} index={i} isDark={isDark} />
+              {i < PROJECTS.length - 1 && <AxisLine isDark={isDark} />}
             </div>
-            
-            <div className="mt-20 text-center">
-              <span className="font-mono text-[9px] text-zinc-400 tracking-[0.5em] uppercase">
-                Rajasekhar — {new Date().getFullYear()} — End of Log
-              </span>
-            </div>
-          </footer>
-
+          ))}
         </div>
-      </section>
-    </AtomicTransition>
+
+        {/* Footer rule */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          style={{
+            marginTop: "clamp(40px,6vw,64px)",
+            display: "flex", alignItems: "center", gap: 16,
+          }}
+        >
+          <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
+          <span style={{
+            fontFamily: "'Courier New',monospace",
+            fontSize: 9, fontWeight: 700,
+            letterSpacing: "0.3em", textTransform: "uppercase",
+            color: isDark ? "rgba(255,255,255,0.2)" : "rgba(10,80,70,0.4)",
+          }}>
+            Rajasekhar — Flagship Systems — v1.0
+          </span>
+          <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
+        </motion.div>
+          <GitHubSnake style={{ marginLeft: 12, filter: isDark ? "invert(1)" : "none" }} /> 
+      </div>
+    </div>
   );
 }

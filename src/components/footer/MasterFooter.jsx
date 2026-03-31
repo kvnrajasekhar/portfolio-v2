@@ -13,19 +13,19 @@ const NAV_COLS = [
   {
     heading: "Navigate",
     links: [
-      { label: "Home",       href: "#home" },
-      { label: "About",      href: "#about" },
-      { label: "Skills",     href: "#skills" },
-      { label: "Projects",   href: "#projects" },
+      { label: "Home",       href: "/" },
+      { label: "About",      href: "/about" },
+      { label: "Skills",     href: "/skills" },
+      { label: "Projects",   href: "/projects" },
     ],
   },
   {
     heading: "Connect",
     links: [
-      { label: "Experience", href: "#experience" },
-      { label: "Contact",    href: "#contact" },
-      { label: "Links",      href: "#links" },
-      { label: "Guest Book", href: "#guestbook" },
+      { label: "Experience", href: "/experience" },
+      { label: "Contact",    href: "/contact" },
+      { label: "Links",      href: "/links" },
+      { label: "Guest Book", href: "/guestbook" },
     ],
   },
 ];
@@ -465,16 +465,19 @@ export default function MasterFooter() {
       {/* ── TOP SECTION (1/3) ── */}
       <div style={{
         flex: "0 0 33.33%",
-        backgroundColor: isDark ? "rgba(251,227,232,0.04)" : "rgba(92,189,185,0.08)",
-        borderBottom: `1px solid ${border}`,
+        backgroundColor: isDark ?  "#6040c032": "rgba(92, 189, 186, 0.1)",
+        border: `2px solid ${border}`,
+        borderRadius: "14px 14px",
         padding: "clamp(24px,3.5vw,44px) clamp(20px,5vw,72px)",
         display: "flex",
+        flexDirection: window.innerWidth < 1024 ? "column" : "row",
         alignItems: "center",
-        justifyContent: "space-between",
-        gap: 28,
+        justifyContent: window.innerWidth < 1024 ? "center" : "space-between",
+        gap: "clamp(32px, 5vw, 28px)",
         flexWrap: "wrap",
         position: "relative",
         zIndex: 2,
+        textAlign: "center",
       }}>
         <ExperienceCounter isDark={isDark} />
         <AnalogClock isDark={isDark} />
@@ -501,6 +504,7 @@ export default function MasterFooter() {
 
           {/* ── Logo: slides from left, parks center, z-index 0 ── */}
           <motion.div
+           className="footer-logo"
             initial={{ x: "-110vw", opacity: 0 }}
             animate={logoControls}
             style={{
@@ -584,7 +588,9 @@ export default function MasterFooter() {
         </div>
 
         {/* ── Social + copyright bar ── */}
-        <div style={{
+        <div
+        className="footer-socials" 
+        style={{
           borderTop: `1px solid ${border}`,
           marginTop: "clamp(20px,3vw,32px)",
           padding: "clamp(14px,2vw,22px) 0",

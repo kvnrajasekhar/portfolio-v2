@@ -9,6 +9,7 @@ import AtomicTransition from "./components/transition/AtomicTransition";
 
 function App() {
   return (
+    <AtomicTransition>
       <div className="main-screen">
         <HeroSection />
         <WarpTransition />
@@ -17,6 +18,8 @@ function App() {
         <RibbonBanners />
         <BentoGrid />
       </div>
+    </AtomicTransition>
+
   );
 }
 
