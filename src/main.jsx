@@ -7,11 +7,13 @@ import PreFooter from "./components/PreFooter";
 import MasterFooter from "./components/footer/MasterFooter";
 import AnimatedRoutes from "./AnimatedRoutes"; 
 import { ThemeProvider } from "./context/ThemeContext";
+import ScrollToTop from "./components/ScrollToTop";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider>
       <BrowserRouter>
+      <ScrollToTop />
         <div className="min-h-screen bg-[#ffffff] dark:bg-[#000000] text-[#5cbdb9] dark:text-[#fbe3e8] transition-colors duration-300">
           <Navbar />
           <AnimatedRoutes />
@@ -20,5 +22,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </div>
       </BrowserRouter>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode> 
 );
