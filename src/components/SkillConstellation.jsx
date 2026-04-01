@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 
 const CATEGORIES = [
   {
@@ -269,7 +270,7 @@ function MobileSkillCard({ cat, index }) {
   );
 }
 
-// ─── DESKTOP CONSTELLATION (unchanged from your original) ────────────────────
+// ─── DESKTOP CONSTELLATION  ────────────────────
 function DesktopConstellation() {
   const canvasRef = useRef(null);
   const [dims, setDims] = useState({ w: 900, h: 600 });
@@ -436,31 +437,44 @@ function DesktopConstellation() {
     const rect = canvasRef.current.getBoundingClientRect();
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
-    let foundCat = null, foundStar = null, tip = null;
+
+    let foundCat = null;
+    let foundStar = null;
+    let tip = null;
 
     CATEGORIES.forEach((cat) => {
       const cx = cat.position.x * dims.w;
       const cy = cat.position.y * dims.h;
-      const distCenter = Math.hypot(mx - cx, my - cy);
       const stars = starPositionsForCategory(cat, dims.w, dims.h, cat.id.length * 0.6);
 
       stars.forEach((star) => {
         const dist = Math.hypot(mx - star.x, my - star.y);
-        if (dist < 18) {
+        if (dist < 25) {
           foundCat = cat.id;
           foundStar = star.skill;
-          tip = { x: e.clientX, y: e.clientY, name: star.skill.name, level: star.skill.level, color: cat.color };
+          tip = {
+            x: e.clientX,
+            y: e.clientY,
+            name: star.skill.name,
+            level: star.skill.level,
+            color: cat.color
+          };
         }
       });
 
-      if (distCenter < 130) foundCat = cat.id;
+      if (!foundStar) {
+        const distCenter = Math.hypot(mx - cx, my - cy);
+        if (distCenter < 120) foundCat = cat.id;
+      }
     });
 
-    setHoveredCat(foundCat);
-    setHoveredStar(foundStar);
+    // Only update state if the actual value reference changed
+    if (foundCat !== hoveredCat) setHoveredCat(foundCat);
+    if (foundStar?.name !== hoveredStar?.name) setHoveredStar(foundStar); // Faster check
     setTooltip(tip);
   };
 
+  
   return (
     <div style={{ width: "100%", flex: 1, minHeight: 580, position: "relative" }}>
       <canvas
@@ -469,46 +483,79 @@ function DesktopConstellation() {
         onMouseMove={handleMouseMove}
         onMouseLeave={() => { setHoveredCat(null); setHoveredStar(null); setTooltip(null); }}
       />
-
-      <AnimatePresence>
-        {tooltip && (
-          <motion.div
-            key={tooltip.name}
-            initial={{ opacity: 0, scale: 0.85, y: 6 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85 }}
-            transition={{ duration: 0.15 }}
-            style={{
-              position: "fixed",
-              left: tooltip.x + 16, top: tooltip.y - 48,
-              background: "#0d1520ee",
-              border: `1px solid ${tooltip.color}55`,
-              borderRadius: 10, padding: "10px 14px",
-              pointerEvents: "none", zIndex: 100,
-              backdropFilter: "blur(8px)",
-              boxShadow: `0 0 20px ${tooltip.color}33`,
-              minWidth: 170,
-            }}
-          >
-            <div style={{ color: tooltip.color, fontWeight: 700, fontSize: 13, marginBottom: 6 }}>
-              {tooltip.name}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ flex: 1, height: 4, background: "#ffffff15", borderRadius: 2, overflow: "hidden" }}>
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${tooltip.level * 100}%` }}
-                  transition={{ duration: 0.4 }}
-                  style={{ height: "100%", background: tooltip.color, borderRadius: 2 }}
-                />
+      {createPortal(
+        <AnimatePresence>
+          {tooltip && (
+            <motion.div
+              key={tooltip.name}
+              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              style={{
+                position: "fixed",
+                left: tooltip.x + 20,
+                top: tooltip.y - 60,
+                background: "rgba(13, 21, 32, 0.95)",
+                border: `1px solid ${tooltip.color}aa`,
+                borderRadius: "12px",
+                padding: "12px 16px",
+                pointerEvents: "none", // Critical: prevents mouse interference
+                zIndex: 99999,
+                backdropFilter: "blur(12px)",
+                boxShadow: `0 8px 32px ${tooltip.color}33`,
+                minWidth: "180px",
+              }}
+            >
+              {/* Skill Name */}
+              <div style={{
+                color: tooltip.color,
+                fontWeight: 800,
+                fontSize: "14px",
+                marginBottom: "8px",
+                fontFamily: "'Courier New', monospace",
+                letterSpacing: "0.05em"
+              }}>
+                {tooltip.name.toUpperCase()}
               </div>
-              <span style={{ color: "#fff", fontSize: 11, opacity: 0.7 }}>
-                {Math.round(tooltip.level * 100)}%
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+              {/* Progress Section */}
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{
+                  flex: 1,
+                  height: "6px",
+                  background: "rgba(255,255,255,0.1)",
+                  borderRadius: "3px",
+                  overflow: "hidden"
+                }}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${tooltip.level * 100}%` }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    style={{
+                      height: "100%",
+                      background: tooltip.color,
+                      borderRadius: "3px",
+                      // Fixed Shadow Logic:
+                      boxShadow: `0 0 10px ${tooltip.color}`
+                    }}
+                  />
+                </div>
+
+                {/* Percentage Text */}
+                <span style={{
+                  color: "#fff",
+                  fontSize: "12px",
+                  fontFamily: "'Courier New', monospace",
+                  fontWeight: "bold"
+                }}>
+                  {Math.round(tooltip.level * 100)}%
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
@@ -540,7 +587,7 @@ export default function SkillConstellation() {
         minHeight: isMobile ? "100vh" : "100vh",
       }}
     >
-      
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -585,7 +632,6 @@ export default function SkillConstellation() {
           ))}
         </div>
       ) : (
-        // ── DESKTOP: full constellation canvas (unchanged) ──
         <DesktopConstellation />
       )}
 
