@@ -55,8 +55,8 @@ function AnalogClock({ isDark }) {
 
   const accent     = isDark ? "#fbe3e8" : "#5cbdb9";
   const secColor   = isDark ? "#c9b8f5" : "#e05050"; 
-  const faceColor  = isDark ? "#111111" : "#f5f5f5";
-  const rimColor   = isDark ? "#2a2a2a" : "#e8e8e8";
+  const faceColor  = isDark ? "#111111" : "#5cbdba5f";
+  const rimColor   = isDark ? "#2a2a2a" : "#5cbdb922";
   const numColor   = isDark ? "rgba(255,255,255,0.55)" : "rgba(30,30,30,0.65)";
   const tickColor  = isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.18)";
   const handColor  = isDark ? "#ffffff" : "#1a1a1a";
@@ -147,7 +147,7 @@ function AnalogClock({ isDark }) {
       // ── Status text inside face ──
       const [line1, line2] = getStatus();
       ctx.font = `400 ${S * 0.042}px 'Courier New', monospace`;
-      ctx.fillStyle = isDark ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.22)";
+      ctx.fillStyle = isDark ? "rgba(255,255,255,0.22)" : "#000000";
       ctx.textAlign = "center";
       ctx.fillText(line1, cx, cy + R * 0.45);
       ctx.fillText(line2, cx, cy + R * 0.45 + S * 0.052);
