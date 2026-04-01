@@ -35,7 +35,7 @@ const GitHubSnake = () => {
           style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}
         >
           <div style={{ width: 28, height: 1.5, background: teal, borderRadius: 1 }} />
-          <span style={{ fontFamily: "'Courier New',monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.35em", textTransform: "uppercase", color: teal }}>
+          <span style={{ fontFamily: "'Courier New',monospace", fontSize: 12, fontWeight: 800, letterSpacing: "0.35em", textTransform: "uppercase", color: teal }}>
             The GitHub Log
           </span>
         </motion.div>
@@ -56,7 +56,7 @@ const GitHubSnake = () => {
             color: text,
           }}
         >
-          Contribution{" "}
+          Contribution to{" "}
           <span style={{
             display: "inline-block",
             padding: "2px 12px",
@@ -68,7 +68,7 @@ const GitHubSnake = () => {
             verticalAlign: "middle",
             marginLeft: "8px"
           }}>
-            Snake.exe
+            GitHub
           </span>
         </motion.h1>
 
@@ -92,6 +92,13 @@ const GitHubSnake = () => {
           Visualizing deployment frequency and commit intensity.
           Automated logic tracking through the contribution grid.
         </motion.p>
+      </div>
+
+      <div className="flex items-center gap-4 mb-10">
+        <div className="w-12 h-[2px] bg-[#5cbdb9]" />
+        <span className="font-mono text-[9px] font-black text-[#5cbdb9] tracking-[0.4em] uppercase">
+          01 — Contribution Snake.exe
+        </span>
       </div>
 
       {/* ── SNAKE DISPLAY CARD ── */}
@@ -122,7 +129,7 @@ const GitHubSnake = () => {
             className="w-full h-auto object-contain"
             style={{
               contain: "layout", // Prevents the SVG from affecting the rest of the page layout
-              aspectRatio: "820 / 150", 
+              aspectRatio: "820 / 150",
               minHeight: "150px"
             }}
           />

@@ -135,12 +135,11 @@ function MetaCircle({ isDark }) {
 
 // ── Stacked big words — NO gradient, uses solid + outline alternation ─────────
 function BigWords({ isDark }) {
-  // Solid colors per line — all visible in both themes
+  // Use a more stable delay and simpler colors for performance
   const solidColors = isDark
     ? ["#5cbdb9", "#ffffff", "#c9b8f5", "#ffffff", "#fbe3e8", "#5cbdb9"]
-    : ["#2a9e9a", "#0a1212", "#6040c0", "#0a1212", "#c04070", "#2a9e9a"];
+    : ["#2a9e9a", "#0a1212", "#6040c0", "#0a1212", "#c04070", "#020d0d"];
 
-  // Even lines = solid fill, odd lines = outline/stroke only
   return (
     <div style={{
       display: "flex",
@@ -149,19 +148,22 @@ function BigWords({ isDark }) {
       lineHeight: 0.9,
       flex: 1,
       minWidth: 0,
+      // 1. CONTAINMENT: Tells the browser this block won't affect 
+      // the layout of elements outside of it once it's rendered.
+      contain: "layout style",
     }}>
       {BIG_WORDS.map((word, i) => {
         const isOutline = i % 2 === 1;
         const color = solidColors[i];
-        const delay = i * 0.08;
+        const delay = i * 0.06; // Slightly faster staggering
 
         return (
           <motion.div
             key={word}
-            initial={{ opacity: 0, x: -28 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true, margin: "-50px" }} // Triggers slightly before it enters
+            transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
             style={{
               fontFamily: "'Courier New', monospace",
               fontSize: "clamp(24px, 5vw, 66px)",
@@ -169,18 +171,15 @@ function BigWords({ isDark }) {
               letterSpacing: "-0.03em",
               textTransform: "uppercase",
               lineHeight: 0.92,
-              // Solid fill lines
+              // 3. STYLING
               ...(!isOutline ? {
                 color,
-                textShadow: isDark
-                  ? `0 0 40px ${color}55`
-                  : "none",
+                textShadow: isDark ? `0 0 30px ${color}44` : "none",
               } : {
-                // Outline/hollow lines
                 color: "transparent",
                 WebkitTextStroke: isDark
-                  ? `1.5px rgba(255,255,255,0.22)`
-                  : `1.5px ${color}55`,
+                  ? `1.5px rgba(255, 255, 255, 0.62)`
+                  : `1.5px ${color}44`,
               }),
             }}
           >
@@ -212,7 +211,7 @@ export default function PreFooter() {
         position: "relative",
         overflow: "hidden",
         // 100vh on desktop, auto on mobile
-        minHeight: "clamp(auto, 100vh, 100vh)",
+        minHeight: "100vh",
         height: "auto",
         display: "flex",
         flexDirection: "column",
@@ -221,6 +220,7 @@ export default function PreFooter() {
         boxSizing: "border-box",
         transition: "background 0.4s ease",
         fontFamily: "'Courier New', monospace",
+        contain: "layout paint", // Performance optimization for complex visuals
       }}
     >
       {/* Blueprint grid */}
@@ -234,7 +234,7 @@ export default function PreFooter() {
       }} />
 
       {/* Corner marks */}
-      {[
+      {/* {[
         { top: 24, left: 24 },
         { top: 24, right: 24 },
         { bottom: 24, left: 24 },
@@ -248,7 +248,7 @@ export default function PreFooter() {
           borderLeft: i % 2 === 0 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
           borderRight: i % 2 === 1 ? `1.5px solid ${isDark ? "rgba(92,189,185,0.35)" : "rgba(42,158,154,0.6)"}` : "none",
         }} />
-      ))}
+      ))} */}
 
       <div style={{
         maxWidth: 1100,

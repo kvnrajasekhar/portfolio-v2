@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import GitHubSnake from "./GitHubSnake";
+import GitHubStats from "./GitHubStats";
+import GitHubRedirect from "./GitHubRedirect";
 
 // ─── PROJECT DATA ─────────────────────────────────────────────────────────────
 const PROJECTS = [
@@ -266,8 +268,9 @@ function MetricBar({ label, before, after, color, isDark }) {
   return (
     <div ref={ref} style={{
       background: isDark ? `rgba(${hexToRgb(color)},0.06)` : `rgba(${hexToRgb(color)},0.06)`,
-      border: `1px solid ${color}33`,
-      borderLeft: `3px solid ${color}`,
+      borderStyle: "solid",
+      borderWidth: "1px 1px 1px 3px", // Top, Right, Bottom, Left
+      borderLeftColor: color,
       borderRadius: "0 6px 6px 0",
       padding: "14px 18px",
       display: "flex", flexDirection: "column", gap: 10,
@@ -310,12 +313,18 @@ function MetricBar({ label, before, after, color, isDark }) {
 function ConstraintBlock({ constraint, color, isDark }) {
   return (
     <div style={{
-      border: `1px solid ${isDark ? "rgba(255,80,80,0.25)" : "rgba(180,40,40,0.2)"}`,
-      borderLeft: "3px solid rgba(220,60,60,0.7)",
+      // Use borderStyle and borderColor to avoid shorthand conflicts
+      borderStyle: "solid",
+      borderWidth: "1px", // Default 1px for all sides
+      borderLeftWidth: "3px", // Specific override for the left accent
+      borderColor: "rgba(255,100,100,0.85)",
+
       borderRadius: "0 6px 6px 0",
       padding: "14px 18px",
       background: isDark ? "rgba(255,0,0,0.05)" : "rgba(200,0,0,0.04)",
-      display: "flex", flexDirection: "column", gap: 10,
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
     }}>
       <span style={{
         fontFamily: "'Courier New',monospace",
@@ -386,8 +395,10 @@ function ProjectCard({ project, index, isDark }) {
       style={{
         position: "relative",
         background: cardBg,
-        border: `1px solid ${border}`,
         borderTop: `3px solid ${color}`,
+        borderRight: `1px solid ${border}`,
+        borderBottom: `1px solid ${border}`,
+        borderLeft: `1px solid ${border}`,
         borderRadius: 8,
         overflow: "hidden",
         boxShadow: isDark ? "none" : `0 4px 32px rgba(${hexToRgb(color)},0.1)`,
@@ -877,6 +888,9 @@ export default function ProjectsPage() {
           ))}
         </div>
 
+        <div className="max-w-7xl mx-auto relative z-10">
+          <GitHubRedirect style={{ filter: isDark ? "invert(1)" : "none" }} />
+        </div>
         {/* Footer rule */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -888,6 +902,7 @@ export default function ProjectsPage() {
             display: "flex", alignItems: "center", gap: 16,
           }}
         >
+
           <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
           <span style={{
             fontFamily: "'Courier New',monospace",
@@ -899,7 +914,15 @@ export default function ProjectsPage() {
           </span>
           <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
         </motion.div>
-          <GitHubSnake style={{ marginLeft: 12, filter: isDark ? "invert(1)" : "none" }} /> 
+
+        {/* The Contribution Snake */}
+        <GitHubSnake style={{ marginLeft: 12, filter: isDark ? "invert(1)" : "none" }} />
+
+        {/* GitHub Stats */}
+        <div className="max-w-7xl mx-auto relative z-10"
+          style={{ willChange: "transform" }}>
+          <GitHubStats />
+        </div>
       </div>
     </div>
   );
