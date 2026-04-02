@@ -125,9 +125,9 @@ const VALUES = [
 // ─── CERTS ────────────────────────────────────────────────────────────────────
 const CERTS = [
     { name: "IBM Full Stack Developer", issuer: "IBM", year: 2024, color: "#5cbdb9", link: "#" },
-    { name: "Postman API Fundamentals", issuer: "Postman", year: 2024, color: "#c9b8f5", link: "#" },
+    { name: "Postman API Fundamentals", issuer: "Postman", year: 2024, color: "#c9b8f5", link: "https://drive.google.com/file/d/1l8Q_tP4arAryS3YrLy7FBFNhhqK5FJZX/view?usp=sharing" },
     { name: "NCC C Certificate", issuer: "NCC India", year: 2023, color: "#f7c4a0", link: "#" },
-    { name: "Git for Beginners", issuer: "KodeKloud", year: 2024, color: "#fbe3e8", link: "#" },
+    { name: "Git for Beginners", issuer: "KodeKloud", year: 2024, color: "#fbe3e8", link: "https://drive.google.com/file/d/1qHHp5uyRJD75CoGnJWqAxh1l5ghzdhI7/view?usp=sharing" },
 ];
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -163,7 +163,7 @@ function SectionTag({ label, isDark, color }) {
             <div style={{ width: 20, height: 1.5, background: color, borderRadius: 1 }} />
             <span style={{
                 fontFamily: "'Courier New',monospace",
-                fontSize: 9, fontWeight: 800,
+                fontSize: 12, fontWeight: 800,
                 letterSpacing: "0.32em",
                 textTransform: "uppercase",
                 color,
