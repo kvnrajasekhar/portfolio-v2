@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import App from "./App";
 import Projects from "./components/projects/Projects";
 import SkillsPage from "./components/skills/SkillsPage";
+import SocialLinks from "./components/contact/SocialLinks";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -14,6 +15,7 @@ function AnimatedRoutes() {
         <Route path="/" element={<App />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/skills" element={<SkillsPage />} />
+        <Route path="/links" element={<SocialLinks />} />
         <Route path="*" element={<App />} />
       </Routes>
     </AnimatePresence>
