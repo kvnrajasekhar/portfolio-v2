@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import App from "./App";
 import Projects from "./components/projects/Projects";
 import SkillsPage from "./components/skills/SkillsPage";
-import SocialLinks from "./components/contact/SocialLinks";
+import SocialLinks from "./components/contact/SocialTerminal";
 
 function AnimatedRoutes() {
   const location = useLocation();
