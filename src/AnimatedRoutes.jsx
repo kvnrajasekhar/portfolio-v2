@@ -4,6 +4,7 @@ import App from "./App";
 import Projects from "./components/projects/Projects";
 import SkillsPage from "./components/skills/SkillsPage";
 import SocialLinks from "./components/contact/SocialTerminal";
+import About from "./components/about/About";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function AnimatedRoutes() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/skills" element={<SkillsPage />} />
         <Route path="/links" element={<SocialLinks />} />
+        <Route path="/about" element={<About />} />
         <Route path="*" element={<App />} />
       </Routes>
     </AnimatePresence>

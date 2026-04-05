@@ -579,7 +579,7 @@ export default function SkillConstellation() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: isMobile ? "88px 0 40px 0px" : "99px 0 40px 0px",
+        padding: isMobile ? "88px 0 40px 0px" : "129px 0 40px 0px",
         fontFamily: "'Courier New', monospace",
         position: "relative",
         overflow: "hidden",
