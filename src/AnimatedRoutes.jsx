@@ -6,6 +6,7 @@ import SkillsPage from "./components/skills/SkillsPage";
 import SocialLinks from "./components/links/SocialTerminal";
 import About from "./components/about/AboutPage";
 import ContactPage from "./components/contact/Contact";
+import Resume from "./components/resume/ResumePage";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function AnimatedRoutes() {
         <Route path="/links" element={<SocialLinks />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/resume" element={<Resume />} />
         <Route path="*" element={<App />} />
       </Routes>
     </AnimatePresence>
