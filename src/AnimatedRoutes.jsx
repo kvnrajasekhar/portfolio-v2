@@ -4,7 +4,7 @@ import App from "./App";
 import Projects from "./components/projects/Projects";
 import SkillsPage from "./components/skills/SkillsPage";
 import SocialLinks from "./components/contact/SocialTerminal";
-import About from "./components/about/About";
+import About from "./components/about/AboutPage";
 
 function AnimatedRoutes() {
   const location = useLocation();

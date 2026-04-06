@@ -108,8 +108,8 @@ const SpotlightCursor = ({ children, isDark }) => {
                     width: 300,
                     height: 300,
                     background: `radial-gradient(circle, ${isDark
-                            ? 'rgba(255,255,255,0.15) 0%, transparent 70%'
-                            : 'rgba(0,0,0,0.25) 0%, transparent 70%'
+                        ? 'rgba(255,255,255,0.15) 0%, transparent 70%'
+                        : 'rgba(0,0,0,0.25) 0%, transparent 70%'
                         })`,
                     filter: 'blur(20px)'
                 }}
@@ -125,25 +125,57 @@ const SpotlightCursor = ({ children, isDark }) => {
 
 // ─── PARALLAX BACKGROUND TEXT ───────────────────────────────────────────────
 const ParallaxWatermark = ({ scrollY, isDark }) => {
-    const watermarkY = useTransform(scrollY, [0, 1000], [0, 200]);
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+    // Responsive parallax based on screen size
+    const isMobile = dimensions.width < 768;
+    const isTablet = dimensions.width >= 768 && dimensions.width < 1024;
+
+    // Adjust parallax intensity based on device
+    const parallaxRange = isMobile ? [0, 100] : isTablet ? [0, 150] : [0, 200];
+    const watermarkY = useTransform(scrollY, [0, 2000], parallaxRange);
     const watermarkX = useSpring(0, { stiffness: 100, damping: 20 });
+
+    // Update dimensions on resize
+    useEffect(() => {
+        const updateDimensions = () => {
+            setDimensions({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+        return () => window.removeEventListener('resize', updateDimensions);
+    }, []);
 
     useEffect(() => {
         const handleMouseMove = (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 50;
+            const x = (e.clientX / window.innerWidth - 0.5) * (isMobile ? 20 : 50);
             watermarkX.set(x);
         };
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, [watermarkX]);
+    }, [watermarkX, isMobile]);
+
+    // Responsive font size
+    const fontSize = isMobile ? '16vw' : isTablet ? '18vw' : '20vw';
 
     return (
         <motion.div
-            className="fixed inset-0 pointer-events-none overflow-hidden"
+            className="fixed inset-0 pointer-events-none overflow-hidden flex items-center justify-center"
             style={{ y: watermarkY, x: watermarkX }}
         >
-            <div className={`text-[20vw] font-bold opacity-5 leading-none ${isDark ? 'text-white' : 'text-black'
-                }`} style={{ fontFamily: 'monospace' }}>
+            <div
+                className={`font-bold opacity-5 leading-none whitespace-nowrap ${isDark ? 'text-white' : 'text-black'
+                    }`}
+                style={{
+                    fontFamily: 'monospace',
+                    fontSize: fontSize,
+                    transform: 'rotate(-5deg)'
+                }}
+            >
                 BUILD_FOR_THE_USER
             </div>
         </motion.div>
@@ -155,6 +187,25 @@ const Section = ({ section, index, scrollY, isDark, isActive }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { amount: 0.3 });
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+    // Update dimensions on resize
+    useEffect(() => {
+        const updateDimensions = () => {
+            setDimensions({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+
+        updateDimensions();
+        window.addEventListener('resize', updateDimensions);
+        return () => window.removeEventListener('resize', updateDimensions);
+    }, []);
+
+    // Responsive breakpoints
+    const isMobile = dimensions.width < 768;
+    const isTablet = dimensions.width >= 768 && dimensions.width < 1024;
 
     // Parallax effect for image
     const imageY = useTransform(scrollY, [0, 1000], [0, -50]);
@@ -162,21 +213,48 @@ const Section = ({ section, index, scrollY, isDark, isActive }) => {
     // Text reveal animation based on scroll position
     const sectionY = useTransform(scrollY, [index * 300, (index + 1) * 300], [0, 1]);
 
+    // Responsive label sizing
+    const getLabelSize = () => {
+        if (isMobile) return 'text-2xl';
+        if (isTablet) return 'text-4xl';
+        return 'text-4xl md:text-6xl lg:text-8xl';
+    };
+
+    // Responsive layout
+    const getLayoutClasses = () => {
+        if (isMobile) {
+            return 'flex-col';
+        }
+        return index % 2 === 0 ? 'flex-row' : 'flex-row-reverse';
+    };
+
+    const getLabelWidth = () => {
+        if (isMobile) return 'w-full';
+        if (isTablet) return 'w-2/5';
+        return 'w-1/3';
+    };
+
+    const getContentWidth = () => {
+        if (isMobile) return 'w-full';
+        if (isTablet) return 'w-3/5';
+        return 'w-2/3';
+    };
+
     return (
         <motion.section
             ref={ref}
-            className={`min-h-screen flex ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                } relative`}
+            className={`min-h-screen flex ${getLayoutClasses()} relative`}
         >
             {/* Left Side - Fixed Label */}
             <motion.div
-                className="w-1/3 flex items-center justify-center sticky top-32 h-screen"
+                className={`${getLabelWidth()} flex items-center justify-center ${isMobile ? 'py-8' : 'sticky top-32 h-screen'
+                    }`}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                <div className="transform -rotate-90 origin-center">
-                    <h2 className={`text-4xl md:text-6xl lg:text-8xl font-bold tracking-wider whitespace-nowrap ${isDark ? 'text-gray-800' : 'text-gray-200'
+                <div className={`${isMobile ? 'text-center' : 'transform -rotate-90 origin-center'}`}>
+                    <h2 className={`${getLabelSize()} font-bold tracking-wider whitespace-nowrap ${isDark ? 'text-gray-800' : 'text-gray-200'
                         }`} style={{ fontFamily: 'monospace' }}>
                         {section.label}
                     </h2>
@@ -184,17 +262,19 @@ const Section = ({ section, index, scrollY, isDark, isActive }) => {
             </motion.div>
 
             {/* Right Side - Content */}
-            <div className="w-2/3 flex items-center justify-center p-8 md:p-16">
+            <div className={`${getContentWidth()} flex items-center justify-center ${isMobile ? 'p-6' : 'p-8 md:p-16'
+                }`}>
                 <SpotlightCursor isDark={isDark}>
                     <motion.div
-                        className="max-w-3xl space-y-8"
+                        className={`${isMobile ? 'max-w-full' : 'max-w-3xl'} space-y-8`}
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.2 }}
                     >
                         {/* Image */}
                         <motion.div
-                            className="relative h-64 md:h-96 rounded-2xl overflow-hidden"
+                            className={`relative ${isMobile ? 'h-48' : 'h-64 md:h-96'
+                                } rounded-2xl overflow-hidden`}
                             style={{ y: imageY }}
                             whileHover={{ scale: 1.02 }}
                             transition={{ duration: 0.6 }}
@@ -214,7 +294,8 @@ const Section = ({ section, index, scrollY, isDark, isActive }) => {
                         </motion.div>
 
                         {/* Content with sentence-by-sentence reveal */}
-                        <div className={`space-y-4 text-lg md:text-xl leading-relaxed ${isDark ? 'text-gray-100' : 'text-gray-900'
+                        <div className={`space-y-4 ${isMobile ? 'text-base' : 'text-lg md:text-xl'
+                            } leading-relaxed ${isDark ? 'text-gray-100' : 'text-gray-900'
                             }`} style={{ fontFamily: 'Georgia, serif' }}>
                             {section.content.split('\n\n').map((paragraph, pIndex) => (
                                 <div key={pIndex} className="space-y-2">
@@ -310,14 +391,14 @@ export default function About() {
                             transition={{ duration: 0.8, delay: 0.6 }}
                         >
                             <div className={`px-6 py-3 rounded-full border ${isDark
-                                    ? 'border-gray-700 text-gray-300'
-                                    : 'border-gray-300 text-gray-700'
+                                ? 'border-gray-700 text-gray-300'
+                                : 'border-gray-300 text-gray-700'
                                 }`}>
                                 <span className="font-mono text-sm">BUILD_FOR_THE_USER</span>
                             </div>
                             <div className={`px-6 py-3 rounded-full border ${isDark
-                                    ? 'border-gray-700 text-gray-300'
-                                    : 'border-gray-300 text-gray-700'
+                                ? 'border-gray-700 text-gray-300'
+                                : 'border-gray-300 text-gray-700'
                                 }`}>
                                 <span className="font-mono text-sm">SCALE_FOR_THE_FUTURE</span>
                             </div>
