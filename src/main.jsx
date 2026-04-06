@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <ScrollToTop />
         <Navbar />
-        <div className="min-h-screen bg-[#ffffff] dark:bg-[#000000] text-[#5cbdb9] dark:text-[#fbe3e8] transition-colors duration-300">
+        <div className="min-h-screen bg-[#f5f5f5] dark:bg-[#000000] text-[#5cbdb9] dark:text-[#fbe3e8] transition-colors duration-300">
           <AnimatedRoutes />
           <PreFooter />
           <MasterFooter />

@@ -278,7 +278,7 @@ export default function SocialTerminal() {
     pushLines([
       { text: "─────────────────────────────────────────────", color: "dim" },
       { text: "SECURE_TERMINAL v2.0.1", color: "header" },
-      { text: "  Developer   : Rajasekhar Vempati", color: "info" },
+      { text: "  Developer   : KVN_Rajasekhar", color: "info" },
       { text: "  Build       : Full Stack Engineer — Portfolio Terminal", color: "info" },
       { text: "  Stack       : React · Framer Motion · Tailwind CSS", color: "dim" },
       { text: "  Purpose     : Authenticate and connect to social protocols", color: "dim" },
