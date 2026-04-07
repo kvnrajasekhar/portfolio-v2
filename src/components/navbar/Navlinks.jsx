@@ -8,7 +8,7 @@ const navLinks = [
     dropdown: [
       { name: "Skills", link: "/skills" },
       { name: "Links", link: "/links" },
-      { name: "Guestbook", link: "/guestbook" },
+      { name: "Guestbook", link: "/registry" },
       { name: "Resume", link: "/resume" },
     ],
   },

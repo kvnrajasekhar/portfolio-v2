@@ -7,6 +7,7 @@ import SocialLinks from "./components/links/SocialTerminal";
 import About from "./components/about/AboutPage";
 import ContactPage from "./components/contact/Contact";
 import Resume from "./components/resume/ResumePage";
+import RegistryPage from "./components/registry/Registry_Updt";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function AnimatedRoutes() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/resume" element={<Resume />} />
+        <Route path="/registry" element={<RegistryPage />} />
         <Route path="*" element={<App />} />
       </Routes>
     </AnimatePresence>
