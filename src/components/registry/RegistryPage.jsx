@@ -70,15 +70,15 @@ function ProviderIcon({ p }) {
     if (p === "linkedin") return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>;
     if (p === "Admin") return (
         <img
-        src="https://cdn-icons-png.freepik.com/512/2397/2397707.png"
-        alt="google"
-        style={{
-            width: 13,
-            height: 13,
-            objectFit: "contain",
-            display: "block",
-        }}
-    />
+            src="https://cdn-icons-png.freepik.com/512/2397/2397707.png"
+            alt="google"
+            style={{
+                width: 13,
+                height: 13,
+                objectFit: "contain",
+                display: "block",
+            }}
+        />
     );
     return <img
         src="https://freelogopng.com/images/all_img/1657955079google-icon-png.png"
@@ -152,7 +152,7 @@ function EntityCard({ user, isDark, isGenesis, onEdit, currentUser, isAdmin, onP
                         display: "flex", alignItems: "center", justifyContent: "center",
                         color: user.provider === "github" ? "#000" : "#fff",
                     }}>
-                        
+
                         <ProviderIcon p={user.provider} />
                     </div>
                 </div>
@@ -662,6 +662,7 @@ export default function RegistryPage() {
 
     const handleLogout = () => {
         localStorage.removeItem("registry_token");
+        localStorage.removeItem("isAdmin");
         setAuthUser(null);
         pushToast("Logged out successfully.", "info");
     };
@@ -704,6 +705,7 @@ export default function RegistryPage() {
             });
 
             const data = await res.json();
+            console.log(res.status, data);
             if (data.success) {
                 pushToast(currentPinned ? "Signature unpinned successfully." : "Signature pinned successfully.", "success");
                 fetchFeed(1); // Refresh feed
