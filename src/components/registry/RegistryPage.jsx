@@ -68,11 +68,32 @@ function Skeleton({ isDark, h = 120 }) {
 function ProviderIcon({ p }) {
     if (p === "github") return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>;
     if (p === "linkedin") return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>;
-    return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" /><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" /><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" /></svg>;
+    if (p === "Admin") return (
+        <img
+        src="https://cdn-icons-png.freepik.com/512/2397/2397707.png"
+        alt="google"
+        style={{
+            width: 13,
+            height: 13,
+            objectFit: "contain",
+            display: "block",
+        }}
+    />
+    );
+    return <img
+        src="https://freelogopng.com/images/all_img/1657955079google-icon-png.png"
+        alt="google"
+        style={{
+            width: 13,
+            height: 13,
+            objectFit: "contain",
+            display: "block",
+        }}
+    />
 }
 
 // ─── ENTITY CARD ─────────────────────────────────────────────────────────────
-function EntityCard({ user, isDark, isGenesis, onEdit, currentUser }) {
+function EntityCard({ user, isDark, isGenesis, onEdit, currentUser, isAdmin, onPinToggle }) {
     const [slide, setSlide] = useState(0);
     const sigs = user.signatures || [];
     const total = sigs.length;
@@ -131,6 +152,7 @@ function EntityCard({ user, isDark, isGenesis, onEdit, currentUser }) {
                         display: "flex", alignItems: "center", justifyContent: "center",
                         color: user.provider === "github" ? "#000" : "#fff",
                     }}>
+                        
                         <ProviderIcon p={user.provider} />
                     </div>
                 </div>
@@ -164,6 +186,28 @@ function EntityCard({ user, isDark, isGenesis, onEdit, currentUser }) {
                         </span>
                     </div>
                 </div>
+
+                {/* Admin controls */}
+                {isAdmin && !isGenesis && (
+                    <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                        <button
+                            onClick={() => onPinToggle(user._id, user.isPinned)}
+                            style={{
+                                fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 800,
+                                letterSpacing: "0.18em", textTransform: "uppercase",
+                                color: user.isPinned ? "#f87171" : teal,
+                                background: "transparent",
+                                border: `1px solid ${user.isPinned ? "#f87171" : teal}55`, borderRadius: 4,
+                                padding: "4px 10px", cursor: "pointer",
+                                transition: "all 0.2s ease",
+                            }}
+                            onMouseEnter={e => { e.currentTarget.style.background = `rgba(${user.isPinned ? "248,113,113" : "92,189,185"},0.1)`; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                        >
+                            {user.isPinned ? "UNPIN" : "PIN"}
+                        </button>
+                    </div>
+                )}
 
                 {/* Edit button */}
                 {isOwn && total > 0 && (
@@ -492,6 +536,7 @@ export default function RegistryPage() {
 
     const [authUser, setAuthUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [initAnim, setInitAnim] = useState(false);
 
     const [users, setUsers] = useState([]);
@@ -509,58 +554,8 @@ export default function RegistryPage() {
     const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
     const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
 
-    // ── Auth: check JWT on mount ──
-    useEffect(() => {
-        const token = getToken();
-        if (!token) { setAuthLoading(false); return; }
-        fetch(`${API}/api/auth/profile`, { headers: { Authorization: `Bearer ${token}` } })
-            .then(r => r.json())
-            .then(d => {
-                if (d.success) setAuthUser(d.data?.user || d.data);
-                else clearToken();
-            })
-            .catch(() => clearToken())
-            .finally(() => setAuthLoading(false));
-    }, []);
-
-    // ── Auth: handle OAuth popup callback ──
-    useEffect(() => {
-        const handler = (e) => {
-            if (e.origin !== window.location.origin) return;
-            if (e.data?.type === "OAUTH_SUCCESS") {
-                setToken(e.data.token);
-                setAuthUser(e.data.user);
-                setInitAnim(true);
-                setTimeout(() => setInitAnim(false), 2200);
-                pushToast(`Authenticated as ${e.data.user?.name}`, "success");
-                fetchFeed(1);
-
-                // Check if user has existing signatures and show appropriate modal
-                setTimeout(() => {
-                    const myUser = users.find(u => u._id === e.data.user._id || u._id === e.data.user.id);
-                    const sigs = myUser?.signatures || [];
-                    if (sigs.length === 0) {
-                        // New user - show signature input modal
-                        setEditSig(null);
-                        setSignModal(true);
-                    }
-                }, 1000);
-            }
-        };
-        window.addEventListener("message", handler);
-        return () => window.removeEventListener("message", handler);
-    }, [users]);
-
-    // ── NEW: Trigger modal automatically after redirect from AuthCallback ──
-    useEffect(() => {
-        if (location.state?.openSignModal && authUser) {
-            handleSignClick();
-            // Clear state so it doesn't pop up again on refresh
-            window.history.replaceState({}, document.title);
-        }
-    }, [authUser, location.state]);
-
-    // ── Feed fetch ──
+    // ✅ fetchFeed already returns a Promise implicitly since it's async
+    // Just make sure it's defined with useCallback and no issues:
     const fetchFeed = useCallback(async (pg = 1) => {
         setFeedLoading(true);
         try {
@@ -568,8 +563,6 @@ export default function RegistryPage() {
             const d = await r.json();
             if (d.success) {
                 const sorted = [...(d.data.users || [])].sort((a, b) => {
-                    if (a.isGenesis) return -1;
-                    if (b.isGenesis) return 1;
                     if (a.isPinned && !b.isPinned) return -1;
                     if (!a.isPinned && b.isPinned) return 1;
                     return new Date(b.createdAt) - new Date(a.createdAt);
@@ -577,37 +570,100 @@ export default function RegistryPage() {
                 setUsers(pg === 1 ? sorted : prev => [...prev, ...sorted]);
                 setPagination(d.data.pagination);
             }
-        } catch { pushToast("Failed to load registry.", "error"); }
-        finally { setFeedLoading(false); }
-    }, []);
+        } catch {
+            pushToast("Failed to load registry.", "error");
+        } finally {
+            setFeedLoading(false);
+        }
+    }, [pushToast]); // ← only pushToast as dep
 
-    useEffect(() => { fetchFeed(page); }, [page]);
+    useEffect(() => {
+        const token = getToken();
+        const storedAdmin = localStorage.getItem("isAdmin") === "true";
+
+        if (!token) {
+            setAuthLoading(false);
+            setIsAdmin(storedAdmin);
+            return;
+        }
+
+        fetch(`${API}/api/auth/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) {
+                    setAuthUser(d.data?.user || d.data);
+                    setIsAdmin(d.data?.isAdmin || storedAdmin);
+                } else {
+                    clearToken();
+                    setIsAdmin(false);
+                }
+            })
+            .catch(() => {
+                clearToken();
+                setIsAdmin(false);
+            })
+            .finally(() => setAuthLoading(false));
+    }, []); // ← empty deps, runs once
+
+    // Effect 2: OAuth message listener (stable, never re-registers)
+    useEffect(() => {
+        const handler = (e) => {
+            if (e.origin !== window.location.origin) return;
+
+            if (e.data?.type === "OAUTH_SUCCESS") {
+                localStorage.setItem("registry_token", e.data.token);
+
+                if (e.data.user) {
+                    setAuthUser(e.data.user);
+                    setIsAdmin(e.data.isAdmin || false);
+                    pushToast(`Welcome, ${e.data.user.name}`, "success");
+                } else {
+                    // fallback (safety)
+                    fetch(`${API}/api/auth/profile`, {
+                        headers: {
+                            Authorization: `Bearer ${e.data.token}`
+                        }
+                    })
+                        .then(r => r.json())
+                        .then(d => {
+                            setAuthUser(d.data?.user || d.data);
+                            setIsAdmin(d.data?.isAdmin || false);
+                            pushToast(`Welcome, ${d.data?.user?.name}`, "success");
+                        });
+                }
+
+                fetchFeed(1);
+            }
+        };
+
+        window.addEventListener("message", handler);
+        return () => window.removeEventListener("message", handler);
+    }, [pushToast, fetchFeed]); // these are useCallback so stable references
 
     const handleOAuth = (provider) => {
-        // Store the current URL for redirect after auth
-        const redirectUrl = window.location.origin + window.location.pathname;
-        localStorage.setItem('auth_redirect', redirectUrl);
-
-        // Open OAuth popup with proper redirect handling
-        const authUrl = `${API}/api/auth/${provider}?redirect=${encodeURIComponent(redirectUrl)}`;
-        const w = window.open(authUrl, "_blank", "width=520,height=640,left=200,top=100");
-
-        // Monitor popup closure
-        const iv = setInterval(() => {
-            if (w?.closed) {
-                clearInterval(iv);
-                // Optional: Show message if popup was closed without auth
-                if (!getToken()) {
-                    pushToast("Authentication cancelled. Please try again.", "info");
-                }
-            }
-        }, 400);
+        window.location.href =
+            `${API}/api/auth/${provider}`;
     };
 
-    const handleLogout = async () => {
-        clearToken();
+    useEffect(() => {
+        if (location.state?.openSignModal) {
+            setSignModal(true);
+        }
+    }, [location.state]);
+
+
+    const [initialLoaded, setInitialLoaded] = useState(false);
+
+    useEffect(() => {
+        fetchFeed(page).then(() => setInitialLoaded(true));
+    }, [page]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("registry_token");
         setAuthUser(null);
-        pushToast("Session terminated.", "info");
+        pushToast("Logged out successfully.", "info");
     };
 
     const handleSignClick = () => {
@@ -633,15 +689,44 @@ export default function RegistryPage() {
         setSignModal(true);
     };
 
+    const handlePinToggle = async (userId, currentPinned) => {
+        const token = getToken();
+        if (!token) return;
+
+        try {
+            const res = await fetch(`${API}/api/registry/pin/${userId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ isPinned: !currentPinned })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                pushToast(currentPinned ? "Signature unpinned successfully." : "Signature pinned successfully.", "success");
+                fetchFeed(1); // Refresh feed
+            } else {
+                pushToast(data.message || "Failed to update pin status.", "error");
+            }
+        } catch {
+            pushToast("Network error. Try again.", "error");
+        }
+    };
+
     const myUser = authUser ? users.find(u => u._id === authUser._id || u._id === authUser.id) : null;
     const mySigs = myUser?.signatures || [];
+
+    // Debug admin state
+    console.log("Admin state:", { isAdmin, authUser, token: getToken() });
 
     // ── GENESIS card ──
     const GENESIS = {
         _id: "genesis_rajasekhar",
         name: "K.V.N. Rajasekhar",
-        profileImg: "https://avatars.githubusercontent.com/u/kvnrajasekhar",
-        provider: "github",
+        profileImg: "https://lh3.googleusercontent.com/a/ACg8ocImj6iRC2XzDs3P7pm4QfIfJyYunNITbT1bofBenjvDPbhd3uQSCQ=s96-c",
+        provider: "Admin",
         isPinned: false,
         isGenesis: true,
         signatures: [{
@@ -784,20 +869,28 @@ export default function RegistryPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,2vw,18px)" }}>
 
                     {/* Genesis — always first */}
-                    <EntityCard user={GENESIS} isDark={isDark} isGenesis={true} onEdit={() => { }} currentUser={null} />
+                    <EntityCard user={GENESIS} isDark={isDark} isGenesis={true} onEdit={() => { }} currentUser={null} isAdmin={false} onPinToggle={() => { }} />
 
                     {/* Feed */}
                     {feedLoading && users.length === 0 ? (
                         Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} isDark={isDark} h={140} />)
                     ) : (
-                        users.map(u => (
-                            <EntityCard
-                                key={u._id} user={u} isDark={isDark}
-                                isGenesis={false}
-                                onEdit={(user, sig) => handleEdit(user, sig)}
-                                currentUser={authUser}
-                            />
-                        ))
+                        users
+                            .filter(u => {
+                                // Only show users who have at least one signature with content
+                                const sigs = u.signatures || [];
+                                return sigs.length > 0 && sigs.some(sig => sig.content && sig.content.trim().length > 0);
+                            })
+                            .map(u => (
+                                <EntityCard
+                                    key={u._id} user={u} isDark={isDark}
+                                    isGenesis={false}
+                                    onEdit={(user, sig) => handleEdit(user, sig)}
+                                    currentUser={authUser}
+                                    isAdmin={isAdmin}
+                                    onPinToggle={handlePinToggle}
+                                />
+                            ))
                     )}
 
                     {/* Load more */}
