@@ -824,7 +824,7 @@ export default function RegistryPage() {
                                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                                     {[
                                         { id: "github", label: "GitHub", bg: "#181717", fg: "#ffffff" },
-                                        { id: "linkedin", label: "LinkedIn", bg: "#0077B5", fg: "#ffffff" },
+                                        // { id: "linkedin", label: "LinkedIn", bg: "#0077B5", fg: "#ffffff" },
                                         { id: "google", label: "Google", bg: "#4285F4", fg: "#ffffff" },
                                     ].map(p => (
                                         <button key={p.id} onClick={() => handleOAuth(p.id)}
