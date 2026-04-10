@@ -6,7 +6,7 @@ import { useTheme } from "../../context/ThemeContext";
 const RESUME_JSON = {
   meta: { version: "2025.1", generated: new Date().toISOString(), format: "SDE_SPEC_SHEET" },
   identity: {
-    name: "K.V.N. Rajasekhar",
+    name: "K.V.N.Rajasekhar",
     phone: "+91 63004 13643",
     location: "Hyderabad, India",
     email: "kanagalavnrajasekhar@gmail.com",
@@ -109,18 +109,18 @@ const RESUME_JSON = {
 
 // ─── METRIC TYPE COLORS ───────────────────────────────────────────────────────
 const METRIC_COLORS = {
-  scale:       "#5cbdb9",
+  scale: "#5cbdb9",
   performance: "#c9b8f5",
-  security:    "#f7c4a0",
+  security: "#f7c4a0",
   reliability: "#a8d8b9",
-  delivery:    "#fbe3e8",
-  devops:      "#5cbdb9",
+  delivery: "#fbe3e8",
+  devops: "#5cbdb9",
   achievement: "#c9b8f5",
 };
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, className = "" }) {
-  const ref    = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   return (
     <motion.div
@@ -137,7 +137,7 @@ function Reveal({ children, delay = 0, className = "" }) {
 
 function SectionSlide({ label, index, isDark }) {
   const teal = isDark ? "#5cbdb9" : "#2a9e9a";
-  const ref  = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
     <motion.div
@@ -201,7 +201,7 @@ function StackChip({ name, isDark }) {
 
 // ─── IMPACT BULLET ────────────────────────────────────────────────────────────
 function ImpactBullet({ bullet, showMetrics, isDark }) {
-  const text  = isDark ? "rgba(255,255,255,0.72)" : "rgba(10,18,18,0.72)";
+  const text = isDark ? "rgba(255,255,255,0.72)" : "rgba(10,18,18,0.72)";
   const color = METRIC_COLORS[bullet.metricType] || "#5cbdb9";
 
   // Highlight metric phrase in text
@@ -252,8 +252,8 @@ function ImpactBullet({ bullet, showMetrics, isDark }) {
 // ─── EXPERIENCE BLOCK ─────────────────────────────────────────────────────────
 function ExperienceBlock({ job, isDark }) {
   const [showMetrics, setShowMetrics] = useState(false);
-  const teal  = isDark ? "#5cbdb9" : "#2a9e9a";
-  const text  = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
+  const teal = isDark ? "#5cbdb9" : "#2a9e9a";
+  const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
   const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
 
   return (
@@ -338,9 +338,9 @@ function ExperienceBlock({ job, isDark }) {
 
 // ─── PROJECT BLOCK ────────────────────────────────────────────────────────────
 function ProjectBlock({ project, isDark }) {
-  const teal  = isDark ? "#5cbdb9" : "#2a9e9a";
-  const lav   = isDark ? "#c9b8f5" : "#6040c0";
-  const text  = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
+  const teal = isDark ? "#5cbdb9" : "#2a9e9a";
+  const lav = isDark ? "#c9b8f5" : "#6040c0";
+  const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
   const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
   const bodyC = isDark ? "rgba(255,255,255,0.68)" : "rgba(10,18,18,0.7)";
 
@@ -403,20 +403,33 @@ function DownloadButton({ isDark, floating = false }) {
   const [phase, setPhase] = useState("idle"); // idle | generating | done
   const teal = isDark ? "#5cbdb9" : "#2a9e9a";
 
-  const handleClick = () => {
+  const downloadPDF = () => {
     if (phase !== "idle") return;
     setPhase("generating");
+
+    // Create download link for PDF file
+    const link = document.createElement('a');
+    link.href = '/Rajasekhar_Software_Engineer_Apr26.pdf';
+    link.download = 'Rajasekhar_Software_Engineer_Apr26.pdf';
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Simulate generation time for UX
     setTimeout(() => {
       setPhase("done");
-      window.print();
       setTimeout(() => setPhase("idle"), 2000);
-    }, 1100);
+    }, 800);
   };
 
+  const handleClick = downloadPDF;
+
   const label =
-    phase === "idle"       ? "[ EXPORT_AS_PDF ]" :
-    phase === "generating" ? "[ Generating... ]" :
-                             "[ Download Ready ✓ ]";
+    phase === "idle" ? "[ EXPORT_AS_PDF ]" :
+      phase === "generating" ? "[ Generating... ]" :
+        "[ Download Ready ✓ ]";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: floating ? "center" : "flex-start", gap: 6 }}>
@@ -464,15 +477,15 @@ function DownloadButton({ isDark, floating = false }) {
 
 // ─── JSON VIEW ────────────────────────────────────────────────────────────────
 function JsonView({ isDark }) {
-  const text   = isDark ? "#a8d8b9" : "#1a6040";
-  const str    = isDark ? "#fbe3e8" : "#b04060";
-  const num    = isDark ? "#f7c4a0" : "#a04010";
-  const key    = isDark ? "#c9b8f5" : "#5030a0";
-  const muted  = isDark ? "rgba(255,255,255,0.28)" : "rgba(10,18,18,0.3)";
+  const text = isDark ? "#a8d8b9" : "#1a6040";
+  const str = isDark ? "#fbe3e8" : "#b04060";
+  const num = isDark ? "#f7c4a0" : "#a04010";
+  const key = isDark ? "#c9b8f5" : "#5030a0";
+  const muted = isDark ? "rgba(255,255,255,0.28)" : "rgba(10,18,18,0.3)";
 
   // Simple syntax-highlighted JSON renderer
   const syntax = JSON.stringify(RESUME_JSON, null, 2);
-  const lines  = syntax.split("\n");
+  const lines = syntax.split("\n");
 
   const colorize = (line) => {
     return line
@@ -508,16 +521,16 @@ function JsonView({ isDark }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function ResumePage() {
   const { theme } = useTheme();
-  const isDark    = theme === "dark";
+  const isDark = theme === "dark";
   const [viewMode, setViewMode] = useState("human"); // human | machine
 
-  const teal   = isDark ? "#5cbdb9" : "#2a9e9a";
-  const lav    = isDark ? "#c9b8f5" : "#6040c0";
-  const bg     = isDark ? "#000000" : "#ffffff";
-  const text   = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
-  const muted  = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
-  const bodyC  = isDark ? "rgba(255,255,255,0.7)"  : "rgba(10,18,18,0.72)";
-  const R      = RESUME_JSON;
+  const teal = isDark ? "#5cbdb9" : "#2a9e9a";
+  const lav = isDark ? "#c9b8f5" : "#6040c0";
+  const bg = isDark ? "#000000" : "#ffffff";
+  const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
+  const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
+  const bodyC = isDark ? "rgba(255,255,255,0.7)" : "rgba(10,18,18,0.72)";
+  const R = RESUME_JSON;
 
   return (
     <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease" }}>
@@ -596,10 +609,10 @@ export default function ResumePage() {
             }}>
               {[
                 { label: "mail", val: R.identity.email },
-                { label: "tel",  val: R.identity.phone },
-                { label: "web",  val: R.identity.portfolio },
-                { label: "li",   val: R.identity.linkedin },
-                { label: "gh",   val: R.identity.github },
+                { label: "tel", val: R.identity.phone },
+                { label: "web", val: R.identity.portfolio },
+                { label: "li", val: R.identity.linkedin },
+                { label: "gh", val: R.identity.github },
               ].map(c => (
                 <span key={c.label}>
                   <span style={{ color: teal, fontWeight: 800 }}>{c.label}://</span>{c.val}
