@@ -103,7 +103,7 @@ const SECTIONS = [
             {
                 type: "sprint",
                 tag: "LEADERSHIP",
-                text: "Refining Strategic Mentorship and Agile Ownership through community orchestration at GDG and Codex.",
+                text: "Refining Strategic Mentorship and Agile Ownership through cross-functional community orchestration and technical leadership.",
             },
         ],
     },
@@ -397,7 +397,7 @@ function ContentBlock({ block, isDark, accentColor }) {
                         <span
                             className="text-xs font-black tracking-widest px-2 py-1 rounded"
                             style={{
-                                color: accent,
+                                color: isDark? accentColor : `rgba(0,0,0,0.58)`  ,
                                 background: `rgba(${accentColor},0.12)`,
                                 border: `1px solid rgba(${accentColor},0.3)`,
                                 fontFamily: "'Courier New', monospace",
@@ -433,8 +433,8 @@ function ContentBlock({ block, isDark, accentColor }) {
                     <span
                         className="text-[9px] font-black tracking-widest mt-1 px-2 py-1 rounded shrink-0"
                         style={{
-                            color: accent,
-                            background: `rgba(${accentColor},0.1)`,
+                            color: isDark? accentColor :  `rgba(0,0,0,0.58)`,
+                            background: `rgba(${accentColor},0.6)`,
                             border: `1px solid rgba(${accentColor},0.25)`,
                             fontFamily: "'Courier New', monospace",
                         }}
