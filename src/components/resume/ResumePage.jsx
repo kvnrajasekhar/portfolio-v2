@@ -30,7 +30,7 @@ const RESUME_JSON = {
       company: "Cognizant Technology Solutions",
       period: "Sep 2025 – Present",
       location: "Hyderabad, India",
-      stack: [ "SQL Server", "Oracle SQL Developer", "JWT", "REST APIs"],
+      stack: [ "SQL", "Oracle SQL Developer", "Microsoft Access"],
       bullets: [
         { text: "BI Data Pipeline Management: Architect and maintain a critical data synchronization layer using Microsoft Access as a middleware bridge; engineered complex SQL queries to transform and flow data from core backend servers to Business Intelligence (BI) platforms for client reporting.", metric: "Microsoft Access", metricType: "tool" },
         { text: "Database Optimization for BI: Design and optimize database schemas and complex queries in Oracle SQL Developer, ensuring the delivery of highly accurate Business Intelligence (BI) customer reports as per evolving business requirements.", metric: "Oracle SQL Developer", metricType: "tool" },
