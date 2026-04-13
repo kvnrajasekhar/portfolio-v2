@@ -40,12 +40,17 @@ const Navbar = () => {
         animate={{
           width: isShrunk ? "60px" : "90%",
           maxWidth: isShrunk ? "60px" : "1152px", // 6xl equivalent
-          x: isShrunk ? "40vw" : "0vw", // Slides to the right
+          x: isShrunk ? "calc(40vw - 30px)" : "0vw",
           borderRadius: isShrunk ? "20px" : "9999px",
           paddingLeft: isShrunk ? "11px" : "24px",
           paddingRight: isShrunk ? "11px" : "24px",
+          height: "auto",
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{
+          type: "tween",
+          duration: 0.4,
+          ease: [0.25, 0.46, 0.45, 0.94]
+        }}
         className="
         pointer-events-auto
         flex items-center justify-between
@@ -58,8 +63,17 @@ const Navbar = () => {
         transition-colors duration-300
         "
       >
-        {/* Logo - Changed <a> to <Link> */}
-        <Link to="/" className="flex-shrink-0">
+        {/* Logo - Expand navbar when shrunk, redirect when expanded */}
+        <button
+          onClick={() => {
+            if (isShrunk) {
+              setIsShrunk(false);
+            } else {
+              window.location.href = "/";
+            }
+          }}
+          className="flex-shrink-0 cursor-pointer bg-transparent border-none p-0"
+        >
           <img
             src={isDark ? darkLogo : lightLogo}
             alt="Logo"
@@ -67,14 +81,18 @@ const Navbar = () => {
             height={38}
             className="inline-block"
           />
-        </Link>
+        </button>
 
-        <AnimatePresence>
+        <AnimatePresence mode="sync">
           {!isShrunk && (
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
+              transition={{
+                duration: 0.3,
+                ease: [0.22, 1, 0.36, 1]
+              }}
               className="flex items-center justify-between w-full ml-4"
             >
               <div className="absolute inset-0 flex items-center justify-center ">
