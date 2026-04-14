@@ -221,12 +221,15 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="
-            absolute top-24
+            absolute top-20
+            left-1/2 transform -translate-x-1/2
             w-[90%]
             bg-white/90 dark:bg-[#262626]/90
             backdrop-blur-xl
             rounded-2xl
             p-6 md:hidden
+            pointer-events-auto
+            z-50
             "
           >
             <ul className="flex flex-col gap-6 text-center">

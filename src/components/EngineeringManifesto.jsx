@@ -159,10 +159,10 @@ function PrincipleCard({ principle, index, isDark }) {
         border: `1px solid ${cardBorder}`,
         borderTop: isDark ? `1px solid ${cardBorder}` : `3px solid ${displayColor}`,
         padding: "clamp(24px, 4vw, 44px)",
-        display: "grid",
-        gridTemplateColumns: "1fr",
+        display: "flex",
+        flexDirection: "column",
         gap: 24,
-        overflow: "hidden",
+        overflow: "visible",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         // Light mode shadow so tile "lifts" off white page
         boxShadow: isDark ? "none" : `0 2px 20px ${displayColor}12`,
@@ -276,11 +276,15 @@ function PrincipleCard({ principle, index, isDark }) {
         {/* Proof quote */}
         <div style={{
           background: quoteBg,
-          borderLeft: `2.5px solid ${displayColor}`,
-          borderRadius: "0 5px 5px 0",
-          padding: "14px 18px",
+          borderLeft: `3px solid ${displayColor}`,
+          borderRadius: "0 8px 8px 0",
+          padding: "16px 20px",
+          margin: "16px 0",
           // Extra visibility in light mode
           boxShadow: isDark ? "none" : `inset 0 0 0 1px ${displayColor}1a`,
+          // Ensure proper spacing in desktop
+          minHeight: "auto",
+          overflow: "visible",
         }}>
           <span style={{
             display: "block",

@@ -593,6 +593,7 @@ export default function SkillConstellation() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
+        className="mt-24"
         style={{ textAlign: "center", marginBottom: isMobile ? 28 : 12, zIndex: 10, padding: "24px 24px" }}
       >
         <p style={{

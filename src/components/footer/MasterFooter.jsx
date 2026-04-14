@@ -504,10 +504,11 @@ export default function MasterFooter() {
             <div className="footer-nav-grid" style={{
               position: "relative",
               zIndex: 10,
-              display: "flex",
+              display: "grid",
               width: "100%",
-              flexWrap: "wrap",
-              alignItems: "flex-start",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "clamp(24px, 3vw, 40px)",
+              alignItems: "start",
             }}>
               {NAV_COLS.map(col => (
                 <NavColumn key={col.heading} col={col} isDark={isDark} />
@@ -573,15 +574,15 @@ export default function MasterFooter() {
                 ))}
               </div>
             </div>
-              <span style={{
-                fontSize: 10,
-                fontWeight: 700,
-                color: muted,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-              }}>
-                Built with React & ♥
-              </span>
+            <span style={{
+              fontSize: 10,
+              fontWeight: 700,
+              color: muted,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+            }}>
+              Built with React & ♥
+            </span>
           </div>
         </div>
 

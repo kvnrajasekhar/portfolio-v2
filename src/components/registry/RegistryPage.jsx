@@ -555,7 +555,7 @@ export default function RegistryPage() {
     const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
     const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
 
-    // ✅ fetchFeed already returns a Promise implicitly since it's async
+    // fetchFeed already returns a Promise implicitly since it's async
     // Just make sure it's defined with useCallback and no issues:
     const fetchFeed = useCallback(async (pg = 1) => {
         setFeedLoading(true);
