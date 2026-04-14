@@ -476,10 +476,6 @@ export default function MasterFooter() {
               initial={{ x: "-110vw", opacity: 0 }}
               animate={logoControls}
               style={{
-                position: "absolute",
-                left: "40%",
-                top: "40%",
-                transform: "translate(-50%, -50%)",
                 zIndex: 0,
                 pointerEvents: "none",
                 display: "flex",
@@ -501,20 +497,22 @@ export default function MasterFooter() {
             </motion.div>
 
             {/* Nav Columns */}
-            <div className="footer-nav-grid" style={{
-              position: "relative",
-              zIndex: 10,
-              display: "grid",
-              width: "100%",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "clamp(24px, 3vw, 40px)",
-              alignItems: "start",
-            }}>
+            <div className="footer-nav-grid"
+              style={{
+                position: "relative",
+                zIndex: 10,
+                display: "grid",
+                width: "100%",
+                // Desktop: 3 equal columns | Mobile: handled by CSS below
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "clamp(24px, 3vw, 40px)",
+                alignItems: "start",
+              }}>
               {NAV_COLS.map(col => (
                 <NavColumn key={col.heading} col={col} isDark={isDark} />
               ))}
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 220 }}>
+              <div className="footer-about-col" style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 220 }}>
                 <SectionHeading label="About" isDark={isDark} />
                 <p style={{ margin: 0, fontSize: "clamp(11px,1.15vw,13px)", fontWeight: 600, color: text, lineHeight: 1.85 }}>
                   Full Stack Engineer building scalable systems with atomic precision.
@@ -588,53 +586,96 @@ export default function MasterFooter() {
 
         {/* ── RESPONSIVE OVERRIDES ── */}
         <style>{`
-          /* TOP SECTION RESPONSIVENESS */
-          .footer-top-container {
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 32px;
-            text-align: center;
-          }
+  /* ── TOP SECTION ── */
+  .footer-top-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    text-align: center;
+  }
+  @media (min-width: 1024px) {
+    .footer-top-container {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
 
-          @media (min-width: 1024px) {
-            .footer-top-container {
-              flex-direction: row;
-              justify-content: space-between;
-              text-align: left;
-            }
-          }
+  /* ── NAV GRID ──
+     Desktop: 3 cols side by side (Navigate | Connect | About)
+     Tablet/Mobile: Navigate + Connect side by side top row,
+                    About centered below, logo behind both
+  */
+  .footer-nav-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-          /* LOGO & NAV RESPONSIVENESS */
-          @media (max-width: 800px) {
-            .footer-logo {
-              position: relative !important;
-              left: auto !important;
-              top: auto !important;
-              transform: none !important;
-              margin: 20px auto !important;
-              width: 100%;
-              opacity: 0.4 !important;
-            }
-            .footer-nav-grid {
-              flex-direction: column !important;
-              align-items: center !important;
-              text-align: center !important;
-              gap: 40px !important;
-            }
-            .footer-bottom-bar {
-              flex-direction: column !important;
-              text-align: center;
-            }
-          }
+  @media (max-width: 900px) {
+    .footer-nav-grid {
+      /* 2-col top row + About spans full width centered below */
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
 
-          @media (min-width: 801px) {
-             .footer-nav-grid {
-                justify-content: space-around;
-                gap: 40px;
-             }
-          }
-        `}</style>
+    /* Navigate = col 1 row 1, Connect = col 2 row 1 */
+    .footer-nav-grid > *:nth-child(1) {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
+      margin-right: clamp(36px, 2vw, 40px);
+    }
+    .footer-nav-grid > *:nth-child(2) {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: start;
+      margin-left: clamp(3px, 2vw, 40px);
+    }
+    /* About spans both columns, centered */
+    .footer-about-col {
+      grid-column: 1 / -1 !important;
+      grid-row: 2;
+      align-items: center;
+      text-align: center;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+  }
+
+  /* ── LOGO: background watermark on all sizes ── */
+  .footer-logo {
+    position: absolute !important;
+    /* Desktop */
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    .footer-logo {
+      /* On mobile/tablet: center it horizontally behind the grid */
+      left: 50% !important;
+      top: 45% !important;
+      transform: translate(-50%, -50%) !important;
+      opacity: 0.8 !important;
+    }
+    .footer-logo img {
+      width: clamp(180px, 50vw, 280px) !important;
+    }
+  }
+
+  /* ── BOTTOM BAR ── */
+  @media (max-width: 640px) {
+    .footer-bottom-bar {
+      flex-direction: column !important;
+      align-items: center !important;
+      text-align: center;
+      gap: 12px !important;
+    }
+  }
+`}</style>
       </footer>
     </div>
   );
