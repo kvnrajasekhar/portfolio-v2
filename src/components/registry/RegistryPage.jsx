@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import { useLocation } from "react-router-dom";
 
-const API = "http://localhost:5000";
+const API = "https://raja-portfolio-server.vercel.app";
+console.log(API);
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 function fmtDate(iso) {
@@ -561,6 +562,7 @@ export default function RegistryPage() {
         try {
             const r = await fetch(`${API}/api/registry?page=${pg}&limit=10`);
             const d = await r.json();
+            console.log(d);
             if (d.success) {
                 const sorted = [...(d.data.users || [])].sort((a, b) => {
                     if (a.isPinned && !b.isPinned) return -1;
@@ -583,7 +585,7 @@ export default function RegistryPage() {
 
         if (!token) {
             setAuthLoading(false);
-            setIsAdmin(storedAdmin);
+            setIsAdmin(false); // Don't show admin when not authenticated
             return;
         }
 
@@ -594,7 +596,7 @@ export default function RegistryPage() {
             .then(d => {
                 if (d.success) {
                     setAuthUser(d.data?.user || d.data);
-                    setIsAdmin(d.data?.isAdmin || storedAdmin);
+                    setIsAdmin(d.data?.isAdmin || false); // Only set admin if API confirms it
                 } else {
                     clearToken();
                     setIsAdmin(false);
@@ -617,7 +619,7 @@ export default function RegistryPage() {
 
                 if (e.data.user) {
                     setAuthUser(e.data.user);
-                    setIsAdmin(e.data.isAdmin || false);
+                    setIsAdmin(e.data.isAdmin === true); // Only set admin if explicitly true
                     pushToast(`Welcome, ${e.data.user.name}`, "success");
                 } else {
                     // fallback (safety)
@@ -629,7 +631,7 @@ export default function RegistryPage() {
                         .then(r => r.json())
                         .then(d => {
                             setAuthUser(d.data?.user || d.data);
-                            setIsAdmin(d.data?.isAdmin || false);
+                            setIsAdmin(d.data?.isAdmin === true); // Only set admin if explicitly true
                             pushToast(`Welcome, ${d.data?.user?.name}`, "success");
                         });
                 }
