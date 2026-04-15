@@ -609,7 +609,6 @@ export default function ResumePage() {
               {[
                 { label: "mail", val: R.identity.email },
                 { label: "tel", val: R.identity.phone },
-                { label: "web", val: R.identity.portfolio },
                 { label: "li", val: R.identity.linkedin },
                 { label: "gh", val: R.identity.github },
               ].map(c => (
