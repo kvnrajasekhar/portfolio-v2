@@ -9,6 +9,7 @@ import ContactPage from "./components/contact/Contact";
 import Resume from "./components/resume/ResumePage";
 import RegistryPage from "./components/registry/RegistryPage";
 import AuthCallback from "./components/auth/AuthCallback";
+import ExperiencePage from "./components/experience/ExperiencePage";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function AnimatedRoutes() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/resume" element={<Resume />} />
         <Route path="/registry" element={<RegistryPage />} />
+        <Route path="/experience" element={<ExperiencePage   />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="*" element={<App />} />
       </Routes>
