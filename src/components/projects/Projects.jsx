@@ -4,6 +4,8 @@ import { useTheme } from "../../context/ThemeContext";
 import GitHubSnake from "./GitHubSnake";
 import GitHubStats from "./GitHubStats";
 import GitHubRedirect from "./GitHubRedirect";
+import AtomicTransition from "../transition/AtomicTransition";
+
 
 // ─── PROJECT DATA ─────────────────────────────────────────────────────────────
 const PROJECTS = [
@@ -857,73 +859,75 @@ export default function ProjectsPage() {
   const gridLine = isDark ? "rgba(255,255,255,0.025)" : "rgba(92,189,185,0.07)";
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: bg,
-      padding: "clamp(56px,9vw,100px) clamp(16px,5vw,72px)",
-      fontFamily: "'Courier New',monospace",
-      transition: "background 0.4s ease",
-      position: "relative",
-    }}>
-      {/* Blueprint grid */}
+    <AtomicTransition>
       <div style={{
-        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-        backgroundImage: `
+        minHeight: "100vh",
+        background: bg,
+        padding: "clamp(56px,9vw,100px) clamp(16px,5vw,72px)",
+        fontFamily: "'Courier New',monospace",
+        transition: "background 0.4s ease",
+        position: "relative",
+      }}>
+        {/* Blueprint grid */}
+        <div style={{
+          position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+          backgroundImage: `
           linear-gradient(${gridLine} 1px, transparent 1px),
           linear-gradient(90deg, ${gridLine} 1px, transparent 1px)
         `,
-        backgroundSize: "48px 48px",
-      }} />
+          backgroundSize: "48px 48px",
+        }} />
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
-        <PageHeader isDark={isDark} />
+        <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <PageHeader isDark={isDark} />
 
-        {/* ── Central axis + cards ── */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 0 }}>
-          {PROJECTS.map((project, i) => (
-            <div key={project.id}>
-              <ProjectCard project={project} index={i} isDark={isDark} />
-              {i < PROJECTS.length - 1 && <AxisLine isDark={isDark} />}
-            </div>
-          ))}
-        </div>
+          {/* ── Central axis + cards ── */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 0 }}>
+            {PROJECTS.map((project, i) => (
+              <div key={project.id}>
+                <ProjectCard project={project} index={i} isDark={isDark} />
+                {i < PROJECTS.length - 1 && <AxisLine isDark={isDark} />}
+              </div>
+            ))}
+          </div>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <GitHubRedirect style={{ filter: isDark ? "invert(1)" : "none" }} />
-        </div>
-        {/* Footer rule */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          style={{
-            marginTop: "clamp(40px,6vw,64px)",
-            display: "flex", alignItems: "center", gap: 16,
-          }}
-        >
+          <div className="max-w-7xl mx-auto relative z-10">
+            <GitHubRedirect style={{ filter: isDark ? "invert(1)" : "none" }} />
+          </div>
+          {/* Footer rule */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            style={{
+              marginTop: "clamp(40px,6vw,64px)",
+              display: "flex", alignItems: "center", gap: 16,
+            }}
+          >
 
-          <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
-          <span style={{
-            fontFamily: "'Courier New',monospace",
-            fontSize: 9, fontWeight: 700,
-            letterSpacing: "0.3em", textTransform: "uppercase",
-            color: isDark ? "rgba(255,255,255,0.2)" : "rgba(10,80,70,0.4)",
-          }}>
-            Rajasekhar — Flagship Systems — v1.0
-          </span>
-          <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
-        </motion.div>
+            <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
+            <span style={{
+              fontFamily: "'Courier New',monospace",
+              fontSize: 9, fontWeight: 700,
+              letterSpacing: "0.3em", textTransform: "uppercase",
+              color: isDark ? "rgba(255,255,255,0.2)" : "rgba(10,80,70,0.4)",
+            }}>
+              Rajasekhar — Flagship Systems — v1.0
+            </span>
+            <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
+          </motion.div>
 
-        {/* The Contribution Snake */}
-        <GitHubSnake style={{ marginLeft: 12, filter: isDark ? "invert(1)" : "none" }} />
+          {/* The Contribution Snake */}
+          <GitHubSnake style={{ marginLeft: 12, filter: isDark ? "invert(1)" : "none" }} />
 
-        {/* GitHub Stats */}
-        <div className="max-w-7xl mx-auto relative z-10"
-          style={{ willChange: "transform" }}>
-          <GitHubStats />
+          {/* GitHub Stats */}
+          <div className="max-w-7xl mx-auto relative z-10"
+            style={{ willChange: "transform" }}>
+            <GitHubStats />
+          </div>
         </div>
       </div>
-    </div>
+    </AtomicTransition>
   );
 }

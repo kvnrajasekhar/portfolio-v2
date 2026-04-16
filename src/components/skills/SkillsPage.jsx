@@ -8,6 +8,7 @@ import {
 } from "react-icons/si";
 import { FaJava, FaAws } from "react-icons/fa";
 import { GrOracle } from "react-icons/gr";
+import AtomicTransition from "../transition/AtomicTransition";
 
 
 // ─── RADAR RATINGS (honest approximate) ──────────────────────────────────────
@@ -52,7 +53,7 @@ const LAYERS = [
         databases: [
             { name: "MongoDB", years: 2, tooltip: "Document store, Mongoose schemas", icon: <SiMongodb /> },
             { name: "Oracle SQL", years: 1, tooltip: "Relational design, stored procedures", icon: <GrOracle /> },
-            { name: "PL/SQL", years: 0.5, tooltip: "Oracle procedural SQL scripting", icon: <GrOracle />    },
+            { name: "PL/SQL", years: 0.5, tooltip: "Oracle procedural SQL scripting", icon: <GrOracle /> },
         ],
         devops: [
             { name: "Docker", years: 1, tooltip: "Containerisation & compose stacks", icon: <SiDocker /> },
@@ -689,7 +690,7 @@ function LeadershipPillar({ pillar, index, isDark, color }) {
 }
 
 // ─── OPERATIONAL VALUE ────────────────────────────────────────────────────────
-function ValueCard({ val, index, isDark, color }) { 
+function ValueCard({ val, index, isDark, color }) {
     const ref = useRef(null);
     const inView = useInView(ref, { once: true, margin: "-40px" });
 
@@ -868,133 +869,135 @@ export default function SkillsPage() {
     const showLeader = view === "Leader Mode" || view === "Hybrid";
 
     return (
-        <div style={{
-            minHeight: "100vh",
-            background: bg,
-            padding: "clamp(56px,9vw,100px) clamp(16px,5vw,72px)",
-            fontFamily: "'Courier New',monospace",
-            transition: "background 0.4s ease",
-            position: "relative",
-        }}>
-            {/* Blueprint grid */}
+        <AtomicTransition>
             <div style={{
-                position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-                backgroundImage: `linear-gradient(${gridLine} 1px,transparent 1px),linear-gradient(90deg,${gridLine} 1px,transparent 1px)`,
-                backgroundSize: "48px 48px",
-            }} />
+                minHeight: "100vh",
+                background: bg,
+                padding: "clamp(56px,9vw,100px) clamp(16px,5vw,72px)",
+                fontFamily: "'Courier New',monospace",
+                transition: "background 0.4s ease",
+                position: "relative",
+            }}>
+                {/* Blueprint grid */}
+                <div style={{
+                    position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+                    backgroundImage: `linear-gradient(${gridLine} 1px,transparent 1px),linear-gradient(90deg,${gridLine} 1px,transparent 1px)`,
+                    backgroundSize: "48px 48px",
+                }} />
 
-            <div style={{ maxWidth: "100%", margin: "0 auto", position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: "clamp(48px,7vw,80px)" }}>
+                <div style={{ maxWidth: "100%", margin: "0 auto", position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: "clamp(48px,7vw,80px)" }}>
 
-                {/* ── Page header ── */}
-                <div className="mt-12">
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                        <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
-                        <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.35em", textTransform: "uppercase", color: teal }}>
-                            The Skill Equilibrium
-                        </span>
-                        <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
-                    </div>
-                    <h1 style={{
-                        margin: 0,
-                        fontFamily: "'Courier New',monospace",
-                        fontSize: "clamp(28px,5.5vw,60px)",
-                        fontWeight: 900,
-                        letterSpacing: "-0.03em",
-                        lineHeight: 1.05,
-                        color: text,
-                    }}>
-                        Dual-Core{" "}
-                        <div style={{ display: "inline-block" }}>
-                            <span style={{
-                                display: "inline",
-                                backgroundImage: isDark
-                                    ? "linear-gradient(135deg, #5cbdb9, #c9b8f5)"
-                                    : "linear-gradient(135deg, #2a9e9a, #6040c0)",
-                                WebkitBackgroundClip: "text",
-                                backgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                                color: "transparent",
-                            }}>
-                                System.
+                    {/* ── Page header ── */}
+                    <div className="mt-12">
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                            <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
+                            <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.35em", textTransform: "uppercase", color: teal }}>
+                                The Skill Equilibrium
                             </span>
+                            <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
                         </div>
-                    </h1>
-                    <p style={{ margin: "14px 0 24px", fontFamily: "'Courier New',monospace", fontSize: "clamp(11px,1.3vw,14px)", fontWeight: 600, color: muted, letterSpacing: "0.06em", maxWidth: 520, lineHeight: 1.75 }}>
-                        Logic Core meets Leadership OS. Every skill documented, every year counted.
-                    </p>
-                    <ViewToggle view={view} setView={setView} isDark={isDark} />
-                    <div style={{ marginTop: 24, height: 1.5, background: isDark ? "linear-gradient(90deg,#5cbdb9,#c9b8f5 45%,#fbe3e8 75%,transparent)" : "linear-gradient(90deg,#2a9e9a,#6040c0 45%,#c04070 75%,transparent)", opacity: isDark ? 0.45 : 0.6 }} />
-                </div>
-
-                {/* ── Radar chart ── */}
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <RadarChart isDark={isDark} />
-                </div>
-
-                {/* ── Logic Core (Tech Stack) ── */}
-                <AnimatePresence>
-                    {showDev && (
-                        <motion.div
-                            key="dev"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <SectionTag label="Logic Core · Tech Stack" isDark={isDark} color={isDark ? "#5cbdb9" : "#2a9e9a"} />
-                            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,2vw,20px)" }}>
-                                {LAYERS.map((layer, i) => <LayerCard key={layer.id} layer={layer} isDark={isDark} index={i} color={isDark ? "#5cbdb9" : "#2a9e9a"} />)}
+                        <h1 style={{
+                            margin: 0,
+                            fontFamily: "'Courier New',monospace",
+                            fontSize: "clamp(28px,5.5vw,60px)",
+                            fontWeight: 900,
+                            letterSpacing: "-0.03em",
+                            lineHeight: 1.05,
+                            color: text,
+                        }}>
+                            Dual-Core{" "}
+                            <div style={{ display: "inline-block" }}>
+                                <span style={{
+                                    display: "inline",
+                                    backgroundImage: isDark
+                                        ? "linear-gradient(135deg, #5cbdb9, #c9b8f5)"
+                                        : "linear-gradient(135deg, #2a9e9a, #6040c0)",
+                                    WebkitBackgroundClip: "text",
+                                    backgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                    color: "transparent",
+                                }}>
+                                    System.
+                                </span>
                             </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* ── Leadership OS ── */}
-                <AnimatePresence>
-                    {showLeader && (
-                        <motion.div
-                            key="leader"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <SectionTag label="Leadership OS · Command Center" isDark={isDark} color={isDark ? "#c9b8f5" : "#6040c0"} />
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,280px),1fr))", gap: "clamp(14px,2vw,20px)" }}>
-                                {PILLARS.map((p, i) => <LeadershipPillar key={p.id} pillar={p} index={i} isDark={isDark} color={isDark ? "#c9b8f5" : "#6040c0"} />)}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* ── Operational Values (always shown) ── */}
-                <div>
-                    <SectionTag label="Operational Values · Connective Tissue" isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,300px),1fr))", gap: "clamp(12px,1.8vw,18px)" }}>
-                        {VALUES.map((v, i) => <ValueCard key={v.value} val={v} index={i} isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />)}
+                        </h1>
+                        <p style={{ margin: "14px 0 24px", fontFamily: "'Courier New',monospace", fontSize: "clamp(11px,1.3vw,14px)", fontWeight: 600, color: muted, letterSpacing: "0.06em", maxWidth: 520, lineHeight: 1.75 }}>
+                            Logic Core meets Leadership OS. Every skill documented, every year counted.
+                        </p>
+                        <ViewToggle view={view} setView={setView} isDark={isDark} />
+                        <div style={{ marginTop: 24, height: 1.5, background: isDark ? "linear-gradient(90deg,#5cbdb9,#c9b8f5 45%,#fbe3e8 75%,transparent)" : "linear-gradient(90deg,#2a9e9a,#6040c0 45%,#c04070 75%,transparent)", opacity: isDark ? 0.45 : 0.6 }} />
                     </div>
+
+                    {/* ── Radar chart ── */}
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <RadarChart isDark={isDark} />
+                    </div>
+
+                    {/* ── Logic Core (Tech Stack) ── */}
+                    <AnimatePresence>
+                        {showDev && (
+                            <motion.div
+                                key="dev"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                <SectionTag label="Logic Core · Tech Stack" isDark={isDark} color={isDark ? "#5cbdb9" : "#2a9e9a"} />
+                                <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,2vw,20px)" }}>
+                                    {LAYERS.map((layer, i) => <LayerCard key={layer.id} layer={layer} isDark={isDark} index={i} color={isDark ? "#5cbdb9" : "#2a9e9a"} />)}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* ── Leadership OS ── */}
+                    <AnimatePresence>
+                        {showLeader && (
+                            <motion.div
+                                key="leader"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                <SectionTag label="Leadership OS · Command Center" isDark={isDark} color={isDark ? "#c9b8f5" : "#6040c0"} />
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,280px),1fr))", gap: "clamp(14px,2vw,20px)" }}>
+                                    {PILLARS.map((p, i) => <LeadershipPillar key={p.id} pillar={p} index={i} isDark={isDark} color={isDark ? "#c9b8f5" : "#6040c0"} />)}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* ── Operational Values (always shown) ── */}
+                    <div>
+                        <SectionTag label="Operational Values · Connective Tissue" isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,300px),1fr))", gap: "clamp(12px,1.8vw,18px)" }}>
+                            {VALUES.map((v, i) => <ValueCard key={v.value} val={v} index={i} isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />)}
+                        </div>
+                    </div>
+
+                    {/* ── Cert Vault ── */}
+                    <CertVault isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />
+
+                    {/* ── Footer rule ── */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
+                        <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(10,80,70,0.4)" }}>
+                            Rajasekhar — Skill Equilibrium — v1.0
+                        </span>
+                        <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
+                    </div>
+
                 </div>
 
-                {/* ── Cert Vault ── */}
-                <CertVault isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />
-
-                {/* ── Footer rule ── */}
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
-                    <span style={{ fontFamily: "'Courier New',monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: isDark ? "rgba(255,255,255,0.2)" : "rgba(10,80,70,0.4)" }}>
-                        Rajasekhar — Skill Equilibrium — v1.0
-                    </span>
-                    <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,100,90,0.15)" }} />
-                </div>
-
-            </div>
-
-            <style>{`
+                <style>{`
         @keyframes pulse {
           0%,100% { opacity:0.6; }
           50%      { opacity:1; }
         }
       `}</style>
-        </div>
+            </div>
+        </AtomicTransition>
     );
 }

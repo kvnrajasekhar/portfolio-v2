@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
+import AtomicTransition from "../transition/AtomicTransition";
 
 // ─── PROTOCOL DATA ────────────────────────────────────────────────────────────
 const PROTOCOLS = [
@@ -79,15 +80,15 @@ const BOOT_LINES = [
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 function colorClass(type, isDark) {
   const map = {
-    success:  isDark ? "text-green-400"   : "text-green-700",
-    error:    isDark ? "text-red-400"     : "text-red-600",
-    warn:     isDark ? "text-yellow-400"  : "text-yellow-600",
-    info:     isDark ? "text-blue-400"    : "text-blue-600",
-    dim:      isDark ? "text-gray-500"    : "text-gray-400",
-    header:   isDark ? "text-teal-300"    : "text-teal-700",
-    cmd:      isDark ? "text-green-300"   : "text-green-800",
-    protocol: isDark ? "text-purple-400"  : "text-purple-700",
-    white:    isDark ? "text-gray-100"    : "text-gray-800",
+    success: isDark ? "text-green-400" : "text-green-700",
+    error: isDark ? "text-red-400" : "text-red-600",
+    warn: isDark ? "text-yellow-400" : "text-yellow-600",
+    info: isDark ? "text-blue-400" : "text-blue-600",
+    dim: isDark ? "text-gray-500" : "text-gray-400",
+    header: isDark ? "text-teal-300" : "text-teal-700",
+    cmd: isDark ? "text-green-300" : "text-green-800",
+    protocol: isDark ? "text-purple-400" : "text-purple-700",
+    white: isDark ? "text-gray-100" : "text-gray-800",
   };
   return map[type] || (isDark ? "text-gray-300" : "text-gray-700");
 }
@@ -172,16 +173,16 @@ export default function SocialTerminal() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
-  const [lines, setLines]         = useState([]);
-  const [input, setInput]         = useState("");
-  const [booted, setBooted]       = useState(false);
+  const [lines, setLines] = useState([]);
+  const [input, setInput] = useState("");
+  const [booted, setBooted] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [history, setHistory]     = useState([]);
-  const [histIdx, setHistIdx]     = useState(-1);
-  const [bootIdx, setBootIdx]     = useState(0);
+  const [history, setHistory] = useState([]);
+  const [histIdx, setHistIdx] = useState(-1);
+  const [bootIdx, setBootIdx] = useState(0);
 
-  const scrollRef   = useRef(null);
-  const inputRef    = useRef(null);
+  const scrollRef = useRef(null);
+  const inputRef = useRef(null);
 
   // ── Auto-scroll ──
   useEffect(() => {
@@ -406,143 +407,144 @@ export default function SocialTerminal() {
   };
 
   // ── Theme classes ──
-  const termBg     = isDark ? "bg-black"   : "bg-gray-50";
+  const termBg = isDark ? "bg-black" : "bg-gray-50";
   const termBorder = isDark ? "border-gray-700" : "border-gray-300";
-  const termText   = isDark ? "text-green-400" : "text-gray-800";
-  const headerBg   = isDark ? "bg-gray-900" : "bg-gray-200";
-  const footerBg   = isDark ? "bg-gray-900 text-gray-500" : "bg-gray-100 text-gray-500";
-  const inputBg    = isDark ? "bg-transparent text-green-300" : "bg-transparent text-gray-800";
-  const promptCol  = isDark ? "text-green-400" : "text-green-700";
+  const termText = isDark ? "text-green-400" : "text-gray-800";
+  const headerBg = isDark ? "bg-gray-900" : "bg-gray-200";
+  const footerBg = isDark ? "bg-gray-900 text-gray-500" : "bg-gray-100 text-gray-500";
+  const inputBg = isDark ? "bg-transparent text-green-300" : "bg-transparent text-gray-800";
+  const promptCol = isDark ? "text-green-400" : "text-green-700";
 
   return (
-    <section
-      className={`w-full flex items-center justify-center py-16 px-4 ${isDark ? "bg-black" : "bg-white"}`}
-      style={{ fontFamily: "'Courier New', monospace" }}
-    >
-      {/* Terminal window */}
-      <motion.div
-        initial={{ opacity: 0, y: 32 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className={`w-full max-w-3xl rounded-xl border ${termBorder} ${termBg} overflow-hidden shadow-2xl mt-12`}
-        style={{ boxShadow: isDark ? "0 0 60px rgba(0,255,128,0.06)" : "0 8px 48px rgba(0,0,0,0.12)" }}
-        onClick={focusInput}
+    <AtomicTransition>
+      <section
+        className={`w-full flex items-center justify-center py-16 px-4 ${isDark ? "bg-black" : "bg-white"}`}
+        style={{ fontFamily: "'Courier New', monospace" }}
       >
-
-        {/* ── Title bar ── */}
-        <div className={`flex items-center gap-3 px-4 py-3 ${headerBg} border-b ${termBorder} select-none`}>
-          {/* macOS dots */}
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-          </div>
-          <span className={`flex-1 text-center text-xs font-semibold tracking-widest ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-            SECURE_TERMINAL — social-protocols@raj:~
-          </span>
-          <div className={`text-[10px] px-2 py-0.5 rounded ${isDark ? "bg-green-900/50 text-green-400" : "bg-green-100 text-green-700"}`}>
-            ● ENCRYPTED
-          </div>
-        </div>
-
-        {/* ── Output area ── */}
-        <div
-          ref={scrollRef}
-          className="h-[420px] overflow-y-scroll px-5 py-4 flex flex-col gap-[3px] text-sm"
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            WebkitOverflowScrolling: "touch",
-          }}
+        {/* Terminal window */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className={`w-full max-w-3xl rounded-xl border ${termBorder} ${termBg} overflow-hidden shadow-2xl mt-12`}
+          style={{ boxShadow: isDark ? "0 0 60px rgba(0,255,128,0.06)" : "0 8px 48px rgba(0,0,0,0.12)" }}
+          onClick={focusInput}
         >
-          <style>{`::-webkit-scrollbar { display: none; }`}</style>
 
-          <AnimatePresence initial={false}>
-            {lines.map((line, i) => (
+          {/* ── Title bar ── */}
+          <div className={`flex items-center gap-3 px-4 py-3 ${headerBg} border-b ${termBorder} select-none`}>
+            {/* macOS dots */}
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+            </div>
+            <span className={`flex-1 text-center text-xs font-semibold tracking-widest ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              SECURE_TERMINAL — social-protocols@raj:~
+            </span>
+            <div className={`text-[10px] px-2 py-0.5 rounded ${isDark ? "bg-green-900/50 text-green-400" : "bg-green-100 text-green-700"}`}>
+              ● ENCRYPTED
+            </div>
+          </div>
+
+          {/* ── Output area ── */}
+          <div
+            ref={scrollRef}
+            className="h-[420px] overflow-y-scroll px-5 py-4 flex flex-col gap-[3px] text-sm"
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            <style>{`::-webkit-scrollbar { display: none; }`}</style>
+
+            <AnimatePresence initial={false}>
+              {lines.map((line, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {line.type === "blank" ? (
+                    <div className="h-2" />
+                  ) : line.type === "protocol-list" ? (
+                    <div className="flex flex-col gap-1 my-1">
+                      {PROTOCOLS.map(p => (
+                        <motion.div
+                          key={p.id}
+                          whileHover={{ x: 5 }}
+                          transition={{ duration: 0.12 }}
+                          onClick={(e) => { e.stopPropagation(); handleProtocolClick(p); }}
+                          className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded transition-colors ${isDark
+                              ? "hover:bg-green-900/20 hover:border-green-800"
+                              : "hover:bg-teal-50 hover:border-teal-200"
+                            } border border-transparent`}
+                          title={`Click to connect: ${p.name}`}
+                        >
+                          <span className={`text-xs w-5 ${isDark ? "text-gray-600" : "text-gray-400"}`}>[{p.id}]</span>
+                          <span className={`w-28 font-bold ${isDark ? "text-purple-400" : "text-purple-700"}`}>{p.label}</span>
+                          <span className={`text-xs flex-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}>--{p.cmd.split(" ").slice(1).join(" ")}</span>
+                          <span className={`text-[10px] ${isDark ? "text-gray-600" : "text-gray-400"}`}>{p.port}</span>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded ml-2 ${isDark ? "bg-green-900/50 text-green-400" : "bg-green-100 text-green-700"}`}>
+                            ● {p.status}
+                          </span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <TermLine line={line} isDark={isDark} />
+                  )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {/* Processing animation */}
+            {processing && (
               <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -6 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.18 }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ repeat: Infinity, duration: 0.8 }}
+                className={`text-xs ${isDark ? "text-yellow-400" : "text-yellow-600"}`}
               >
-                {line.type === "blank" ? (
-                  <div className="h-2" />
-                ) : line.type === "protocol-list" ? (
-                  <div className="flex flex-col gap-1 my-1">
-                    {PROTOCOLS.map(p => (
-                      <motion.div
-                        key={p.id}
-                        whileHover={{ x: 5 }}
-                        transition={{ duration: 0.12 }}
-                        onClick={(e) => { e.stopPropagation(); handleProtocolClick(p); }}
-                        className={`flex items-center gap-2 cursor-pointer px-2 py-1 rounded transition-colors ${
-                          isDark
-                            ? "hover:bg-green-900/20 hover:border-green-800"
-                            : "hover:bg-teal-50 hover:border-teal-200"
-                        } border border-transparent`}
-                        title={`Click to connect: ${p.name}`}
-                      >
-                        <span className={`text-xs w-5 ${isDark ? "text-gray-600" : "text-gray-400"}`}>[{p.id}]</span>
-                        <span className={`w-28 font-bold ${isDark ? "text-purple-400" : "text-purple-700"}`}>{p.label}</span>
-                        <span className={`text-xs flex-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}>--{p.cmd.split(" ").slice(1).join(" ")}</span>
-                        <span className={`text-[10px] ${isDark ? "text-gray-600" : "text-gray-400"}`}>{p.port}</span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded ml-2 ${isDark ? "bg-green-900/50 text-green-400" : "bg-green-100 text-green-700"}`}>
-                          ● {p.status}
-                        </span>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <TermLine line={line} isDark={isDark} />
-                )}
+                ▶ Processing...
               </motion.div>
-            ))}
-          </AnimatePresence>
+            )}
+          </div>
 
-          {/* Processing animation */}
-          {processing && (
-            <motion.div
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ repeat: Infinity, duration: 0.8 }}
-              className={`text-xs ${isDark ? "text-yellow-400" : "text-yellow-600"}`}
-            >
-              ▶ Processing...
-            </motion.div>
-          )}
-        </div>
+          {/* ── Input row ── */}
+          <div className={`flex items-center gap-2 px-5 py-3 border-t ${termBorder} ${isDark ? "bg-gray-950/60" : "bg-gray-100/60"}`}>
+            <span className={`text-sm font-bold shrink-0 ${promptCol}`}>C:\sociallinks $</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={!booted || processing}
+              placeholder={booted ? "type a command..." : "booting..."}
+              className={`flex-1 bg-transparent outline-none border-none text-sm ${inputBg} placeholder-gray-600 caret-green-400`}
+              style={{ fontFamily: "'Courier New', monospace" }}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+            />
+            {booted && !processing && <Cursor isDark={isDark} />}
+          </div>
 
-        {/* ── Input row ── */}
-        <div className={`flex items-center gap-2 px-5 py-3 border-t ${termBorder} ${isDark ? "bg-gray-950/60" : "bg-gray-100/60"}`}>
-          <span className={`text-sm font-bold shrink-0 ${promptCol}`}>C:\sociallinks $</span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={!booted || processing}
-            placeholder={booted ? "type a command..." : "booting..."}
-            className={`flex-1 bg-transparent outline-none border-none text-sm ${inputBg} placeholder-gray-600 caret-green-400`}
-            style={{ fontFamily: "'Courier New', monospace" }}
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-          />
-          {booted && !processing && <Cursor isDark={isDark} />}
-        </div>
+          {/* ── Footer ── */}
+          <div className={`px-5 py-2 text-[10px] tracking-widest flex items-center justify-between ${footerBg} border-t ${termBorder}`}>
+            <span>SECURE_TERMINAL v2.0.1</span>
+            <span className="flex gap-4">
+              <span>AES-256 / TLS 1.3</span>
+              <span className={isDark ? "text-green-500" : "text-green-600"}>● ENCRYPTED</span>
+              <span>{PROTOCOLS.length} NODES ONLINE</span>
+            </span>
+          </div>
 
-        {/* ── Footer ── */}
-        <div className={`px-5 py-2 text-[10px] tracking-widest flex items-center justify-between ${footerBg} border-t ${termBorder}`}>
-          <span>SECURE_TERMINAL v2.0.1</span>
-          <span className="flex gap-4">
-            <span>AES-256 / TLS 1.3</span>
-            <span className={isDark ? "text-green-500" : "text-green-600"}>● ENCRYPTED</span>
-            <span>{PROTOCOLS.length} NODES ONLINE</span>
-          </span>
-        </div>
-
-      </motion.div>
-    </section>
+        </motion.div>
+      </section>
+    </AtomicTransition>
   );
 }

@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
+import AtomicTransition from "../transition/AtomicTransition";
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 function hexRgb(hex) {
@@ -1002,41 +1003,43 @@ export default function Contact() {
     const isDark = theme === "dark";
 
     return (
-        <div
-            style={{
-                minHeight: "100vh",
-                background: isDark ? "#000000" : "#ffffff",
-                transition: "background 0.4s ease",
-                overflowX: "hidden",
-                position: "relative",
-            }}
-        >
-            {/* Blueprint grid */}
+        <AtomicTransition>
             <div
                 style={{
-                    position: "fixed",
-                    inset: 0,
-                    pointerEvents: "none",
-                    zIndex: 0,
-                    backgroundImage: `
+                    minHeight: "100vh",
+                    background: isDark ? "#000000" : "#ffffff",
+                    transition: "background 0.4s ease",
+                    overflowX: "hidden",
+                    position: "relative",
+                }}
+            >
+                {/* Blueprint grid */}
+                <div
+                    style={{
+                        position: "fixed",
+                        inset: 0,
+                        pointerEvents: "none",
+                        zIndex: 0,
+                        backgroundImage: `
             linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.07)"} 1px, transparent 1px),
             linear-gradient(90deg, ${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.07)"} 1px, transparent 1px)
           `,
-                    backgroundSize: "52px 52px",
-                }}
-                aria-hidden
-            />
+                        backgroundSize: "52px 52px",
+                    }}
+                    aria-hidden
+                />
 
-            {/* Content */}
-            <div style={{ position: "relative", zIndex: 1 }}>
-                <HeroSection isDark={isDark} />
-                <AlignmentSection isDark={isDark} />
-                <GrowthLogSection isDark={isDark} />
-                <HandshakeSection isDark={isDark} />
-                <UptimeSection isDark={isDark} />
-                <FeedbackSection isDark={isDark} />
-                <FooterRule isDark={isDark} />
+                {/* Content */}
+                <div style={{ position: "relative", zIndex: 1 }}>
+                    <HeroSection isDark={isDark} />
+                    <AlignmentSection isDark={isDark} />
+                    <GrowthLogSection isDark={isDark} />
+                    <HandshakeSection isDark={isDark} />
+                    <UptimeSection isDark={isDark} />
+                    <FeedbackSection isDark={isDark} />
+                    <FooterRule isDark={isDark} />
+                </div>
             </div>
-        </div>
+        </AtomicTransition>
     );
 }

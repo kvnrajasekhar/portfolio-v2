@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import { useLocation } from "react-router-dom";
+import AtomicTransition from "../transition/AtomicTransition";
+
 
 const API = "https://raja-portfolio-server.vercel.app";
 console.log(API);
@@ -742,218 +744,220 @@ export default function RegistryPage() {
     };
 
     return (
-        <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease" }}>
-            <Toast toasts={toasts} remove={removeToast} />
+        <AtomicTransition>
+            <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease" }}>
+                <Toast toasts={toasts} remove={removeToast} />
 
-            {/* Grid */}
-            <div style={{
-                position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-                backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px, transparent 1px),linear-gradient(90deg,${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px)`,
-                backgroundSize: "48px 48px",
-            }} aria-hidden />
+                {/* Grid */}
+                <div style={{
+                    position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+                    backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px, transparent 1px),linear-gradient(90deg,${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px)`,
+                    backgroundSize: "48px 48px",
+                }} aria-hidden />
 
-            <div style={{ position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto", padding: "clamp(56px,10vw,96px) clamp(16px,5vw,48px) clamp(72px,10vw,100px)", boxSizing: "border-box" }}>
+                <div style={{ position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto", padding: "clamp(56px,10vw,96px) clamp(16px,5vw,48px) clamp(72px,10vw,100px)", boxSizing: "border-box" }}>
 
-                {/* ── PAGE HEADER ── */}
-                <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }} style={{ marginBottom: "clamp(36px,6vw,56px)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
-                        <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
-                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase", color: teal }}>
-                            Digital Archive · Portfolio Registry
-                        </span>
-                        <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
+                    {/* ── PAGE HEADER ── */}
+                    <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }} style={{ marginBottom: "clamp(36px,6vw,56px)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+                            <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
+                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase", color: teal }}>
+                                Digital Archive · Portfolio Registry
+                            </span>
+                            <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
+                        </div>
+
+                        <h1 style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(32px,6vw,60px)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, color: text, margin: "0 0 10px" }}>
+                            The Ledger
+                        </h1>
+                        <p style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.3vw,13px)", color: muted, lineHeight: 1.78, maxWidth: 520, margin: 0 }}>
+                            A permanent record of engineers, founders, and builders who crossed paths with this portfolio.
+                            Sign to leave your mark in the archive.
+                        </p>
+                    </motion.div>
+
+                    {/* ── AUTH ZONE ── */}
+                    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
+                        style={{
+                            padding: "clamp(18px,3vw,28px)", marginBottom: "clamp(28px,5vw,44px)",
+                            border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`,
+                            borderRadius: 8,
+                            background: isDark ? "rgba(255,255,255,0.02)" : "rgba(10,18,18,0.01)",
+                        }}>
+
+                        <AnimatePresence mode="wait">
+                            {authLoading ? (
+                                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                    <Skeleton isDark={isDark} h={52} />
+                                </motion.div>
+                            ) : authUser ? (
+                                <motion.div key="authed" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.38 }}>
+                                    {/* Session bar */}
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <div style={{ position: "relative" }}>
+                                                <img src={authUser.profileImg || `https://api.dicebear.com/7.x/initials/svg?seed=${authUser.name}`} alt={authUser.name}
+                                                    style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: `2px solid ${teal}` }} />
+                                                <div style={{ position: "absolute", bottom: -2, right: -2, width: 12, height: 12, borderRadius: "50%", background: "#22c55e", border: `1.5px solid ${bg}` }} />
+                                            </div>
+                                            <div>
+                                                <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(12px,1.4vw,14px)", fontWeight: 800, color: text, display: "block" }}>{authUser.name}</span>
+                                                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted }}>Session active · {mySigs.length}/3 slots</span>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                                            <button onClick={handleSignClick}
+                                                style={{
+                                                    fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.18em",
+                                                    color: isDark ? "#000" : "#fff", background: teal, border: `1px solid ${teal}`,
+                                                    borderRadius: 5, padding: "8px 18px", cursor: "pointer",
+                                                }}>
+                                                &gt; SIGN_HERE
+                                            </button>
+                                            <button onClick={handleLogout}
+                                                style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", color: muted, background: "transparent", border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`, borderRadius: 5, padding: "8px 14px", cursor: "pointer" }}>
+                                                LOGOUT
+                                            </button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.div key="loggedout" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, letterSpacing: "0.28em", color: muted, display: "block", marginBottom: 14, textTransform: "uppercase" }}>
+                  // HANDSHAKE_PROTOCOL — Select auth provider
+                                    </span>
+                                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                                        {[
+                                            { id: "github", label: "GitHub", bg: "#181717", fg: "#ffffff" },
+                                            // { id: "linkedin", label: "LinkedIn", bg: "#0077B5", fg: "#ffffff" },
+                                            { id: "google", label: "Google", bg: "#4285F4", fg: "#ffffff" },
+                                        ].map(p => (
+                                            <button key={p.id} onClick={() => handleOAuth(p.id)}
+                                                style={{
+                                                    fontFamily: "'Courier New', monospace", fontSize: 11, fontWeight: 800,
+                                                    letterSpacing: "0.14em", textTransform: "uppercase",
+                                                    color: p.fg, background: p.bg,
+                                                    border: "none", borderRadius: 6,
+                                                    padding: "10px 20px", cursor: "pointer",
+                                                    display: "flex", alignItems: "center", gap: 8,
+                                                    transition: "opacity 0.2s ease",
+                                                }}
+                                                onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+                                                onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                                            >
+                                                <ProviderIcon p={p.id} />
+                                                {p.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    {/* ── STATS ROW ── */}
+                    {pagination && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+                            style={{ display: "flex", gap: "clamp(20px,4vw,40px)", marginBottom: "clamp(24px,4vw,36px)", flexWrap: "wrap" }}>
+                            {[
+                                { label: "TOTAL_SIGNATORIES", val: pagination.totalUsers },
+                                { label: "LEDGER_PAGES", val: pagination.totalPages },
+                                { label: "STATUS", val: "LIVE" },
+                            ].map(s => (
+                                <div key={s.label}>
+                                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.22em", textTransform: "uppercase", display: "block", marginBottom: 2 }}>{s.label}</span>
+                                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(16px,2.2vw,22px)", fontWeight: 900, color: s.val === "LIVE" ? teal : text, letterSpacing: "-0.01em" }}>{s.val}</span>
+                                </div>
+                            ))}
+                        </motion.div>
+                    )}
+
+                    {/* ── REGISTRY FEED ── */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,2vw,18px)" }}>
+
+                        {/* Genesis — always first */}
+                        <EntityCard user={GENESIS} isDark={isDark} isGenesis={true} onEdit={() => { }} currentUser={null} isAdmin={false} onPinToggle={() => { }} />
+
+                        {/* Feed */}
+                        {feedLoading && users.length === 0 ? (
+                            Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} isDark={isDark} h={140} />)
+                        ) : (
+                            users
+                                .filter(u => {
+                                    // Only show users who have at least one signature with content
+                                    const sigs = u.signatures || [];
+                                    return sigs.length > 0 && sigs.some(sig => sig.content && sig.content.trim().length > 0);
+                                })
+                                .map(u => (
+                                    <EntityCard
+                                        key={u._id} user={u} isDark={isDark}
+                                        isGenesis={false}
+                                        onEdit={(user, sig) => handleEdit(user, sig)}
+                                        currentUser={authUser}
+                                        isAdmin={isAdmin}
+                                        onPinToggle={handlePinToggle}
+                                    />
+                                ))
+                        )}
+
+                        {/* Load more */}
+                        {pagination?.hasNextPage && !feedLoading && (
+                            <button onClick={() => setPage(p => p + 1)}
+                                style={{
+                                    fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.2em",
+                                    color: teal, background: "transparent",
+                                    border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`,
+                                    borderRadius: 6, padding: "12px 0", cursor: "pointer", width: "100%",
+                                    transition: "border-color 0.2s, background 0.2s",
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.borderColor = teal; e.currentTarget.style.background = `rgba(${isDark ? "92,189,185" : "42,158,154"},0.06)`; }}
+                                onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"; e.currentTarget.style.background = "transparent"; }}
+                            >
+                                LOAD_MORE ({pagination.totalUsers - users.length} remaining)
+                            </button>
+                        )}
+
+                        {feedLoading && users.length > 0 && (
+                            <Skeleton isDark={isDark} h={80} />
+                        )}
                     </div>
 
-                    <h1 style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(32px,6vw,60px)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, color: text, margin: "0 0 10px" }}>
-                        The Ledger
-                    </h1>
-                    <p style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.3vw,13px)", color: muted, lineHeight: 1.78, maxWidth: 520, margin: 0 }}>
-                        A permanent record of engineers, founders, and builders who crossed paths with this portfolio.
-                        Sign to leave your mark in the archive.
-                    </p>
-                </motion.div>
-
-                {/* ── AUTH ZONE ── */}
-                <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
-                    style={{
-                        padding: "clamp(18px,3vw,28px)", marginBottom: "clamp(28px,5vw,44px)",
-                        border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`,
-                        borderRadius: 8,
-                        background: isDark ? "rgba(255,255,255,0.02)" : "rgba(10,18,18,0.01)",
-                    }}>
-
-                    <AnimatePresence mode="wait">
-                        {authLoading ? (
-                            <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                                <Skeleton isDark={isDark} h={52} />
-                            </motion.div>
-                        ) : authUser ? (
-                            <motion.div key="authed" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.38 }}>
-                                {/* Session bar */}
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                                        <div style={{ position: "relative" }}>
-                                            <img src={authUser.profileImg || `https://api.dicebear.com/7.x/initials/svg?seed=${authUser.name}`} alt={authUser.name}
-                                                style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: `2px solid ${teal}` }} />
-                                            <div style={{ position: "absolute", bottom: -2, right: -2, width: 12, height: 12, borderRadius: "50%", background: "#22c55e", border: `1.5px solid ${bg}` }} />
-                                        </div>
-                                        <div>
-                                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(12px,1.4vw,14px)", fontWeight: 800, color: text, display: "block" }}>{authUser.name}</span>
-                                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted }}>Session active · {mySigs.length}/3 slots</span>
-                                        </div>
-                                    </div>
-                                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                                        <button onClick={handleSignClick}
-                                            style={{
-                                                fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.18em",
-                                                color: isDark ? "#000" : "#fff", background: teal, border: `1px solid ${teal}`,
-                                                borderRadius: 5, padding: "8px 18px", cursor: "pointer",
-                                            }}>
-                                            &gt; SIGN_HERE
-                                        </button>
-                                        <button onClick={handleLogout}
-                                            style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", color: muted, background: "transparent", border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`, borderRadius: 5, padding: "8px 14px", cursor: "pointer" }}>
-                                            LOGOUT
-                                        </button>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ) : (
-                            <motion.div key="loggedout" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, letterSpacing: "0.28em", color: muted, display: "block", marginBottom: 14, textTransform: "uppercase" }}>
-                  // HANDSHAKE_PROTOCOL — Select auth provider
-                                </span>
-                                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                                    {[
-                                        { id: "github", label: "GitHub", bg: "#181717", fg: "#ffffff" },
-                                        // { id: "linkedin", label: "LinkedIn", bg: "#0077B5", fg: "#ffffff" },
-                                        { id: "google", label: "Google", bg: "#4285F4", fg: "#ffffff" },
-                                    ].map(p => (
-                                        <button key={p.id} onClick={() => handleOAuth(p.id)}
-                                            style={{
-                                                fontFamily: "'Courier New', monospace", fontSize: 11, fontWeight: 800,
-                                                letterSpacing: "0.14em", textTransform: "uppercase",
-                                                color: p.fg, background: p.bg,
-                                                border: "none", borderRadius: 6,
-                                                padding: "10px 20px", cursor: "pointer",
-                                                display: "flex", alignItems: "center", gap: 8,
-                                                transition: "opacity 0.2s ease",
-                                            }}
-                                            onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
-                                            onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-                                        >
-                                            <ProviderIcon p={p.id} />
-                                            {p.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </motion.div>
-
-                {/* ── STATS ROW ── */}
-                {pagination && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-                        style={{ display: "flex", gap: "clamp(20px,4vw,40px)", marginBottom: "clamp(24px,4vw,36px)", flexWrap: "wrap" }}>
-                        {[
-                            { label: "TOTAL_SIGNATORIES", val: pagination.totalUsers },
-                            { label: "LEDGER_PAGES", val: pagination.totalPages },
-                            { label: "STATUS", val: "LIVE" },
-                        ].map(s => (
-                            <div key={s.label}>
-                                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.22em", textTransform: "uppercase", display: "block", marginBottom: 2 }}>{s.label}</span>
-                                <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(16px,2.2vw,22px)", fontWeight: 900, color: s.val === "LIVE" ? teal : text, letterSpacing: "-0.01em" }}>{s.val}</span>
-                            </div>
-                        ))}
-                    </motion.div>
-                )}
-
-                {/* ── REGISTRY FEED ── */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px,2vw,18px)" }}>
-
-                    {/* Genesis — always first */}
-                    <EntityCard user={GENESIS} isDark={isDark} isGenesis={true} onEdit={() => { }} currentUser={null} isAdmin={false} onPinToggle={() => { }} />
-
-                    {/* Feed */}
-                    {feedLoading && users.length === 0 ? (
-                        Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} isDark={isDark} h={140} />)
-                    ) : (
-                        users
-                            .filter(u => {
-                                // Only show users who have at least one signature with content
-                                const sigs = u.signatures || [];
-                                return sigs.length > 0 && sigs.some(sig => sig.content && sig.content.trim().length > 0);
-                            })
-                            .map(u => (
-                                <EntityCard
-                                    key={u._id} user={u} isDark={isDark}
-                                    isGenesis={false}
-                                    onEdit={(user, sig) => handleEdit(user, sig)}
-                                    currentUser={authUser}
-                                    isAdmin={isAdmin}
-                                    onPinToggle={handlePinToggle}
-                                />
-                            ))
-                    )}
-
-                    {/* Load more */}
-                    {pagination?.hasNextPage && !feedLoading && (
-                        <button onClick={() => setPage(p => p + 1)}
-                            style={{
-                                fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.2em",
-                                color: teal, background: "transparent",
-                                border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`,
-                                borderRadius: 6, padding: "12px 0", cursor: "pointer", width: "100%",
-                                transition: "border-color 0.2s, background 0.2s",
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor = teal; e.currentTarget.style.background = `rgba(${isDark ? "92,189,185" : "42,158,154"},0.06)`; }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"; e.currentTarget.style.background = "transparent"; }}
-                        >
-                            LOAD_MORE ({pagination.totalUsers - users.length} remaining)
-                        </button>
-                    )}
-
-                    {feedLoading && users.length > 0 && (
-                        <Skeleton isDark={isDark} h={80} />
-                    )}
+                    {/* ── FOOTER ── */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: "clamp(40px,7vw,60px)" }}>
+                        <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.09)" }} />
+                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: muted }}>
+                            Registry · Ledger v1.0 · {new Date().getFullYear()}
+                        </span>
+                        <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.09)" }} />
+                    </div>
                 </div>
 
-                {/* ── FOOTER ── */}
-                <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: "clamp(40px,7vw,60px)" }}>
-                    <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.09)" }} />
-                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: muted }}>
-                        Registry · Ledger v1.0 · {new Date().getFullYear()}
-                    </span>
-                    <div style={{ flex: 1, height: 1, background: isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.09)" }} />
-                </div>
+                {/* ── MODALS ── */}
+                <AnimatePresence>
+                    {slotModal && (
+                        <SlotModal
+                            key="slot"
+                            isDark={isDark}
+                            sigs={mySigs}
+                            onEdit={sig => handleEdit(myUser, sig)}
+                            onNew={handleSlotNew}
+                            onClose={() => setSlotModal(false)}
+                        />
+                    )}
+                    {signModal && (
+                        <SignModal
+                            key="sign"
+                            isDark={isDark}
+                            user={authUser}
+                            existingSigs={mySigs}
+                            editSig={editSig}
+                            onClose={() => { setSignModal(false); setEditSig(null); }}
+                            onSaved={() => fetchFeed(1)}
+                            pushToast={pushToast}
+                        />
+                    )}
+                </AnimatePresence>
             </div>
-
-            {/* ── MODALS ── */}
-            <AnimatePresence>
-                {slotModal && (
-                    <SlotModal
-                        key="slot"
-                        isDark={isDark}
-                        sigs={mySigs}
-                        onEdit={sig => handleEdit(myUser, sig)}
-                        onNew={handleSlotNew}
-                        onClose={() => setSlotModal(false)}
-                    />
-                )}
-                {signModal && (
-                    <SignModal
-                        key="sign"
-                        isDark={isDark}
-                        user={authUser}
-                        existingSigs={mySigs}
-                        editSig={editSig}
-                        onClose={() => { setSignModal(false); setEditSig(null); }}
-                        onSaved={() => fetchFeed(1)}
-                        pushToast={pushToast}
-                    />
-                )}
-            </AnimatePresence>
-        </div>
+        </AtomicTransition>
     );
 }

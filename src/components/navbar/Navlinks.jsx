@@ -2,7 +2,7 @@ const navLinks = [
   { name: "Home", link: "/" },
   { name: "About", link: "/about" },
   { name: "Projects", link: "/projects" },
-  { name: "Contact", link: "/contact" },
+  { name: "Experience", link: "/experience" },
   {
     name: "More",
     dropdown: [
@@ -10,6 +10,7 @@ const navLinks = [
       { name: "Links", link: "/links" },
       { name: "Guestbook", link: "/registry" },
       { name: "Resume", link: "/resume" },
+      { name: "Contact", link: "/contact" },
     ],
   },
 ];

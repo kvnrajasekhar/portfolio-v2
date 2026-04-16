@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
+import AtomicTransition from "../transition/AtomicTransition";
 
 // ─── RESUME DATA ──────────────────────────────────────────────────────────────
 const RESUME_JSON = {
@@ -17,7 +18,7 @@ const RESUME_JSON = {
     "Software Engineer with enterprise experience at Cognizant specializing in financial data systems and middleware architecture. Expert in designing and maintaining complex data integration pipelines using SQL Server, Oracle, and Microsoft Access to power Business Intelligence (BI) reporting for international clients. Proficient in MongoDB, Express.js, React, and Node.js, with a professional focus on bridging middleware data synchronization with modern, data-driven business requirements within Scrum environments.",
   skills: {
     programming: ["JavaScript (ES6+)", "Java", "Python"],
-    frameworks: ["React.js","Spring Boot", "Material-UI", "Bootstrap", "Tailwind CSS", "Framer Motion"],
+    frameworks: ["React.js", "Spring Boot", "Material-UI", "Bootstrap", "Tailwind CSS", "Framer Motion"],
     backend: ["Node.js", "Express.js", "RESTful APIs", "JWT Auth", "Middleware Architecture"],
     databases: ["SQL Server", "Oracle SQL Developer", "MongoDB", "Mongoose"],
     devops: ["Git/GitHub", "Docker", "Vercel", "Render", "AWS (in progress)"],
@@ -30,7 +31,7 @@ const RESUME_JSON = {
       company: "Cognizant Technology Solutions",
       period: "Sep 2025 – Present",
       location: "Hyderabad, India",
-      stack: [ "SQL", "Oracle SQL Developer", "Microsoft Access"],
+      stack: ["SQL", "Oracle SQL Developer", "Microsoft Access"],
       bullets: [
         { text: "BI Data Pipeline Management: Architect and maintain a critical data synchronization layer using Microsoft Access as a middleware bridge; engineered complex SQL queries to transform and flow data from core backend servers to Business Intelligence (BI) platforms for client reporting.", metric: "Microsoft Access", metricType: "tool" },
         { text: "Database Optimization for BI: Design and optimize database schemas and complex queries in Oracle SQL Developer, ensuring the delivery of highly accurate Business Intelligence (BI) customer reports as per evolving business requirements.", metric: "Oracle SQL Developer", metricType: "tool" },
@@ -532,372 +533,374 @@ export default function ResumePage() {
   const R = RESUME_JSON;
 
   return (
-    <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease" }}>
+    <AtomicTransition>
+      <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease" }}>
 
-      {/* Blueprint grid */}
-      <div style={{
-        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-        backgroundImage: `
+        {/* Blueprint grid */}
+        <div style={{
+          position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+          backgroundImage: `
           linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px, transparent 1px),
           linear-gradient(90deg, ${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px, transparent 1px)
         `,
-        backgroundSize: "48px 48px",
-      }} aria-hidden />
+          backgroundSize: "48px 48px",
+        }} aria-hidden />
 
-      {/* Floating download */}
-      <div style={{
-        position: "fixed",
-        bottom: "clamp(20px,3vw,32px)",
-        right: "clamp(16px,3vw,32px)",
-        zIndex: 50,
-      }} className="print:hidden">
-        <DownloadButton isDark={isDark} floating />
-      </div>
+        {/* Floating download */}
+        <div style={{
+          position: "fixed",
+          bottom: "clamp(20px,3vw,32px)",
+          right: "clamp(16px,3vw,32px)",
+          zIndex: 50,
+        }} className="print:hidden">
+          <DownloadButton isDark={isDark} floating />
+        </div>
 
-      {/* Content */}
-      <div style={{
-        position: "relative", zIndex: 1,
-        maxWidth: 900,
-        margin: "0 auto",
-        padding: "clamp(56px,10vw,100px) clamp(20px,6vw,64px) clamp(64px,10vw,100px)",
-      }}>
+        {/* Content */}
+        <div style={{
+          position: "relative", zIndex: 1,
+          maxWidth: 900,
+          margin: "0 auto",
+          padding: "clamp(56px,10vw,100px) clamp(20px,6vw,64px) clamp(64px,10vw,100px)",
+        }}>
 
-        {/* ── HEADER ── */}
-        <Reveal>
-          <div style={{ marginBottom: "clamp(40px,7vw,64px)" }}>
-            {/* Top meta row */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
-              <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
-              <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", color: teal, textTransform: "uppercase" }}>
-                SDE Spec Sheet · Resume
-              </span>
-              <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
-            </div>
-
-            {/* Name */}
-            <h1 style={{
-              fontFamily: "'Courier New', monospace",
-              fontSize: "clamp(32px,6vw,64px)",
-              fontWeight: 900,
-              letterSpacing: "-0.03em",
-              lineHeight: 1.05,
-              color: text,
-              margin: "0 0 8px",
-            }}>
-              {R.identity.name}
-            </h1>
-            <p style={{
-              fontFamily: "'Courier New', monospace",
-              fontSize: "clamp(12px,1.4vw,15px)",
-              fontWeight: 700,
-              color: teal,
-              letterSpacing: "0.08em",
-              margin: "0 0 20px",
-            }}>
-              Full-Stack Software Engineer · Cognizant Technology Solutions
-            </p>
-
-            {/* Contact row */}
-            <div style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "6px 20px",
-              fontFamily: "'Courier New', monospace",
-              fontSize: "clamp(10px,1.1vw,12px)",
-              color: muted,
-            }}>
-              {[
-                { label: "mail", val: R.identity.email },
-                { label: "tel", val: R.identity.phone },
-                { label: "li", val: R.identity.linkedin },
-                { label: "gh", val: R.identity.github },
-              ].map(c => (
-                <span key={c.label}>
-                  <span style={{ color: teal, fontWeight: 800 }}>{c.label}://</span>{c.val}
+          {/* ── HEADER ── */}
+          <Reveal>
+            <div style={{ marginBottom: "clamp(40px,7vw,64px)" }}>
+              {/* Top meta row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
+                <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", color: teal, textTransform: "uppercase" }}>
+                  SDE Spec Sheet · Resume
                 </span>
-              ))}
-            </div>
+                <div style={{ width: 24, height: 1.5, background: teal, borderRadius: 1 }} />
+              </div>
 
-            {/* View toggle + download */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              marginTop: 28,
-              flexWrap: "wrap",
-            }}>
-              {/* Human / Machine toggle */}
+              {/* Name */}
+              <h1 style={{
+                fontFamily: "'Courier New', monospace",
+                fontSize: "clamp(32px,6vw,64px)",
+                fontWeight: 900,
+                letterSpacing: "-0.03em",
+                lineHeight: 1.05,
+                color: text,
+                margin: "0 0 8px",
+              }}>
+                {R.identity.name}
+              </h1>
+              <p style={{
+                fontFamily: "'Courier New', monospace",
+                fontSize: "clamp(12px,1.4vw,15px)",
+                fontWeight: 700,
+                color: teal,
+                letterSpacing: "0.08em",
+                margin: "0 0 20px",
+              }}>
+                Full-Stack Software Engineer · Cognizant Technology Solutions
+              </p>
+
+              {/* Contact row */}
               <div style={{
                 display: "flex",
-                gap: 0,
-                border: `1px solid ${isDark ? "rgba(255,255,255,0.14)" : "rgba(10,18,18,0.16)"}`,
-                borderRadius: 6,
-                overflow: "hidden",
+                flexWrap: "wrap",
+                gap: "6px 20px",
+                fontFamily: "'Courier New', monospace",
+                fontSize: "clamp(10px,1.1vw,12px)",
+                color: muted,
               }}>
-                {["human", "machine"].map(m => (
-                  <button
-                    key={m}
-                    onClick={() => setViewMode(m)}
-                    style={{
-                      fontFamily: "'Courier New', monospace",
-                      fontSize: 10,
-                      fontWeight: 800,
-                      letterSpacing: "0.14em",
-                      textTransform: "uppercase",
-                      padding: "7px 14px",
-                      border: "none",
-                      cursor: "pointer",
-                      background: viewMode === m ? teal : "transparent",
-                      color: viewMode === m ? (isDark ? "#000" : "#fff") : muted,
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {m === "human" ? "Human" : "Machine"}
-                  </button>
-                ))}
-              </div>
-              <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.1em" }}>
-                // view as:
-              </span>
-              <DownloadButton isDark={isDark} />
-            </div>
-          </div>
-        </Reveal>
-
-        {/* ── MACHINE VIEW ── */}
-        <AnimatePresence mode="wait">
-          {viewMode === "machine" ? (
-            <motion.div key="machine" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
-              <Reveal>
-                <div style={{ marginBottom: 16 }}>
-                  <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.25em", textTransform: "uppercase" }}>
-                    // RESUME.JSON — Raw data export for machine readers
+                {[
+                  { label: "mail", val: R.identity.email },
+                  { label: "tel", val: R.identity.phone },
+                  { label: "li", val: R.identity.linkedin },
+                  { label: "gh", val: R.identity.github },
+                ].map(c => (
+                  <span key={c.label}>
+                    <span style={{ color: teal, fontWeight: 800 }}>{c.label}://</span>{c.val}
                   </span>
-                </div>
-                <JsonView isDark={isDark} />
-              </Reveal>
-            </motion.div>
-
-          ) : (
-
-            /* ── HUMAN VIEW ── */
-            <motion.div key="human" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
-
-              {/* ── SUMMARY ── */}
-              <SectionSlide label="Professional Summary" index={1} isDark={isDark} />
-              <Reveal className="mb-12">
-                <p style={{
-                  fontFamily: "'Courier New', monospace",
-                  fontSize: "clamp(12px,1.35vw,14px)",
-                  color: bodyC,
-                  lineHeight: 1.85,
-                  maxWidth: 760,
-                  borderLeft: `2px solid ${teal}44`,
-                  paddingLeft: "clamp(14px,2vw,22px)",
-                }}>
-                  {R.summary}
-                </p>
-              </Reveal>
-
-              {/* ── SKILLS ── */}
-              <SectionSlide label="Technical Skills" index={2} isDark={isDark} />
-              <Reveal className="mb-12">
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {Object.entries(R.skills).map(([cat, items]) => (
-                    <div key={cat} style={{ display: "flex", gap: "clamp(12px,2vw,20px)", alignItems: "flex-start", flexWrap: "wrap" }}>
-                      <span style={{
-                        fontFamily: "'Courier New', monospace",
-                        fontSize: 9,
-                        fontWeight: 800,
-                        letterSpacing: "0.22em",
-                        color: muted,
-                        textTransform: "uppercase",
-                        minWidth: "clamp(70px,8vw,96px)",
-                        paddingTop: 4,
-                        flexShrink: 0,
-                      }}>
-                        {cat}
-                      </span>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                        {items.map(s => <StackChip key={s} name={s} isDark={isDark} />)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-
-              {/* ── EXPERIENCE ── */}
-              <SectionSlide label="Professional Experience" index={3} isDark={isDark} />
-              <div className="mb-12">
-                {R.experience.map(job => <ExperienceBlock key={job.id} job={job} isDark={isDark} />)}
-              </div>
-
-              {/* ── PROJECTS ── */}
-              <SectionSlide label="Personal Projects" index={4} isDark={isDark} />
-              <div className="mb-12">
-                {R.projects.map(p => <ProjectBlock key={p.id} project={p} isDark={isDark} />)}
-              </div>
-
-              {/* ── EDUCATION ── */}
-              <SectionSlide label="Education" index={5} isDark={isDark} />
-              <Reveal className="mb-12">
-                {R.education.map((e, i) => (
-                  <div key={i} style={{
-                    borderLeft: `2px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(10,18,18,0.1)"}`,
-                    paddingLeft: "clamp(16px,2.5vw,28px)",
-                  }}>
-                    <h3 style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(13px,1.6vw,16px)", fontWeight: 900, color: text, margin: "0 0 4px", letterSpacing: "-0.01em" }}>
-                      {e.degree}
-                    </h3>
-                    <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-                      <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 700, color: teal }}>{e.institution}</span>
-                      <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>·</span>
-                      <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, color: lav }}>CGPA {e.gpa}</span>
-                      <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>·</span>
-                      <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted, letterSpacing: "0.1em" }}>{e.period}</span>
-                    </div>
-                  </div>
                 ))}
-              </Reveal>
+              </div>
 
-              {/* ── CERTIFICATIONS ── */}
-              <SectionSlide label="Certifications" index={6} isDark={isDark} />
-              <Reveal className="mb-12">
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {R.certifications.map((c, i) => (
-                    <div key={i} style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      flexWrap: "wrap",
-                      gap: 8,
-                      paddingBottom: 10,
-                      borderBottom: i < R.certifications.length - 1
-                        ? `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(10,18,18,0.07)"}`
-                        : "none",
-                    }}>
-                      <div>
-                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 700, color: text }}>
-                          {c.name}
-                        </span>
-                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted, marginLeft: 10 }}>
-                          {c.issuer} · {c.year}
-                        </span>
-                      </div>
-                      <span style={{
+              {/* View toggle + download */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                marginTop: 28,
+                flexWrap: "wrap",
+              }}>
+                {/* Human / Machine toggle */}
+                <div style={{
+                  display: "flex",
+                  gap: 0,
+                  border: `1px solid ${isDark ? "rgba(255,255,255,0.14)" : "rgba(10,18,18,0.16)"}`,
+                  borderRadius: 6,
+                  overflow: "hidden",
+                }}>
+                  {["human", "machine"].map(m => (
+                    <button
+                      key={m}
+                      onClick={() => setViewMode(m)}
+                      style={{
                         fontFamily: "'Courier New', monospace",
-                        fontSize: 9,
+                        fontSize: 10,
                         fontWeight: 800,
-                        letterSpacing: "0.15em",
+                        letterSpacing: "0.14em",
                         textTransform: "uppercase",
-                        color: c.status === "In Progress" ? "#f7c4a0" : teal,
-                        background: c.status === "In Progress" ? "rgba(247,196,160,0.1)" : `rgba(${isDark ? "92,189,185" : "42,158,154"},0.1)`,
-                        border: `1px solid ${c.status === "In Progress" ? "rgba(247,196,160,0.3)" : `rgba(${isDark ? "92,189,185" : "42,158,154"},0.3)`}`,
-                        borderRadius: 4,
-                        padding: "2px 8px",
-                      }}>
-                        {c.status}
-                      </span>
-                    </div>
+                        padding: "7px 14px",
+                        border: "none",
+                        cursor: "pointer",
+                        background: viewMode === m ? teal : "transparent",
+                        color: viewMode === m ? (isDark ? "#000" : "#fff") : muted,
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      {m === "human" ? "Human" : "Machine"}
+                    </button>
                   ))}
                 </div>
-              </Reveal>
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.1em" }}>
+                // view as:
+                </span>
+                <DownloadButton isDark={isDark} />
+              </div>
+            </div>
+          </Reveal>
 
-              {/* ── LEADERSHIP & DISCIPLINE ── */}
-              <SectionSlide label="Leadership · Discipline" index={7} isDark={isDark} />
-              <Reveal className="mb-12">
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                  {R.leadership.map((l, i) => (
-                    <div key={i} style={{
-                      display: "flex",
-                      gap: "clamp(14px,2.5vw,28px)",
-                      alignItems: "flex-start",
-                      flexWrap: "wrap",
-                      paddingBottom: 14,
-                      borderBottom: i < R.leadership.length - 1
-                        ? `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(10,18,18,0.07)"}`
-                        : "none",
-                    }}>
-                      <div style={{ flexShrink: 0, minWidth: "clamp(100px,14vw,140px)" }}>
+          {/* ── MACHINE VIEW ── */}
+          <AnimatePresence mode="wait">
+            {viewMode === "machine" ? (
+              <motion.div key="machine" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
+                <Reveal>
+                  <div style={{ marginBottom: 16 }}>
+                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.25em", textTransform: "uppercase" }}>
+                    // RESUME.JSON — Raw data export for machine readers
+                    </span>
+                  </div>
+                  <JsonView isDark={isDark} />
+                </Reveal>
+              </motion.div>
+
+            ) : (
+
+              /* ── HUMAN VIEW ── */
+              <motion.div key="human" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
+
+                {/* ── SUMMARY ── */}
+                <SectionSlide label="Professional Summary" index={1} isDark={isDark} />
+                <Reveal className="mb-12">
+                  <p style={{
+                    fontFamily: "'Courier New', monospace",
+                    fontSize: "clamp(12px,1.35vw,14px)",
+                    color: bodyC,
+                    lineHeight: 1.85,
+                    maxWidth: 760,
+                    borderLeft: `2px solid ${teal}44`,
+                    paddingLeft: "clamp(14px,2vw,22px)",
+                  }}>
+                    {R.summary}
+                  </p>
+                </Reveal>
+
+                {/* ── SKILLS ── */}
+                <SectionSlide label="Technical Skills" index={2} isDark={isDark} />
+                <Reveal className="mb-12">
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {Object.entries(R.skills).map(([cat, items]) => (
+                      <div key={cat} style={{ display: "flex", gap: "clamp(12px,2vw,20px)", alignItems: "flex-start", flexWrap: "wrap" }}>
                         <span style={{
                           fontFamily: "'Courier New', monospace",
                           fontSize: 9,
                           fontWeight: 800,
-                          letterSpacing: "0.18em",
+                          letterSpacing: "0.22em",
+                          color: muted,
                           textTransform: "uppercase",
-                          color: lav,
-                          background: `rgba(${isDark ? "201,184,245" : "96,64,192"},0.1)`,
-                          border: `1px solid rgba(${isDark ? "201,184,245" : "96,64,192"},0.25)`,
-                          borderRadius: 4,
-                          padding: "3px 8px",
-                          display: "inline-block",
+                          minWidth: "clamp(70px,8vw,96px)",
+                          paddingTop: 4,
+                          flexShrink: 0,
                         }}>
-                          {l.frame}
+                          {cat}
+                        </span>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                          {items.map(s => <StackChip key={s} name={s} isDark={isDark} />)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Reveal>
+
+                {/* ── EXPERIENCE ── */}
+                <SectionSlide label="Professional Experience" index={3} isDark={isDark} />
+                <div className="mb-12">
+                  {R.experience.map(job => <ExperienceBlock key={job.id} job={job} isDark={isDark} />)}
+                </div>
+
+                {/* ── PROJECTS ── */}
+                <SectionSlide label="Personal Projects" index={4} isDark={isDark} />
+                <div className="mb-12">
+                  {R.projects.map(p => <ProjectBlock key={p.id} project={p} isDark={isDark} />)}
+                </div>
+
+                {/* ── EDUCATION ── */}
+                <SectionSlide label="Education" index={5} isDark={isDark} />
+                <Reveal className="mb-12">
+                  {R.education.map((e, i) => (
+                    <div key={i} style={{
+                      borderLeft: `2px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(10,18,18,0.1)"}`,
+                      paddingLeft: "clamp(16px,2.5vw,28px)",
+                    }}>
+                      <h3 style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(13px,1.6vw,16px)", fontWeight: 900, color: text, margin: "0 0 4px", letterSpacing: "-0.01em" }}>
+                        {e.degree}
+                      </h3>
+                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 700, color: teal }}>{e.institution}</span>
+                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>·</span>
+                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, color: lav }}>CGPA {e.gpa}</span>
+                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>·</span>
+                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted, letterSpacing: "0.1em" }}>{e.period}</span>
+                      </div>
+                    </div>
+                  ))}
+                </Reveal>
+
+                {/* ── CERTIFICATIONS ── */}
+                <SectionSlide label="Certifications" index={6} isDark={isDark} />
+                <Reveal className="mb-12">
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {R.certifications.map((c, i) => (
+                      <div key={i} style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: 8,
+                        paddingBottom: 10,
+                        borderBottom: i < R.certifications.length - 1
+                          ? `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(10,18,18,0.07)"}`
+                          : "none",
+                      }}>
+                        <div>
+                          <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 700, color: text }}>
+                            {c.name}
+                          </span>
+                          <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted, marginLeft: 10 }}>
+                            {c.issuer} · {c.year}
+                          </span>
+                        </div>
+                        <span style={{
+                          fontFamily: "'Courier New', monospace",
+                          fontSize: 9,
+                          fontWeight: 800,
+                          letterSpacing: "0.15em",
+                          textTransform: "uppercase",
+                          color: c.status === "In Progress" ? "#f7c4a0" : teal,
+                          background: c.status === "In Progress" ? "rgba(247,196,160,0.1)" : `rgba(${isDark ? "92,189,185" : "42,158,154"},0.1)`,
+                          border: `1px solid ${c.status === "In Progress" ? "rgba(247,196,160,0.3)" : `rgba(${isDark ? "92,189,185" : "42,158,154"},0.3)`}`,
+                          borderRadius: 4,
+                          padding: "2px 8px",
+                        }}>
+                          {c.status}
                         </span>
                       </div>
-                      <div style={{ flex: 1, minWidth: 200 }}>
-                        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "baseline", marginBottom: 4 }}>
-                          <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(12px,1.4vw,14px)", fontWeight: 900, color: text }}>{l.role}</span>
-                          <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 700, color: teal }}>{l.org}</span>
+                    ))}
+                  </div>
+                </Reveal>
+
+                {/* ── LEADERSHIP & DISCIPLINE ── */}
+                <SectionSlide label="Leadership · Discipline" index={7} isDark={isDark} />
+                <Reveal className="mb-12">
+                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    {R.leadership.map((l, i) => (
+                      <div key={i} style={{
+                        display: "flex",
+                        gap: "clamp(14px,2.5vw,28px)",
+                        alignItems: "flex-start",
+                        flexWrap: "wrap",
+                        paddingBottom: 14,
+                        borderBottom: i < R.leadership.length - 1
+                          ? `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(10,18,18,0.07)"}`
+                          : "none",
+                      }}>
+                        <div style={{ flexShrink: 0, minWidth: "clamp(100px,14vw,140px)" }}>
+                          <span style={{
+                            fontFamily: "'Courier New', monospace",
+                            fontSize: 9,
+                            fontWeight: 800,
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            color: lav,
+                            background: `rgba(${isDark ? "201,184,245" : "96,64,192"},0.1)`,
+                            border: `1px solid rgba(${isDark ? "201,184,245" : "96,64,192"},0.25)`,
+                            borderRadius: 4,
+                            padding: "3px 8px",
+                            display: "inline-block",
+                          }}>
+                            {l.frame}
+                          </span>
                         </div>
-                        <p style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(10px,1.1vw,12px)", color: bodyC, lineHeight: 1.75, margin: 0 }}>
-                          {l.desc}
-                        </p>
+                        <div style={{ flex: 1, minWidth: 200 }}>
+                          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "baseline", marginBottom: 4 }}>
+                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(12px,1.4vw,14px)", fontWeight: 900, color: text }}>{l.role}</span>
+                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 700, color: teal }}>{l.org}</span>
+                          </div>
+                          <p style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(10px,1.1vw,12px)", color: bodyC, lineHeight: 1.75, margin: 0 }}>
+                            {l.desc}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
+                    ))}
+                  </div>
+                </Reveal>
 
-              {/* ── ACHIEVEMENTS ── */}
-              <SectionSlide label="Achievements" index={8} isDark={isDark} />
-              <Reveal className="mb-16">
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {R.achievements.map((a, i) => (
-                    <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                      <span style={{ color: teal, fontFamily: "'Courier New', monospace", fontSize: 12, fontWeight: 800, flexShrink: 0, marginTop: 1 }}>✦</span>
-                      <div>
-                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(12px,1.3vw,14px)", fontWeight: 800, color: text }}>{a.title}</span>
-                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(10px,1.1vw,12px)", color: muted, marginLeft: 10 }}>{a.detail}</span>
+                {/* ── ACHIEVEMENTS ── */}
+                <SectionSlide label="Achievements" index={8} isDark={isDark} />
+                <Reveal className="mb-16">
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {R.achievements.map((a, i) => (
+                      <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <span style={{ color: teal, fontFamily: "'Courier New', monospace", fontSize: 12, fontWeight: 800, flexShrink: 0, marginTop: 1 }}>✦</span>
+                        <div>
+                          <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(12px,1.3vw,14px)", fontWeight: 800, color: text }}>{a.title}</span>
+                          <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(10px,1.1vw,12px)", color: muted, marginLeft: 10 }}>{a.detail}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
+                    ))}
+                  </div>
+                </Reveal>
 
-              {/* ── FOOTER ACTION ── */}
-              <Reveal>
-                <div style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 14,
-                  paddingTop: "clamp(28px,5vw,48px)",
-                  borderTop: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.08)"}`,
-                }}>
-                  <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted, letterSpacing: "0.25em", textTransform: "uppercase" }}>
+                {/* ── FOOTER ACTION ── */}
+                <Reveal>
+                  <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 14,
+                    paddingTop: "clamp(28px,5vw,48px)",
+                    borderTop: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.08)"}`,
+                  }}>
+                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted, letterSpacing: "0.25em", textTransform: "uppercase" }}>
                     // Take this offline
-                  </span>
-                  <DownloadButton isDark={isDark} />
-                  <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.15em" }}>
-                    Rajasekhar · Resume v2025.1 · {new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
-                  </span>
-                </div>
-              </Reveal>
+                    </span>
+                    <DownloadButton isDark={isDark} />
+                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.15em" }}>
+                      Rajasekhar · Resume v2025.1 · {new Date().toLocaleDateString("en-IN", { month: "short", year: "numeric" })}
+                    </span>
+                  </div>
+                </Reveal>
 
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-      {/* Print styles */}
-      <style>{`
+        {/* Print styles */}
+        <style>{`
         @media print {
           body { background: white !important; }
           .print\\:hidden { display: none !important; }
           * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
       `}</style>
-    </div>
+      </div>
+    </AtomicTransition>
   );
 }

@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
+import AtomicTransition from "../transition/AtomicTransition";
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const SECTIONS = [
@@ -397,7 +398,7 @@ function ContentBlock({ block, isDark, accentColor }) {
                         <span
                             className="text-xs font-black tracking-widest px-2 py-1 rounded"
                             style={{
-                                color: isDark? accentColor : `rgba(0,0,0,0.58)`  ,
+                                color: isDark ? accentColor : `rgba(0,0,0,0.58)`,
                                 background: `rgba(${accentColor},0.12)`,
                                 border: `1px solid rgba(${accentColor},0.3)`,
                                 fontFamily: "'Courier New', monospace",
@@ -433,7 +434,7 @@ function ContentBlock({ block, isDark, accentColor }) {
                     <span
                         className="text-[9px] font-black tracking-widest mt-1 px-2 py-1 rounded shrink-0"
                         style={{
-                            color: isDark? accentColor :  `rgba(0,0,0,0.58)`,
+                            color: isDark ? accentColor : `rgba(0,0,0,0.58)`,
                             background: `rgba(${accentColor},0.6)`,
                             border: `1px solid rgba(${accentColor},0.25)`,
                             fontFamily: "'Courier New', monospace",
@@ -711,14 +712,7 @@ export default function AboutPage() {
     }, []);
 
     return (
-        <div
-            className="relative min-h-screen"
-            style={{
-                background: isDark ? "#000000" : "#ffffff",
-                transition: "background 0.4s ease",
-            }}
-        >
-            {/* Global dim overlay — spotlight effect */}
+        <AtomicTransition>
             <div
                 className="fixed inset-0 pointer-events-none"
                 style={{
@@ -796,6 +790,6 @@ export default function AboutPage() {
                     />
                 </div>
             </div>
-        </div>
+        </AtomicTransition>
     );
 }

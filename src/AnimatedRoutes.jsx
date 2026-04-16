@@ -16,7 +16,7 @@ function AnimatedRoutes() {
 
   return (
     /* mode="wait" ensures the old page exits before the new one starts */
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<App />} />
         <Route path="/projects" element={<Projects />} />

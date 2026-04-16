@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import AtomicTransition from "../transition/AtomicTransition";
 
 // ImageKit CDN Configuration
 const IMAGEKIT_BASE_URL = "https://ik.imagekit.io/vnrajasekhar";
@@ -42,6 +43,12 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
     }, [total, onClose]);
+
+    // Reset zoom and position when image changes
+    useEffect(() => {
+        setZoom(0.3);
+        setPosition({ x: 0, y: 0 });
+    }, [current]);
 
     // Disable body scrolling when lightbox is open
     useEffect(() => {
@@ -127,6 +134,7 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
         <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
+            className="lg:mt-12"
             style={{
                 position: "fixed", inset: 0, zIndex: 1000,
                 background: "rgba(0,0,0,0.92)", backdropFilter: "blur(8px)",
@@ -219,8 +227,7 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
                 {/* Caption */}
                 {images[current].caption && (
                     <p style={{ fontFamily: "'Courier New', monospace", fontSize: 11, color: muted, textAlign: "center", margin: 0, fontStyle: "italic" }}>
-                    // {images[current].caption}
-            // {images[current].caption}
+                        {images[current].caption}
                     </p>
                 )}
 
@@ -751,194 +758,196 @@ export default function ExperiencePage() {
     const sep = isDark ? "rgba(255,255,255,0.07)" : "rgba(10,18,18,0.09)";
 
     return (
-        <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease", fontFamily: "'Courier New', monospace" }}>
+        <AtomicTransition>
+            <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease", fontFamily: "'Courier New', monospace" }}>
 
-            {/* Blueprint grid */}
-            <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px),linear-gradient(90deg,${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px)`, backgroundSize: "48px 48px" }} aria-hidden />
+                {/* Blueprint grid */}
+                <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px),linear-gradient(90deg,${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px)`, backgroundSize: "48px 48px" }} aria-hidden />
 
-            <div style={{ position: "relative", zIndex: 1, maxWidth: 960, margin: "0 auto", padding: "clamp(56px,10vw,96px) clamp(16px,5vw,56px) clamp(72px,10vw,100px)", boxSizing: "border-box" }}>
+                <div style={{ position: "relative", zIndex: 1, maxWidth: 960, margin: "0 auto", padding: "clamp(56px,10vw,96px) clamp(16px,5vw,56px) clamp(72px,10vw,100px)", boxSizing: "border-box" }}>
 
-                {/* ── PAGE HEADER ── */}
-                <Reveal style={{ marginBottom: "clamp(48px,8vw,72px)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                        <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
-                        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase", color: teal }}>Operations Record · Full Career Ledger</span>
-                        <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
-                    </div>
-                    <h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, color: text, margin: "0 0 10px" }}>
-                        Experience
-                    </h1>
-                    <p style={{ fontSize: "clamp(11px,1.3vw,13px)", color: muted, maxWidth: 500, lineHeight: 1.78, margin: 0 }}>
-                        Professional deployments, field operations, rank progression, and community orchestration — every chapter documented.
-                    </p>
-                    <motion.div initial={{ scaleX: 0, originX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.3 }}
-                        style={{ marginTop: 22, height: 1.5, background: isDark ? "linear-gradient(90deg,#5cbdb9,#c9b8f5 45%,#fbe3e8 75%,transparent)" : "linear-gradient(90deg,#2a9e9a,#6040c0 45%,#c04070 75%,transparent)", opacity: isDark ? 0.45 : 0.6 }} />
-                </Reveal>
+                    {/* ── PAGE HEADER ── */}
+                    <Reveal style={{ marginBottom: "clamp(48px,8vw,72px)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                            <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
+                            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase", color: teal }}>Operations Record · Full Career Ledger</span>
+                            <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
+                        </div>
+                        <h1 style={{ fontSize: "clamp(32px,6vw,64px)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.05, color: text, margin: "0 0 10px" }}>
+                            Experience
+                        </h1>
+                        <p style={{ fontSize: "clamp(11px,1.3vw,13px)", color: muted, maxWidth: 500, lineHeight: 1.78, margin: 0 }}>
+                            Professional deployments, field operations, rank progression, and community orchestration — every chapter documented.
+                        </p>
+                        <motion.div initial={{ scaleX: 0, originX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.3 }}
+                            style={{ marginTop: 22, height: 1.5, background: isDark ? "linear-gradient(90deg,#5cbdb9,#c9b8f5 45%,#fbe3e8 75%,transparent)" : "linear-gradient(90deg,#2a9e9a,#6040c0 45%,#c04070 75%,transparent)", opacity: isDark ? 0.45 : 0.6 }} />
+                    </Reveal>
 
-                {/* ════════════════════════════════════════════
+                    {/* ════════════════════════════════════════════
             §1 PROFESSIONAL DEPLOYMENT
         ════════════════════════════════════════════ */}
-                <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
-                    <SectionHeader index="01" tag="Professional Deployment" title="Work Experience" subtitle="Enterprise engineering at scale — financial services & backend systems." isDark={isDark} color={teal} />
-                    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                        {WORK_EXP.map((job, i) => <WorkEntry key={job.role} job={job} isDark={isDark} index={i} />)}
-                    </div>
-                </section>
+                    <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
+                        <SectionHeader index="01" tag="Professional Deployment" title="Work Experience" subtitle="Enterprise engineering at scale — financial services & backend systems." isDark={isDark} color={teal} />
+                        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                            {WORK_EXP.map((job, i) => <WorkEntry key={job.role} job={job} isDark={isDark} index={i} />)}
+                        </div>
+                    </section>
 
-                <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
+                    <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
 
-                {/* ════════════════════════════════════════════
+                    {/* ════════════════════════════════════════════
             §2 COMBAT ENGINEERING
         ════════════════════════════════════════════ */}
-                <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
-                    <SectionHeader index="02" tag="Combat Engineering" title="Hackathon Record" subtitle="High-pressure delivery under time constraints — field-tested problem solving." isDark={isDark} color={amber} />
-                    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                        {HACKATHONS.map((h, i) => <HackathonEntry key={h.id} hack={h} isDark={isDark} index={i} />)}
-                    </div>
-                </section>
+                    <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
+                        <SectionHeader index="02" tag="Combat Engineering" title="Hackathon Record" subtitle="High-pressure delivery under time constraints — field-tested problem solving." isDark={isDark} color={amber} />
+                        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                            {HACKATHONS.map((h, i) => <HackathonEntry key={h.id} hack={h} isDark={isDark} index={i} />)}
+                        </div>
+                    </section>
 
-                <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
+                    <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
 
-                {/* ════════════════════════════════════════════
+                    {/* ════════════════════════════════════════════
             §3 NCC — RANK PROGRESSION
         ════════════════════════════════════════════ */}
-                <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
-                    <SectionHeader index="03" tag="Service Record" title="NCC Journey" subtitle="Sep 2022 – Feb 2025 · 1(A) ENGR COY NCC, Guntur Group · AP & Telangana Directorate" isDark={isDark} color={gold} />
+                    <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
+                        <SectionHeader index="03" tag="Service Record" title="NCC Journey" subtitle="Sep 2022 – Feb 2025 · 1(A) ENGR COY NCC, Guntur Group · AP & Telangana Directorate" isDark={isDark} color={gold} />
 
-                    {/* Rank timeline */}
-                    <div style={{ marginBottom: 40 }}>
-                        <span style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", display: "block", marginBottom: 20 }}>// RANK_PROGRESSION · Scroll →</span>
-                        <NCCRankTimeline isDark={isDark} />
-                    </div>
+                        {/* Rank timeline */}
+                        <div style={{ marginBottom: 40 }}>
+                            <span style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", display: "block", marginBottom: 20 }}>// RANK_PROGRESSION · Scroll →</span>
+                            <NCCRankTimeline isDark={isDark} />
+                        </div>
 
-                    {/* Achievements */}
-                    <Reveal delay={0.1}>
-                        <span style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", display: "block", marginBottom: 16 }}>// COMMENDATIONS & CAMPS</span>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
-                            {NCC_ACHIEVEMENTS.map((a, i) => (
-                                <div key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
-                                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 8, fontWeight: 800, letterSpacing: "0.18em", color: isDark ? "#000" : "#000", background: a.color, borderRadius: 3, padding: "2px 7px", flexShrink: 0, marginTop: 2 }}>{a.tag}</span>
-                                    <div>
-                                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.3vw,13px)", fontWeight: 800, color: text, display: "block", marginBottom: 2 }}>{a.title}</span>
-                                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>{a.org}</span>
+                        {/* Achievements */}
+                        <Reveal delay={0.1}>
+                            <span style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", display: "block", marginBottom: 16 }}>// COMMENDATIONS & CAMPS</span>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
+                                {NCC_ACHIEVEMENTS.map((a, i) => (
+                                    <div key={i} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 8, fontWeight: 800, letterSpacing: "0.18em", color: isDark ? "#000" : "#000", background: a.color, borderRadius: 3, padding: "2px 7px", flexShrink: 0, marginTop: 2 }}>{a.tag}</span>
+                                        <div>
+                                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.3vw,13px)", fontWeight: 800, color: text, display: "block", marginBottom: 2 }}>{a.title}</span>
+                                            <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>{a.org}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    </Reveal>
+                                ))}
+                            </div>
+                        </Reveal>
 
-                    {/* Certificates */}
-                    <Reveal delay={0.2}>
-                        <span style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", display: "block", marginBottom: 16 }}>// CERTIFICATION_LEDGER</span>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 28 }}>
-                            {NCC_CERTS.map((c, i) => (
-                                <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, paddingBottom: 8, borderBottom: i < NCC_CERTS.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(10,18,18,0.07)"}` : "none" }}>
-                                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 800, color: text }}>{c.name}</span>
-                                    <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>{c.detail}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </Reveal>
+                        {/* Certificates */}
+                        <Reveal delay={0.2}>
+                            <span style={{ fontSize: 9, letterSpacing: "0.28em", color: muted, textTransform: "uppercase", display: "block", marginBottom: 16 }}>// CERTIFICATION_LEDGER</span>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 28 }}>
+                                {NCC_CERTS.map((c, i) => (
+                                    <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, paddingBottom: 8, borderBottom: i < NCC_CERTS.length - 1 ? `1px solid ${isDark ? "rgba(255,255,255,0.05)" : "rgba(10,18,18,0.07)"}` : "none" }}>
+                                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: "clamp(11px,1.2vw,13px)", fontWeight: 800, color: text }}>{c.name}</span>
+                                        <span style={{ fontFamily: "'Courier New', monospace", fontSize: 10, color: muted }}>{c.detail}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </Reveal>
 
-                    {/* NCC images */}
-                    <Reveal delay={0.3}>
-                        <ThumbnailStrip images={NCC_IMAGES} isDark={isDark} label="NCC Evidence" />
-                    </Reveal>
-                </section>
+                        {/* NCC images */}
+                        <Reveal delay={0.3}>
+                            <ThumbnailStrip images={NCC_IMAGES} isDark={isDark} label="NCC Evidence" />
+                        </Reveal>
+                    </section>
 
-                <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
+                    <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
 
-                {/* ════════════════════════════════════════════
+                    {/* ════════════════════════════════════════════
             §4 GDG
         ════════════════════════════════════════════ */}
-                <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
-                    <SectionHeader index="04" tag="Ecosystem Orchestration" title="Google Developer Groups" role="Co-Organizer" subtitle=" Aug 2024 – Jul 2025 · RVR & JC CE, Guntur" isDark={isDark} color={teal} />
+                    <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
+                        <SectionHeader index="04" tag="Ecosystem Orchestration" title="Google Developer Groups" role="Co-Organizer" subtitle=" Aug 2024 – Jul 2025 · RVR & JC CE, Guntur" isDark={isDark} color={teal} />
 
-                    <Reveal>
-                        <p style={{ fontSize: "clamp(12px,1.35vw,14px)", color: bodyC, lineHeight: 1.85, maxWidth: 680, marginBottom: 20 }}>
-                            Bridging global Google technologies and local developer talent through structured knowledge-sharing frameworks — workshops, online webinars, and community-led innovation sessions for college students.
-                        </p>
-                        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
-                            {["Stakeholder Management", "Public Speaking", "Workshop Design", "Community Growth"].map(k => (
-                                <span key={k} style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 700, color: teal, background: `rgba(${isDark ? "92,189,185" : "42,158,154"},0.1)`, border: `1px solid rgba(${isDark ? "92,189,185" : "42,158,154"},0.25)`, borderRadius: 3, padding: "3px 9px", letterSpacing: "0.06em" }}>
-                                    {k}
-                                </span>
-                            ))}
-                        </div>
-                        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
-                            <a href="https://gdg.community.dev/gdg-on-campus-rvr-jccollege-of-engineering-guntur-india/" target="_blank" rel="noopener noreferrer"
-                                style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.15em", color: teal, textDecoration: "none", border: `1px solid ${teal}55`, borderRadius: 5, padding: "7px 14px", transition: "all 0.2s" }}
-                                onMouseEnter={e => { e.currentTarget.style.background = `rgba(${isDark ? "92,189,185" : "42,158,154"},0.1)`; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-                            >
-                                GDG Community Page ↗
-                            </a>
-                            {/* <a href="https://www.linkedin.com/in/kvnrs23" target="_blank" rel="noopener noreferrer"
+                        <Reveal>
+                            <p style={{ fontSize: "clamp(12px,1.35vw,14px)", color: bodyC, lineHeight: 1.85, maxWidth: 680, marginBottom: 20 }}>
+                                Bridging global Google technologies and local developer talent through structured knowledge-sharing frameworks — workshops, online webinars, and community-led innovation sessions for college students.
+                            </p>
+                            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
+                                {["Stakeholder Management", "Public Speaking", "Workshop Design", "Community Growth"].map(k => (
+                                    <span key={k} style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 700, color: teal, background: `rgba(${isDark ? "92,189,185" : "42,158,154"},0.1)`, border: `1px solid rgba(${isDark ? "92,189,185" : "42,158,154"},0.25)`, borderRadius: 3, padding: "3px 9px", letterSpacing: "0.06em" }}>
+                                        {k}
+                                    </span>
+                                ))}
+                            </div>
+                            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
+                                <a href="https://gdg.community.dev/gdg-on-campus-rvr-jccollege-of-engineering-guntur-india/" target="_blank" rel="noopener noreferrer"
+                                    style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.15em", color: teal, textDecoration: "none", border: `1px solid ${teal}55`, borderRadius: 5, padding: "7px 14px", transition: "all 0.2s" }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = `rgba(${isDark ? "92,189,185" : "42,158,154"},0.1)`; }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                                >
+                                    GDG Community Page ↗
+                                </a>
+                                {/* <a href="https://www.linkedin.com/in/kvnrs23" target="_blank" rel="noopener noreferrer"
                 style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.15em", color: muted, textDecoration: "none", border: `1px solid ${isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"}`, borderRadius: 5, padding: "7px 14px", transition: "all 0.2s" }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = teal; e.currentTarget.style.color = teal; }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? "rgba(255,255,255,0.1)" : "rgba(10,18,18,0.12)"; e.currentTarget.style.color = muted; }}
               >
                 View LinkedIn Posts ↗
               </a> */}
-                        </div>
-                        <ThumbnailStrip images={GDG_IMAGES} isDark={isDark} label="GDG Evidence" />
-                    </Reveal>
-                </section>
+                            </div>
+                            <ThumbnailStrip images={GDG_IMAGES} isDark={isDark} label="GDG Evidence" />
+                        </Reveal>
+                    </section>
 
-                <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
+                    <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
 
-                {/* ════════════════════════════════════════════
+                    {/* ════════════════════════════════════════════
             §5 CODEX
         ════════════════════════════════════════════ */}
-                <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
-                    <SectionHeader index="05" tag="Strategic Management" title="Code-X Technical Club" role="President" subtitle=" · Aug 2023 – Sep 2024 · RVR & JC CE, Guntur" isDark={isDark} color={lav} />
+                    <section style={{ marginBottom: "clamp(56px,9vw,88px)" }}>
+                        <SectionHeader index="05" tag="Strategic Management" title="Code-X Technical Club" role="President" subtitle=" · Aug 2023 – Sep 2024 · RVR & JC CE, Guntur" isDark={isDark} color={lav} />
 
-                    <Reveal>
-                        <p style={{ fontSize: "clamp(12px,1.35vw,14px)", color: bodyC, lineHeight: 1.85, maxWidth: 680, marginBottom: 20 }}>
-                            Transitioned Code-X from a student interest group into a professional technical incubator. Conducted Web Development competitions, peer-teaching sessions, and industry-aligned skill development initiatives, fostering a culture of mentorship and rapid prototyping.
-                        </p>
-                        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
-                            {["Team Building", "Curriculum Design", "Technical Roadmap", "Peer Mentorship"].map(k => (
-                                <span key={k} style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 700, color: lav, background: `rgba(${isDark ? "201,184,245" : "96,64,192"},0.1)`, border: `1px solid rgba(${isDark ? "201,184,245" : "96,64,192"},0.25)`, borderRadius: 3, padding: "3px 9px", letterSpacing: "0.06em" }}>
-                                    {k}
-                                </span>
-                            ))}
-                        </div>
-                        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
-                            <a href="https://www.linkedin.com/in/kvnrs23" target="_blank" rel="noopener noreferrer"
-                                style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.15em", color: lav, textDecoration: "none", border: `1px solid ${lav}55`, borderRadius: 5, padding: "7px 14px", transition: "all 0.2s" }}
-                                onMouseEnter={e => { e.currentTarget.style.background = `rgba(${isDark ? "201,184,245" : "96,64,192"},0.1)`; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-                            >
-                                View LinkedIn Posts ↗
-                            </a>
-                        </div>
-                        <ThumbnailStrip images={CODEX_IMAGES} isDark={isDark} label="CodeX Evidence" />
-                    </Reveal>
-                </section>
+                        <Reveal>
+                            <p style={{ fontSize: "clamp(12px,1.35vw,14px)", color: bodyC, lineHeight: 1.85, maxWidth: 680, marginBottom: 20 }}>
+                                Transitioned Code-X from a student interest group into a professional technical incubator. Conducted Web Development competitions, peer-teaching sessions, and industry-aligned skill development initiatives, fostering a culture of mentorship and rapid prototyping.
+                            </p>
+                            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
+                                {["Team Building", "Curriculum Design", "Technical Roadmap", "Peer Mentorship"].map(k => (
+                                    <span key={k} style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 700, color: lav, background: `rgba(${isDark ? "201,184,245" : "96,64,192"},0.1)`, border: `1px solid rgba(${isDark ? "201,184,245" : "96,64,192"},0.25)`, borderRadius: 3, padding: "3px 9px", letterSpacing: "0.06em" }}>
+                                        {k}
+                                    </span>
+                                ))}
+                            </div>
+                            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 24 }}>
+                                <a href="https://www.linkedin.com/in/kvnrs23" target="_blank" rel="noopener noreferrer"
+                                    style={{ fontFamily: "'Courier New', monospace", fontSize: 10, fontWeight: 800, letterSpacing: "0.15em", color: lav, textDecoration: "none", border: `1px solid ${lav}55`, borderRadius: 5, padding: "7px 14px", transition: "all 0.2s" }}
+                                    onMouseEnter={e => { e.currentTarget.style.background = `rgba(${isDark ? "201,184,245" : "96,64,192"},0.1)`; }}
+                                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                                >
+                                    View LinkedIn Posts ↗
+                                </a>
+                            </div>
+                            <ThumbnailStrip images={CODEX_IMAGES} isDark={isDark} label="CodeX Evidence" />
+                        </Reveal>
+                    </section>
 
-                <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
+                    <div style={{ height: 1, background: sep, marginBottom: "clamp(56px,9vw,88px)" }} />
 
-                {/* ════════════════════════════════════════════
+                    {/* ════════════════════════════════════════════
             §6 OPERATIONAL VALUES
         ════════════════════════════════════════════ */}
-                <section style={{ marginBottom: "clamp(56px,9vw,72px)" }}>
-                    <SectionHeader index="06" tag="Operational Values" title="Soft Skills" subtitle="Derived from real deployments — not self-assessed traits." isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />
-                    <SoftSkillsSection isDark={isDark} />
-                </section>
+                    <section style={{ marginBottom: "clamp(56px,9vw,72px)" }}>
+                        <SectionHeader index="06" tag="Operational Values" title="Soft Skills" subtitle="Derived from real deployments — not self-assessed traits." isDark={isDark} color={isDark ? "#fbe3e8" : "#c04070"} />
+                        <SoftSkillsSection isDark={isDark} />
+                    </section>
 
-                {/* Footer rule */}
-                <Reveal>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                        <div style={{ flex: 1, height: 1, background: sep }} />
-                        <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: muted }}>
-                            Rajasekhar · Operations Record · v1.0
-                        </span>
-                        <div style={{ flex: 1, height: 1, background: sep }} />
-                    </div>
-                </Reveal>
+                    {/* Footer rule */}
+                    <Reveal>
+                        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                            <div style={{ flex: 1, height: 1, background: sep }} />
+                            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.3em", textTransform: "uppercase", color: muted }}>
+                                Rajasekhar · Operations Record · v1.0
+                            </span>
+                            <div style={{ flex: 1, height: 1, background: sep }} />
+                        </div>
+                    </Reveal>
 
+                </div>
             </div>
-        </div>
+        </AtomicTransition>
     );
 }
