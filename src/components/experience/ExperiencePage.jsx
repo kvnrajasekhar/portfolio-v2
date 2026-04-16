@@ -3,20 +3,23 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
-// Images 
-import bestCadetImage from "../../assets/ncc/best-cadet.jpg";
-import bestCadetImage2 from "../../assets/ncc/best-cadet-2.png";
-import bestCadetImage3 from "../../assets/ncc/best-cadet-3.jpg";
-import certificateA from "../../assets/ncc/certificate-a.jpg";
-import certificateB from "../../assets/ncc/certificate-b.jpg";
-import certificateC from "../../assets/ncc/certificate-c.jpg";
-import nccSocial1 from "../../assets/ncc/ncc-social-1.jpg";
-import nccSocial2 from "../../assets/ncc/ncc-social-2.jpg";
-import gdgWorkshop1 from "../../assets/gdg/gdg-workshop-1.jpg";
-import gdgWorkshop2 from "../../assets/gdg/gdg-workshop-2.jpg";
-import codexCompetition1 from "../../assets/codex/codex-competition-1.jpg";
-import codexCompetition2 from "../../assets/codex/codex-competition-2.jpg";
-import codexCompetition3 from "../../assets/codex/codex-competition-3.jpg";
+// ImageKit CDN Configuration
+const IMAGEKIT_BASE_URL = "https://ik.imagekit.io/vnrajasekhar";
+
+// Images using ImageKit CDN
+const bestCadetImage = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/best-cadet.jpg`;
+const bestCadetImage2 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/best-cadet-2.png`;
+const bestCadetImage3 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/best-cadet-3.jpg`;
+const certificateA = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/certificate-a.jpg`;
+const certificateB = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/certificate-b.jpg`;
+const certificateC = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/certificate-c.jpg`;
+const nccSocial1 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/ncc-social-1.jpg`;
+const nccSocial2 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/ncc/ncc-social-2.jpg`;
+const gdgWorkshop1 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/gdg/gdg-workshop-1.jpg`;
+const gdgWorkshop2 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/gdg/gdg-workshop-2.jpg`;
+const codexCompetition1 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/codex/codex-competition-1.jpg`;
+const codexCompetition2 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/codex/codex-competition-2.jpg`;
+const codexCompetition3 = `${IMAGEKIT_BASE_URL}/tr:w-1000,q-99,f-auto/codex/codex-competition-3.jpg`;
 
 
 // ─── IMAGE LIGHTBOX ───────────────────────────────────────────────────────────
@@ -33,8 +36,8 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
             if (e.key === "Escape") onClose();
             if (e.key === "ArrowRight") setCurrent(c => Math.min(c + 1, total - 1));
             if (e.key === "ArrowLeft") setCurrent(c => Math.max(c - 1, 0));
-            if (e.key === "+" || e.key === "=") setZoom(z => Math.min(z + 0.2, 3));
-            if (e.key === "-" || e.key === "_") setZoom(z => Math.max(z - 0.2, 0.3));
+            if (e.key === "+" || e.key === "=") setZoom(z => Math.min(z + 0.05, 3));
+            if (e.key === "-" || e.key === "_") setZoom(z => Math.max(z - 0.05, 0.3));
         };
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
@@ -56,7 +59,7 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
         if (e.ctrlKey) {
             e.preventDefault();
             e.stopPropagation();
-            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            const delta = e.deltaY > 0 ? -0.05 : 0.05;
             setZoom(z => Math.max(0.3, Math.min(3, z + delta)));
         }
         // Otherwise, do nothing (normal scroll behavior)
@@ -85,6 +88,32 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
 
     const handleMouseUp = (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(false);
+    };
+
+    const handleTouchStart = (e) => {
+        e.stopPropagation();
+        const touch = e.touches[0];
+        setIsDragging(true);
+        setDragStart({
+            x: touch.clientX - position.x,
+            y: touch.clientY - position.y
+        });
+    };
+
+    const handleTouchMove = (e) => {
+        if (isDragging) {
+            e.stopPropagation();
+            const touch = e.touches[0];
+            setPosition({
+                x: touch.clientX - dragStart.x,
+                y: touch.clientY - dragStart.y
+            });
+        }
+    };
+
+    const handleTouchEnd = (e) => {
         e.stopPropagation();
         setIsDragging(false);
     };
@@ -125,6 +154,9 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseUp}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                 >
                     {images[current].src ? (
                         <div style={{
@@ -214,15 +246,15 @@ function ImageLightbox({ images, startIndex, onClose, isDark }) {
 
                 {/* Zoom Controls */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
-                    <button onClick={() => setZoom(z => Math.max(0.12, z - 0.2))}
-                        style={{ background: "none", border: `1px solid ${zoom <= 0.12 ? "rgba(255,255,255,0.1)" : teal}`, borderRadius: 4, color: zoom <= 0.12 ? "rgba(255,255,255,0.2)" : teal, fontFamily: "'Courier New', monospace", fontSize: 10, padding: "4px 8px", cursor: zoom <= 0.12 ? "default" : "pointer", letterSpacing: "0.1em" }}>
+                    <button onClick={() => setZoom(z => Math.max(0.3, z - 0.05))}
+                        style={{ background: "none", border: `1px solid ${zoom <= 0.3 ? "rgba(255,255,255,0.1)" : teal}`, borderRadius: 4, color: zoom <= 0.3 ? "rgba(255,255,255,0.2)" : teal, fontFamily: "'Courier New', monospace", fontSize: 10, padding: "4px 8px", cursor: zoom <= 0.3 ? "default" : "pointer", letterSpacing: "0.1em" }}>
                         − ZOOM OUT
                     </button>
                     <button onClick={resetZoom}
                         style={{ background: "none", border: `1px solid ${teal}`, borderRadius: 4, color: teal, fontFamily: "'Courier New', monospace", fontSize: 10, padding: "4px 8px", cursor: "pointer", letterSpacing: "0.1em" }}>
                         RESET
                     </button>
-                    <button onClick={() => setZoom(z => Math.min(3, z + 0.2))}
+                    <button onClick={() => setZoom(z => Math.min(3, z + 0.05))}
                         style={{ background: "none", border: `1px solid ${zoom >= 3 ? "rgba(255,255,255,0.1)" : teal}`, borderRadius: 4, color: zoom >= 3 ? "rgba(255,255,255,0.2)" : teal, fontFamily: "'Courier New', monospace", fontSize: 10, padding: "4px 8px", cursor: zoom >= 3 ? "default" : "pointer", letterSpacing: "0.1em" }}>
                         ZOOM IN +
                     </button>
