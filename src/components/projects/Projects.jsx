@@ -376,7 +376,7 @@ function ProjectCard({ project, index, isDark }) {
 
   const isEven = index % 2 === 0;
   const color = project.color;
-  const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
+  const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10, 18, 18, 0.74)";
   const text = isDark ? "rgba(255,255,255,0.82)" : "rgba(10,18,18,0.82)";
   const border = isDark ? `${color}22` : `${color}44`;
   const cardBg = `rgba(${hexToRgb(color)},0.05)`;
@@ -393,6 +393,7 @@ function ProjectCard({ project, index, isDark }) {
       initial={{ opacity: 0, y: 60 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      className="mt-2"
       style={{
         position: "relative",
         background: cardBg,
@@ -509,8 +510,8 @@ function ProjectCard({ project, index, isDark }) {
               fontSize: "clamp(9px,1vw,11px)",
               fontWeight: 700,
               color,
-              background: `rgba(${hexToRgb(color)},0.1)`,
-              border: `1px solid ${color}44`,
+              background: `rgba(${hexToRgb(color)},0.2)`,
+              border: `1px solid ${color}64`,
               borderRadius: 4,
               padding: "3px 9px",
               letterSpacing: "0.05em",
@@ -547,7 +548,7 @@ function ProjectCard({ project, index, isDark }) {
             {/* Canvas area */}
             <div style={{
               height: "clamp(220px,28vw,320px)",
-              background: isDark ? "rgba(0,0,0,0.4)" : `rgba(${hexToRgb(color)},0.3)`,
+              background: isDark ? "rgba(0,0,0,0.4)" : `rgba(${hexToRgb(color)},0.15)`,
               border: `1px solid ${border}`,
               borderRadius: 6,
               overflow: "hidden",
