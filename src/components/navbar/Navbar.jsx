@@ -158,7 +158,7 @@ const Navbar = () => {
                         absolute top-12 right-0
                         w-44
                         backdrop-blur-xl
-                        bg-[${colors.background}]
+                        bg-white/90 dark:bg-black/95
                         border border-[#5cbdb9]/20
                         rounded-xl
                         shadow-xl
