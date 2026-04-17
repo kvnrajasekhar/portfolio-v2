@@ -745,7 +745,7 @@ function SoftSkillsSection({ isDark }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function ExperiencePage() {
     const { theme } = useTheme();
-    const {colors} = useTheme();
+    const { colors } = useTheme();
     const isDark = theme === "dark";
 
     const bg = isDark ? "#000000" : "#ffffff";
@@ -760,7 +760,8 @@ export default function ExperiencePage() {
 
     return (
         <AtomicTransition>
-            <div style={{ minHeight: "100vh", background: colors.background, position: "relative", overflowX: "hidden", transition: "background 0.4s ease", fontFamily: "'Courier New', monospace" }}>
+            <div style={{ minHeight: "100vh", position: "relative", overflowX: "hidden", transition: "background 0.4s ease", fontFamily: "'Courier New', monospace" }}
+            >
 
                 {/* Blueprint grid */}
                 <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px),linear-gradient(90deg,${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px)`, backgroundSize: "48px 48px" }} aria-hidden />
@@ -768,8 +769,8 @@ export default function ExperiencePage() {
                 <div style={{ position: "relative", zIndex: 1, maxWidth: 960, margin: "0 auto", padding: "clamp(56px,10vw,96px) clamp(16px,5vw,56px) clamp(72px,10vw,100px)", boxSizing: "border-box" }}>
 
                     {/* ── PAGE HEADER ── */}
-                    <Reveal style={{ marginBottom: "clamp(48px,8vw,72px)" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                    <Reveal style={{ marginBottom: "clamp(48px,8vw,72px)" }} >
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }} className="mt-12 lg:mt-0">
                             <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
                             <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase", color: teal }}>Operations Record · Full Career Ledger</span>
                             <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />

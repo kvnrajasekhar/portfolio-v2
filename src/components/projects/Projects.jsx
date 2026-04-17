@@ -4,6 +4,7 @@ import { useTheme } from "../../context/ThemeContext";
 import GitHubSnake from "./GitHubSnake";
 import GitHubStats from "./GitHubStats";
 import GitHubRedirect from "./GitHubRedirect";
+import AtomicTransition from "../../components/transition/AtomicTransition";
 
 
 // ─── PROJECT DATA ─────────────────────────────────────────────────────────────
@@ -859,6 +860,7 @@ export default function ProjectsPage() {
   const gridLine = isDark ? "rgba(255,255,255,0.025)" : "rgba(92,189,185,0.07)";
 
   return (
+    <AtomicTransition>
       <div style={{
         minHeight: "100vh",
         background: bg,
@@ -927,5 +929,6 @@ export default function ProjectsPage() {
           </div>
         </div>
       </div>
+    </AtomicTransition>
   );
 }
