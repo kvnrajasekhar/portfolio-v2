@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useTheme } from "./context/ThemeContext";
 import { AnimatePresence } from "framer-motion";
 import App from "./App";
 import Projects from "./components/projects/Projects";
@@ -11,11 +12,13 @@ import RegistryPage from "./components/registry/RegistryPage";
 import AuthCallback from "./components/auth/AuthCallback";
 import ExperiencePage from "./components/experience/ExperiencePage";
 
+
 function AnimatedRoutes() {
   const location = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
-    /* mode="wait" ensures the old page exits before the new one starts */
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<App />} />
@@ -26,7 +29,7 @@ function AnimatedRoutes() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/resume" element={<Resume />} />
         <Route path="/registry" element={<RegistryPage />} />
-        <Route path="/experience" element={<ExperiencePage   />} />
+        <Route path="/experience" element={<ExperiencePage />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="*" element={<App />} />
       </Routes>
@@ -34,4 +37,4 @@ function AnimatedRoutes() {
   );
 }
 
-export default AnimatedRoutes;  
+export default AnimatedRoutes;

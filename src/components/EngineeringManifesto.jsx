@@ -329,21 +329,16 @@ function PrincipleCard({ principle, index, isDark }) {
 
 // ── Main export ───────────────────────────────────────────────────────────────
 export default function EngineeringManifesto() {
+  const { colors } = useTheme();
   const { theme } = useTheme();
   const isDark = theme === "dark";
-
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true, margin: "-60px" });
-
-  const bg = isDark ? "#000000" : "#ffffff";
-  const gridLine = isDark ? "rgba(255,255,255,0.04)" : "rgba(92,189,185,0.1)";
-  const textPri = isDark ? "#ffffff" : "#0a1212";
-  const textSec = isDark ? "rgba(255,255,255,0.35)" : "rgba(10,18,18,0.55)";
 
   return (
     <section style={{
       width: "100%",
-      background: bg,
+      background: colors.background,
       position: "relative",
       padding: "clamp(60px, 10vw, 120px) clamp(20px, 6vw, 80px)",
       fontFamily: "'Courier New', monospace",
@@ -355,8 +350,8 @@ export default function EngineeringManifesto() {
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
         backgroundImage: `
-          linear-gradient(${gridLine} 1px, transparent 1px),
-          linear-gradient(90deg, ${gridLine} 1px, transparent 1px)
+          linear-gradient(${colors.grid} 1px, transparent 1px),
+          linear-gradient(90deg, ${colors.grid} 1px, transparent 1px)
         `,
         backgroundSize: "48px 48px",
         zIndex: 0,
@@ -413,7 +408,7 @@ export default function EngineeringManifesto() {
               letterSpacing: "-0.03em",
               lineHeight: 1.05,
               // Force the main heading to use its own color variable
-              color: textPri,
+              color: colors.textPrimary,
             }}
           >
             Key Engineering
@@ -440,7 +435,7 @@ export default function EngineeringManifesto() {
             style={{
               margin: "18px 0 0",
               fontSize: "clamp(12px, 1.4vw, 14px)",
-              color: textSec,
+              color: colors.textSecondary,
               letterSpacing: "0.08em",
               maxWidth: 480,
               lineHeight: 1.7,

@@ -30,7 +30,7 @@ const Navbar = () => {
     }
   });
 
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, colors } = useTheme();
   const isDark = theme === "dark";
 
   return (
@@ -51,6 +51,7 @@ const Navbar = () => {
           duration: 0.4,
           ease: [0.25, 0.46, 0.45, 0.94]
         }}
+        style={{ zIndex: "1000" }}
         className="
         pointer-events-auto
         flex items-center justify-between
@@ -115,6 +116,7 @@ const Navbar = () => {
                     hover:bg-[#fbe3e8] hover:text-[#262626] hover:drop-shadow-[0_0_1px_rgba(0,0,0,1)]
                     dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626] dark:hover:drop-shadow-[0_0_1px_white]
                     rounded-full transition
+                    z-1000
                     "
                           >
                             {nav.name}
@@ -133,6 +135,7 @@ const Navbar = () => {
                     hover:bg-[#fbe3e8] hover:text-[#262626] 
                     dark:hover:bg-[#5cbdb9] dark:hover:text-[#262626]
                     rounded-full transition
+                    z-1000
                     "
                           >
                             {nav.name}
@@ -155,10 +158,12 @@ const Navbar = () => {
                         absolute top-12 right-0
                         w-44
                         backdrop-blur-xl
+                        bg-[${colors.background}]
                         border border-[#5cbdb9]/20
                         rounded-xl
                         shadow-xl
                         p-2
+                        z-1000
                         "
                               >
                                 {nav.dropdown.map((item, index) => (

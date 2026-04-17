@@ -1000,6 +1000,7 @@ function FooterRule({ isDark }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function Contact() {
     const { theme } = useTheme();
+    const {colors} = useTheme();
     const isDark = theme === "dark";
 
     return (
@@ -1007,7 +1008,7 @@ export default function Contact() {
             <div
                 style={{
                     minHeight: "100vh",
-                    background: isDark ? "#000000" : "#ffffff",
+                    background: colors.background,
                     transition: "background 0.4s ease",
                     overflowX: "hidden",
                     position: "relative",

@@ -745,6 +745,7 @@ function SoftSkillsSection({ isDark }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function ExperiencePage() {
     const { theme } = useTheme();
+    const {colors} = useTheme();
     const isDark = theme === "dark";
 
     const bg = isDark ? "#000000" : "#ffffff";
@@ -759,7 +760,7 @@ export default function ExperiencePage() {
 
     return (
         <AtomicTransition>
-            <div style={{ minHeight: "100vh", background: bg, position: "relative", overflowX: "hidden", transition: "background 0.4s ease", fontFamily: "'Courier New', monospace" }}>
+            <div style={{ minHeight: "100vh", background: colors.background, position: "relative", overflowX: "hidden", transition: "background 0.4s ease", fontFamily: "'Courier New', monospace" }}>
 
                 {/* Blueprint grid */}
                 <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: `linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px),linear-gradient(90deg,${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.065)"} 1px,transparent 1px)`, backgroundSize: "48px 48px" }} aria-hidden />

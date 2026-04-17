@@ -520,13 +520,13 @@ function JsonView({ isDark }) {
 // MAIN RESUME PAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function ResumePage() {
-  const { theme } = useTheme();
+  const { theme , colors} = useTheme();
   const isDark = theme === "dark";
   const [viewMode, setViewMode] = useState("human"); // human | machine
 
   const teal = isDark ? "#5cbdb9" : "#2a9e9a";
   const lav = isDark ? "#c9b8f5" : "#6040c0";
-  const bg = isDark ? "#000000" : "#ffffff";
+  const bg = colors.background;
   const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
   const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
   const bodyC = isDark ? "rgba(255,255,255,0.7)" : "rgba(10,18,18,0.72)";

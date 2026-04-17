@@ -572,6 +572,7 @@ export default function MasterFooter() {
                 ))}
               </div>
             </div>
+            
             <span style={{
               fontSize: 10,
               fontWeight: 700,

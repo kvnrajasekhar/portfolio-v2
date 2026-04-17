@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useTheme } from "../../context/ThemeContext";
 import AtomicTransition from "../transition/AtomicTransition";
 
@@ -688,6 +688,7 @@ function PageHeader({ isDark }) {
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function AboutPage() {
+    const { colors } = useTheme();
     const { theme } = useTheme();
     const isDark = theme === "dark";
     const [activeColor, setActiveColor] = useState("92,189,185");
@@ -713,81 +714,74 @@ export default function AboutPage() {
 
     return (
         <AtomicTransition>
-            <div
-                className="fixed inset-0 pointer-events-none"
-                style={{
-                    background: isDark ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.12)",
-                    zIndex: 0,
-                }}
-                aria-hidden
-            />
-
-            {/* Spotlight cursor */}
-            <SpotlightCursor isDark={isDark} activeColor={activeColor} />
-
-            {/* Blueprint grid */}
-            <div
-                className="fixed inset-0 pointer-events-none"
-                style={{
-                    backgroundImage: `
+            <div style={{ minHeight: "100vh", background: colors.background, position: "relative" }}>
+                {/* Blueprint grid */}
+                <div
+                    className="fixed inset-0 pointer-events-none"
+                    style={{
+                        backgroundImage: `
             linear-gradient(${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.06)"} 1px, transparent 1px),
             linear-gradient(90deg, ${isDark ? "rgba(255,255,255,0.022)" : "rgba(92,189,185,0.06)"} 1px, transparent 1px)
           `,
-                    backgroundSize: "56px 56px",
-                    zIndex: 0,
-                }}
-                aria-hidden
-            />
+                        backgroundSize: "56px 56px",
+                        zIndex: 0,
+                    }}
+                    aria-hidden
+                />
 
-            {/* Content */}
-            <div className="relative" style={{ zIndex: 2 }}>
-                <PageHeader isDark={isDark} />
+                {/* Spotlight cursor */}
+                <SpotlightCursor isDark={isDark} activeColor={activeColor} />
 
-                {SECTIONS.map((section) => (
-                    <AboutSection
-                        key={section.id}
-                        section={section}
-                        isDark={isDark}
-                        mouseX={mouseX}
-                        mouseY={mouseY}
-                        onEnter={handleSectionEnter}
-                    />
-                ))}
+                {/* Content */}
+                <div className="relative" style={{ zIndex: 2 }}>
+                    <PageHeader isDark={isDark} />
 
-                {/* Closing statement */}
-                <div
-                    className="relative max-w-6xl mx-auto px-6 md:px-12 lg:px-20 py-24 md:py-36 flex flex-col items-center text-center gap-6"
-                    onMouseEnter={() => handleSectionEnter("92,189,185")}
-                >
-                    <span
-                        className="text-xs font-black tracking-[0.4em] uppercase"
-                        style={{ color: "#5cbdb9", fontFamily: "'Courier New', monospace" }}
-                    >
-                        END OF PROFILE
-                    </span>
-                    <p
-                        className="text-2xl md:text-4xl font-black tracking-tight max-w-2xl leading-tight"
-                        style={{
-                            color: isDark ? "rgba(255,255,255,0.85)" : "rgba(10,18,18,0.85)",
-                            fontFamily: "'Courier New', monospace",
-                        }}
-                    >
-                        Build. Scale. Repeat.
-                    </p>
-                    <p
-                        className="text-sm max-w-md"
-                        style={{
-                            color: isDark ? "rgba(255,255,255,0.35)" : "rgba(10,18,18,0.38)",
-                            fontFamily: "'Courier New', monospace",
-                            letterSpacing: "0.06em",
-                        }}
-                    >
-            // kvn_rajasekhar.profile — loaded successfully
-                    </p>
+                    {SECTIONS.map((section) => (
+                        <AboutSection
+                            key={section.id}
+                            section={section}
+                            isDark={isDark}
+                            mouseX={mouseX}
+                            mouseY={mouseY}
+                            onEnter={handleSectionEnter}
+                        />
+                    ))}
+
+                    {/* Closing statement */}
                     <div
-                        className="w-px h-16 rounded mt-4"
-                        style={{ background: isDark ? "rgba(92,189,185,0.4)" : "rgba(92,189,185,0.6)" }}
-                    />
+                        className="relative max-w-6xl mx-auto px-6 md:px-12 lg:px-20 py-24 md:py-36 flex flex-col items-center text-center gap-6"
+                        onMouseEnter={() => handleSectionEnter("92,189,185")}
+                    >
+                        <span
+                            className="text-xs font-black tracking-[0.4em] uppercase"
+                            style={{ color: "#5cbdb9", fontFamily: "'Courier New', monospace" }}
+                        >
+                            END OF PROFILE
+                        </span>
+                        <p
+                            className="text-2xl md:text-4xl font-black tracking-tight max-w-2xl leading-tight"
+                            style={{
+                                color: isDark ? "rgba(255,255,255,0.85)" : "rgba(10,18,18,0.85)",
+                                fontFamily: "'Courier New', monospace",
+                            }}
+                        >
+                            Build. Scale. Repeat.
+                        </p>
+                        <p
+                            className="text-sm max-w-md"
+                            style={{
+                                color: isDark ? "rgba(255,255,255,0.35)" : "rgba(10,18,18,0.38)",
+                                fontFamily: "'Courier New', monospace",
+                                letterSpacing: "0.06em",
+                            }}
+                        >
+                    kvn_rajasekhar.profile - loaded successfully
+                        </p>
+                        <div
+                            className="w-px h-16 rounded mt-4"
+                            style={{ background: isDark ? "rgba(92,189,185,0.4)" : "rgba(92,189,185,0.6)" }}
+                        />
+                    </div>
                 </div>
             </div>
         </AtomicTransition>

@@ -856,10 +856,10 @@ function ViewToggle({ view, setView, isDark }) {
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function SkillsPage() {
-    const { theme } = useTheme();
+    const { theme, colors } = useTheme();
     const isDark = theme === "dark";
     const [view, setView] = useState("Hybrid");
-    const bg = isDark ? "#000000" : "#ffffff";
+    const bg = colors.background;
     const teal = isDark ? "#5cbdb9" : "#2a9e9a";
     const text = isDark ? "#ffffff" : "#0a1212";
     const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.42)";

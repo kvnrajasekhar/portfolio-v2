@@ -4,7 +4,6 @@ import { useTheme } from "../../context/ThemeContext";
 import GitHubSnake from "./GitHubSnake";
 import GitHubStats from "./GitHubStats";
 import GitHubRedirect from "./GitHubRedirect";
-import AtomicTransition from "../transition/AtomicTransition";
 
 
 // ─── PROJECT DATA ─────────────────────────────────────────────────────────────
@@ -380,7 +379,7 @@ function ProjectCard({ project, index, isDark }) {
   const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
   const text = isDark ? "rgba(255,255,255,0.82)" : "rgba(10,18,18,0.82)";
   const border = isDark ? `${color}22` : `${color}44`;
-  const cardBg = isDark ? `rgba(${hexToRgb(color)},0.04)` : "#ffffff";
+  const cardBg = `rgba(${hexToRgb(color)},0.05)`;
 
   const copyTerminal = () => {
     navigator.clipboard?.writeText(project.terminalPath);
@@ -853,13 +852,12 @@ function PageHeader({ isDark }) {
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 export default function ProjectsPage() {
-  const { theme } = useTheme();
+  const { theme, colors } = useTheme();
   const isDark = theme === "dark";
-  const bg = isDark ? "#000000" : "#ffffff";
+  const bg = colors.background;
   const gridLine = isDark ? "rgba(255,255,255,0.025)" : "rgba(92,189,185,0.07)";
 
   return (
-    <AtomicTransition>
       <div style={{
         minHeight: "100vh",
         background: bg,
@@ -928,6 +926,5 @@ export default function ProjectsPage() {
           </div>
         </div>
       </div>
-    </AtomicTransition>
   );
 }

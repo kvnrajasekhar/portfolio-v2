@@ -170,7 +170,7 @@ function Cursor({ isDark }) {
 
 // ─── MAIN TERMINAL ────────────────────────────────────────────────────────────
 export default function SocialTerminal() {
-  const { theme } = useTheme();
+  const { theme , colors} = useTheme();
   const isDark = theme === "dark";
 
   const [lines, setLines] = useState([]);
@@ -415,10 +415,11 @@ export default function SocialTerminal() {
   const inputBg = isDark ? "bg-transparent text-green-300" : "bg-transparent text-gray-800";
   const promptCol = isDark ? "text-green-400" : "text-green-700";
 
+
   return (
     <AtomicTransition>
       <section
-        className={`w-full flex items-center justify-center py-16 px-4 ${isDark ? "bg-black" : "bg-white"}`}
+        className={`w-full flex items-center justify-center py-16 px-4 bg-[${colors.background}]`}
         style={{ fontFamily: "'Courier New', monospace" }}
       >
         {/* Terminal window */}
