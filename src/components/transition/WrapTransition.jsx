@@ -206,7 +206,12 @@ export default function WarpTransition() {
         ctx.textAlign = "center";
         ctx.shadowBlur = 18;
         ctx.shadowColor = "#5cbdb9";
-        ctx.fillText("Entering the Skill Universe", cx, cy - (W < 500 ? 10 : 14));
+        if (W < 500) {
+          ctx.fillText("Entering the", cx, cy - mainFontSize * 0.6);
+          ctx.fillText("Skill Universe", cx, cy + mainFontSize * 0.1);
+        } else {
+          ctx.fillText("Entering the Skill Universe", cx, cy - (W < 500 ? 10 : 14));
+        }
         ctx.shadowBlur = 0;
 
         // Dots
