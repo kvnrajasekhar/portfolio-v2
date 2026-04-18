@@ -6,7 +6,6 @@ import AtomicTransition from "../transition/AtomicTransition";
 
 
 const API = "https://raja-portfolio-server.vercel.app";
-console.log(API);
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 function fmtDate(iso) {
@@ -564,7 +563,6 @@ export default function RegistryPage() {
         try {
             const r = await fetch(`${API}/api/registry?page=${pg}&limit=10`);
             const d = await r.json();
-            console.log(d);
             if (d.success) {
                 const sorted = [...(d.data.users || [])].sort((a, b) => {
                     if (a.isPinned && !b.isPinned) return -1;
@@ -709,7 +707,6 @@ export default function RegistryPage() {
             });
 
             const data = await res.json();
-            console.log(res.status, data);
             if (data.success) {
                 pushToast(currentPinned ? "Signature unpinned successfully." : "Signature pinned successfully.", "success");
                 fetchFeed(1); // Refresh feed
@@ -725,7 +722,7 @@ export default function RegistryPage() {
     const mySigs = myUser?.signatures || [];
 
     // Debug admin state
-    console.log("Admin state:", { isAdmin, authUser, token: getToken() });
+    // console.log("Admin state:", { isAdmin, authUser, token: getToken() });
 
     // ── GENESIS card ──
     const GENESIS = {
