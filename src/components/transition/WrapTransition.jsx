@@ -192,14 +192,16 @@ export default function WarpTransition() {
         ctx.globalAlpha = labelAlpha;
 
         // Sub-label
-        ctx.font = `${W < 500 ? 9 : 16}px 'Courier New', monospace`;
+        const subFontSize = Math.min(16, Math.max(8, W / 40));
+        ctx.font = `${subFontSize}px 'Courier New', monospace`;
         ctx.fillStyle = "#5cbdb9";
         ctx.textAlign = "center";
         ctx.letterSpacing = "0.4em";
         ctx.fillText("✦  Now! We are  ✦", cx, cy - (W < 500 ? 36 : 52));
 
         // Main label
-        ctx.font = `bold ${W < 500 ? 14 : 36}px 'Courier New', monospace`;
+        const mainFontSize = Math.min(36, Math.max(12, W / 20));
+        ctx.font = `bold ${mainFontSize}px 'Courier New', monospace`;
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.shadowBlur = 18;
