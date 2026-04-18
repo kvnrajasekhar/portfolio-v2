@@ -4,7 +4,7 @@ import { useTheme } from "../../context/ThemeContext";
 
 import darkLogo from "../../assets/portfolio-dark-logo.png";
 import lightLogo from "../../assets/portfolio-light-logo.png";
-import charminaImg from "../../assets/charminar.png";
+import charminarImg from "../../assets/charminar.png";
 
 
 const START_DATE = new Date("2025-02-01T00:00:00");
@@ -323,7 +323,7 @@ function LocationWidget({ isDark }) {
 
         {/* Charminar image — transparent background PNG */}
         <img
-          src="/src/assets/charminar.png"
+          src={charminarImg}
           alt="Charminar"
           style={{
             width: "clamp(52px,6vw,72px)",
