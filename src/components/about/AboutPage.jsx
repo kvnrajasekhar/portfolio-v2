@@ -671,25 +671,104 @@ function PageHeader({ isDark }) {
                     Scroll to load the full profile.
                 </p>
             </RevealText>
-            {/* Scroll hint */}
+
+            {/* The Scroll hint */}
             <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 1.8 }}
-                className="mt-12"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 0.8 }}
+                className="mt-20 flex flex-col items-center"
+                style={{ position: "relative" }}
             >
+                {/* The Wire */}
                 <div
-                    className="w-px h-14 rounded"
-                    style={{ background: isDark ? "rgba(92,189,185,0.5)" : "rgba(92,189,185,0.7)" }}
+                    style={{
+                        width: 1.5,
+                        height: 40,
+                        background: `linear-gradient(to top, ${isDark ? "rgba(92,189,185,0.3)" : "rgba(42,158,154,0.4)"}, transparent)`,
+                        marginBottom: -2
+                    }}
                 />
+
+                {/* Mouse Body */}
+                <div
+                    style={{
+                        width: 26,
+                        height: 44,
+                        borderRadius: 14,
+                        border: `2px solid ${isDark ? "rgba(92,189,185,0.3)" : "rgba(42,158,154,0.4)"}`,
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingTop: 8,
+                        overflow: "hidden" // Keeps the wheel inside the body
+                    }}
+                >
+                    {/* CSS-Powered Scroll Wheel (Bypasses Framer Motion Logic) */}
+                    <div
+                        className="mouse-wheel-animation"
+                        style={{
+                            width: 3,
+                            height: 8,
+                            borderRadius: 2,
+                            backgroundColor: isDark ? "#5cbdb9" : "#2a9e9a",
+                            boxShadow: isDark ? "0 0 10px #5cbdb9" : "none",
+                        }}
+                    />
+                </div>
+
+                {/* Status Text */}
+                <div
+                    style={{
+                        fontSize: 10,
+                        fontWeight: 800,
+                        letterSpacing: "0.2em",
+                        textTransform: "uppercase",
+                        color: isDark ? "#5cbdb9" : "#2a9e9a",
+                        fontFamily: "'Courier New', monospace",
+                        marginTop: 16,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6
+                    }}
+                >
+                    <span>Scroll_to_Sync</span>
+                    <span className="terminal-cursor" style={{ backgroundColor: isDark ? "#5cbdb9" : "#2a9e9a" }} />
+                </div>
+
+                {/* Injecting CSS directly into the component for 100% Reliability */}
+                <style>{`
+    @keyframes mouse-scroll {
+      0%   { transform: translateY(0); opacity: 0.2; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(18px); opacity: 0; }
+    }
+
+    @keyframes cursor-blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    .mouse-wheel-animation {
+      animation: mouse-scroll 2s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+    }
+
+    .terminal-cursor {
+      width: 6px;
+      height: 10px;
+      animation: cursor-blink 0.8s step-end infinite;
+    }
+  `}</style>
             </motion.div>
         </div>
     );
 }
 
-// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
+// ... rest of the code remains the same ...
 export default function AboutPage() {
-    const { colors } = useTheme();
-    const { theme } = useTheme();
+    // ... rest of the code remains the same ...
+    const { theme, colors } = useTheme();
     const isDark = theme === "dark";
     const [activeColor, setActiveColor] = useState("92,189,185");
 
@@ -775,7 +854,7 @@ export default function AboutPage() {
                                 letterSpacing: "0.06em",
                             }}
                         >
-                    kvn_rajasekhar.profile - loaded successfully
+                            kvn_rajasekhar.profile - loaded successfully
                         </p>
                         <div
                             className="w-px h-16 rounded mt-4"
