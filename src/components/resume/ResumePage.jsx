@@ -520,7 +520,7 @@ function JsonView({ isDark }) {
 // MAIN RESUME PAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function ResumePage() {
-  const { theme , colors} = useTheme();
+  const { theme, colors } = useTheme();
   const isDark = theme === "dark";
   const [viewMode, setViewMode] = useState("human"); // human | machine
 
@@ -545,16 +545,6 @@ export default function ResumePage() {
         `,
           backgroundSize: "48px 48px",
         }} aria-hidden />
-
-        {/* Floating download */}
-        <div style={{
-          position: "fixed",
-          bottom: "clamp(20px,3vw,32px)",
-          right: "clamp(16px,3vw,32px)",
-          zIndex: 50,
-        }} className="print:hidden">
-          <DownloadButton isDark={isDark} floating />
-        </div>
 
         {/* Content */}
         <div style={{
@@ -628,6 +618,9 @@ export default function ResumePage() {
                 marginTop: 28,
                 flexWrap: "wrap",
               }}>
+                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.1em" }}>
+                // view as:
+                </span>
                 {/* Human / Machine toggle */}
                 <div style={{
                   display: "flex",
@@ -658,9 +651,6 @@ export default function ResumePage() {
                     </button>
                   ))}
                 </div>
-                <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, color: muted, letterSpacing: "0.1em" }}>
-                // view as:
-                </span>
                 <DownloadButton isDark={isDark} />
               </div>
             </div>
