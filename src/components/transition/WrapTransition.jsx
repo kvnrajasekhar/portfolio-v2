@@ -206,18 +206,24 @@ export default function WarpTransition() {
         ctx.textAlign = "center";
         ctx.shadowBlur = 18;
         ctx.shadowColor = "#5cbdb9";
-        if (W < 500) {
-          ctx.fillText("Entering the", cx, cy - mainFontSize * 0.7);
-          ctx.fillText("Skill Universe", cx, cy + mainFontSize * 0.7);
+        let dotsYOffset = 0;
+        if (W <= 912) {
+          // Two lines for mobile and tablet
+          const lineSpacing = mainFontSize * 0.5;
+          ctx.fillText("Entering the", cx, cy - lineSpacing / 2);
+          ctx.fillText("Skill Universe", cx, cy + lineSpacing / 2 + mainFontSize * 0.8);
+          dotsYOffset = mainFontSize * 1.8;
         } else {
+          // Single line for desktop
           ctx.fillText("Entering the Skill Universe", cx, cy - (W < 500 ? 10 : 14));
+          dotsYOffset = mainFontSize * 0.8;
         }
         ctx.shadowBlur = 0;
 
         // Dots
         const dotCount = 5;
         const dotSpacing = W < 500 ? 12 : 16;
-        const dotsY = cy + (W < 500 ? 18 : 28);
+        const dotsY = cy + dotsYOffset;
         const dotsX = cx - ((dotCount - 1) / 2) * dotSpacing;
         const now = performance.now() / 1000;
         for (let i = 0; i < dotCount; i++) {
