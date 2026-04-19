@@ -421,7 +421,7 @@ export default function MasterFooter() {
           transition: "background 0.4s ease",
           position: "relative",
           overflow: "hidden",
-          minHeight: "75vh",
+          minHeight: "45vh",
           display: "flex",
           flexDirection: "column",
           boxSizing: "border-box",
@@ -461,14 +461,14 @@ export default function MasterFooter() {
 
         {/* ── BOTTOM SECTION (2/3) ── */}
         <div style={{
-          flex: "1 1 66.67%",
+          flex: "0 0 auto",
           position: "relative",
           padding: "clamp(28px,3.5vw,44px) clamp(20px,5vw,72px) 0",
           display: "flex",
           flexDirection: "column",
         }}>
 
-          <div style={{ flex: 1, display: "flex", alignItems: "center", position: "relative", minHeight: 200 }}>
+          <div style={{ flex: "0 0 auto", display: "flex", alignItems: "flex-start", position: "relative" }}>
 
             {/* Logo Container */}
             <motion.div
@@ -589,30 +589,32 @@ export default function MasterFooter() {
         <style>{`
   /* ── TOP SECTION ── */
   .footer-top-container {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 32px;
-    text-align: center;
+    text-align: left;
   }
-  @media (min-width: 1024px) {
+  @media (max-width: 749px) {
     .footer-top-container {
-      flex-direction: row;
-      justify-content: space-between;
-      text-align: left;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      text-align: center;
     }
   }
 
   /* ── NAV GRID ──
      Desktop/Tablet (>430px): 3 cols side by side (Navigate | Connect | About)
-     Mobile (≤430px): Navigate + Connect side by side top row,
+     Mobile (<=430px): Navigate + Connect side by side top row,
                       About centered below, logo behind both
   */
   .footer-nav-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  @media (max-width: 430px) {
+  @media (max-width: 431px) {
     .footer-nav-grid {
       /* 2-col top row + About spans full width centered below */
       grid-template-columns: 1fr 1fr;
@@ -630,7 +632,7 @@ export default function MasterFooter() {
       grid-column: 2;
       grid-row: 1;
       justify-self: center;
-      margin-left: clamp(20px, 2vw, 24px);
+      margin-left: clamp(48px, 2vw, 24px);
     }
     /* About spans both columns, centered */
     .footer-about-col {

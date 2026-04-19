@@ -192,7 +192,7 @@ export default function PreFooter() {
         background: bg,
         position: "relative",
         overflow: "hidden",
-        minHeight: "100vh",
+        minHeight: "65vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
