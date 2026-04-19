@@ -22,8 +22,61 @@ function clearToken() { localStorage.removeItem("registry_token"); }
 // ─── TOAST ────────────────────────────────────────────────────────────────────
 function Toast({ toasts, remove }) {
     const COLOR = { success: "#5cbdb9", error: "#f87171", info: "#c9b8f5" };
+
+    // Detect screen size for responsive positioning
+    const [isMobile, setIsMobile] = useState(false);
+    const [isTablet, setIsTablet] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth <= 768);
+            setIsTablet(window.innerWidth > 768 && window.innerWidth <= 1024);
+        };
+
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
+    // Responsive positioning logic
+    const getPosition = () => {
+        if (isMobile) {
+            return {
+                top: "auto",
+                bottom: 20,
+                right: 16,
+                left: 16,
+                alignItems: "center"
+            };
+        } else if (isTablet) {
+            return {
+                top: "90px",
+                right: 20,
+                bottom: "auto",
+                left: "auto",
+                alignItems: "flex-end"
+            };
+        } else {
+            return {
+                top: "80px",
+                right: 24,
+                bottom: "auto",
+                left: "auto",
+                alignItems: "flex-end"
+            };
+        }
+    };
+
     return (
-        <div style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, display: "flex", flexDirection: "column", gap: 8, pointerEvents: "none" }}>
+        <div style={{
+            position: "fixed",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            pointerEvents: "none",
+            ...getPosition()
+        }}>
             <AnimatePresence>
                 {toasts.map(t => (
                     <motion.div key={t.id}
@@ -556,6 +609,15 @@ export default function RegistryPage() {
     const text = isDark ? "rgba(255,255,255,0.88)" : "rgba(10,18,18,0.88)";
     const muted = isDark ? "rgba(255,255,255,0.38)" : "rgba(10,18,18,0.4)";
 
+    // Show welcome toast on first visit
+    useEffect(() => {
+        const hasVisited = sessionStorage.getItem('registry_visited');
+        if (!hasVisited) {
+            pushToast("Welcome to my Guestbook! Sign the registry to leave your mark.", "info");
+            sessionStorage.setItem('registry_visited', 'true');
+        }
+    }, [pushToast]);
+
     // fetchFeed already returns a Promise implicitly since it's async
     // Just make sure it's defined with useCallback and no issues:
     const fetchFeed = useCallback(async (pg = 1) => {
@@ -755,8 +817,8 @@ export default function RegistryPage() {
                 <div style={{ position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto", padding: "clamp(56px,10vw,96px) clamp(16px,5vw,48px) clamp(72px,10vw,100px)", boxSizing: "border-box" }}>
 
                     {/* ── PAGE HEADER ── */}
-                    <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }} style={{ marginBottom: "clamp(36px,6vw,56px)" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+                    <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }} style={{ marginBottom: "clamp(36px,6vw,56px)" }} >
+                        <div className="mt-12 md:mt-6 lg:mt-0" style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
                             <div style={{ width: 22, height: 1.5, background: teal, borderRadius: 1 }} />
                             <span style={{ fontFamily: "'Courier New', monospace", fontSize: 9, fontWeight: 800, letterSpacing: "0.32em", textTransform: "uppercase", color: teal }}>
                                 Digital Archive · Portfolio Registry
