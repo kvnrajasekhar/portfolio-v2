@@ -572,7 +572,7 @@ export default function MasterFooter() {
                 ))}
               </div>
             </div>
-            
+
             <span style={{
               fontSize: 10,
               fontWeight: 700,
@@ -604,15 +604,15 @@ export default function MasterFooter() {
   }
 
   /* ── NAV GRID ──
-     Desktop: 3 cols side by side (Navigate | Connect | About)
-     Tablet/Mobile: Navigate + Connect side by side top row,
-                    About centered below, logo behind both
+     Desktop/Tablet (>430px): 3 cols side by side (Navigate | Connect | About)
+     Mobile (≤430px): Navigate + Connect side by side top row,
+                      About centered below, logo behind both
   */
   .footer-nav-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 430px) {
     .footer-nav-grid {
       /* 2-col top row + About spans full width centered below */
       grid-template-columns: 1fr 1fr;
@@ -623,14 +623,14 @@ export default function MasterFooter() {
     .footer-nav-grid > *:nth-child(1) {
       grid-column: 1;
       grid-row: 1;
-      justify-self: start;
-      margin-right: clamp(36px, 2vw, 40px);
+      justify-self: center;
+      margin-right: clamp(20px, 2vw, 24px);
     }
     .footer-nav-grid > *:nth-child(2) {
       grid-column: 2;
       grid-row: 1;
-      justify-self: start;
-      margin-left: clamp(3px, 2vw, 40px);
+      justify-self: center;
+      margin-left: clamp(20px, 2vw, 24px);
     }
     /* About spans both columns, centered */
     .footer-about-col {
@@ -646,7 +646,7 @@ export default function MasterFooter() {
   /* ── LOGO: background watermark on all sizes ── */
   .footer-logo {
     position: absolute !important;
-    /* Desktop */
+    /* Desktop/Tablet */
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
@@ -654,9 +654,9 @@ export default function MasterFooter() {
     pointer-events: none;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 430px) {
     .footer-logo {
-      /* On mobile/tablet: center it horizontally behind the grid */
+      /* On mobile: center it horizontally behind the grid */
       left: 50% !important;
       top: 45% !important;
       transform: translate(-50%, -50%) !important;
