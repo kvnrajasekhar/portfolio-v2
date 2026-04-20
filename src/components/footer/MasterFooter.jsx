@@ -621,20 +621,26 @@ export default function MasterFooter() {
       grid-template-rows: auto auto;
     }
 
-    /* Navigate = col 1 row 1, Connect = col 2 row 1 */
+    /* Navigate = col 1 row 1, positioned to the right */
     .footer-nav-grid > *:nth-child(1) {
       grid-column: 1;
       grid-row: 1;
-      justify-self: center;
-      margin-right: clamp(20px, 2vw, 24px);
+      display: flex;
+      justify-content: flex-end;
+      margin-right: clamp(12px, 2vw, 16px);
+      margin-left: clamp(14px, 4vw, 16px);
     }
+
+    /* Connect = col 2 row 1, positioned to the left */
     .footer-nav-grid > *:nth-child(2) {
       grid-column: 2;
       grid-row: 1;
-      justify-self: center;
-      margin-left: clamp(48px, 2vw, 24px);
+      display: flex;
+      justify-content: flex-start;
+      margin-left: clamp(14px, 2vw, 16px);
     }
-    /* About spans both columns, centered */
+
+    /* About spans both columns, perfectly centered */
     .footer-about-col {
       grid-column: 1 / -1 !important;
       grid-row: 2;
@@ -642,6 +648,7 @@ export default function MasterFooter() {
       text-align: center;
       max-width: 320px;
       margin: 0 auto;
+      justify-self: center;
     }
   }
 
