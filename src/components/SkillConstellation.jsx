@@ -10,7 +10,6 @@ const CATEGORIES = [
     position: { x: 0.22, y: 0.28 },
     skills: [
       { name: "JavaScript (ES6+)", level: 0.70 },
-      { name: "C#", level: 0.65 },
       { name: "Java", level: 0.70 },
       { name: "Python", level: 0.75 },
     ],
