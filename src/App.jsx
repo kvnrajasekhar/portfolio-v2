@@ -3,7 +3,7 @@ import RibbonBanners from "./components/RibbonBanners";
 import HeroSection from "./components/hero/HeroSection";
 import SkillConstellation from "./components/SkillConstellation";
 import WarpTransition from "./components/transition/WrapTransition";
-import BentoGrid from "./components/BentoGrid";
+import VerticalsofExcellence from "./components/VerticalsofExcellence";
 import AtomicTransition from "./components/transition/AtomicTransition";
 
 
@@ -16,7 +16,7 @@ function App() {
         <SkillConstellation />
         <EngineeringManifesto />
         <RibbonBanners />
-        <BentoGrid />
+        <VerticalsofExcellence />
       </div>
     </AtomicTransition>
 

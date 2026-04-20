@@ -67,11 +67,12 @@ function NetworkCanvas({ color, isDark }) {
     return <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />;
 }
 
-// ─── Heartbeat canvas ─────────────────────────────────────────────────────────
-function HeartbeatCanvas({ color, isDark }) {
+// ─── Performance Metrics Canvas ───────────────────────────────────────────────────
+function PerformanceMetricsCanvas({ color, isDark }) {
     const canvasRef = useRef(null);
     const animRef = useRef(null);
     const tickRef = useRef(0);
+    const barHeightsRef = useRef([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -81,66 +82,61 @@ function HeartbeatCanvas({ color, isDark }) {
         const W = canvas.clientWidth, H = canvas.clientHeight;
         canvas.width = W * dpr; canvas.height = H * dpr;
         ctx.scale(dpr, dpr);
-        const cy = H / 2;
 
-        const wave = [
-            [0, 0], [0.08, 0], [0.14, -0.06], [0.19, 0],
-            [0.28, 0], [0.33, -0.92], [0.37, 0.52], [0.41, -0.18], [0.46, 0],
-            [0.54, 0], [0.6, -0.06], [0.65, 0],
-            [0.73, 0], [0.78, -0.92], [0.82, 0.52], [0.86, -0.18], [0.91, 0],
-            [1, 0],
-        ];
+        // 5 performance bars with fixed varied heights
+        const barCount = 5;
+        if (barHeightsRef.current.length === 0) {
+            barHeightsRef.current = [0.85, 0.55, 0.75, 0.45, 0.90]; // Different base heights
+        }
+
+        const barWidth = (W * 0.7) / barCount;
+        const barGap = 10;
+        const startX = (W - (barCount * barWidth + (barCount - 1) * barGap)) / 2;
+        const baselineY = H * 0.72;
+        const maxHeight = H * 0.55;
 
         const draw = () => {
-            tickRef.current += 0.007;
-            const t = tickRef.current % 1;
+            tickRef.current += 0.015;
+            const t = tickRef.current;
             ctx.clearRect(0, 0, W, H);
 
-            // Static background line — visible in both modes
+            // Draw baseline
             ctx.beginPath();
-            wave.forEach(([nx, ny], i) => {
-                const x = nx * W, y = cy + ny * (H * 0.4);
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.strokeStyle = isDark ? color + "30" : color + "55";
-            ctx.lineWidth = 1.4;
+            ctx.moveTo(startX - 12, baselineY);
+            ctx.lineTo(startX + barCount * barWidth + (barCount - 1) * barGap + 12, baselineY);
+            ctx.strokeStyle = isDark ? color + "18" : color + "33";
+            ctx.lineWidth = 0.8;
             ctx.stroke();
 
-            // Animated sweep segment
-            const segLen = 0.32;
-            const segEnd = t;
-            const segStart = t - segLen;
+            // Draw animated bars
+            for (let i = 0; i < barCount; i++) {
+                const baseHeight = barHeightsRef.current[i];
+                // Subtle pulse animation - each bar pulses independently
+                const pulse = 0.95 + 0.08 * Math.sin(t * 2.5 + i * 0.8);
+                const finalHeight = maxHeight * baseHeight * pulse;
+                const x = startX + i * (barWidth + barGap);
+                const y = baselineY - finalHeight;
 
-            ctx.save();
-            ctx.beginPath();
-            let started = false;
-            wave.forEach(([nx, ny]) => {
-                const inSeg = segStart < 0
-                    ? nx >= (1 + segStart) || nx <= segEnd
-                    : nx >= segStart && nx <= segEnd;
-                if (!inSeg) return;
-                const x = nx * W, y = cy + ny * (H * 0.4);
-                if (!started) { ctx.moveTo(x, y); started = true; }
-                else ctx.lineTo(x, y);
-            });
-            ctx.shadowBlur = 14;
-            ctx.shadowColor = color;
-            ctx.strokeStyle = color;
-            ctx.lineWidth = isDark ? 1.8 : 2.2;
-            ctx.stroke();
-            ctx.restore();
+                // Bar background (very faint)
+                ctx.fillStyle = isDark ? color + "0a" : color + "15";
+                ctx.fillRect(x, baselineY - maxHeight * baseHeight, barWidth, maxHeight * baseHeight);
 
-            // Leading dot
-            const edgePoint = wave.find(([nx]) => Math.abs(nx - segEnd) < 0.04);
-            if (edgePoint) {
-                const [nx, ny] = edgePoint;
+                // Animated bar with gradient
+                const gradient = ctx.createLinearGradient(x, y, x, baselineY);
+                gradient.addColorStop(0, color);
+                gradient.addColorStop(0.5, isDark ? color + "88" : color + "bb");
+                gradient.addColorStop(1, isDark ? color + "44" : color + "88");
+
                 ctx.save();
-                ctx.shadowBlur = 16; ctx.shadowColor = color;
-                ctx.beginPath();
-                ctx.arc(nx * W, cy + ny * (H * 0.4), isDark ? 3 : 4, 0, Math.PI * 2);
-                ctx.fillStyle = color;
-                ctx.fill();
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = color;
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x, y, barWidth, finalHeight);
                 ctx.restore();
+
+                // Top accent cap
+                ctx.fillStyle = isDark ? color + "99" : color;
+                ctx.fillRect(x, y - 1.5, barWidth, 2);
             }
 
             animRef.current = requestAnimationFrame(draw);
@@ -241,16 +237,31 @@ function FlaskIcon({ color, isDark }) {
     );
 }
 
-// ─── Silhouette icon ──────────────────────────────────────────────────────────
-function SilhouetteIcon({ color, isDark }) {
+// ─── People/Team icon ──────────────────────────────────────────────────────────
+function PeopleTeamIcon({ color, isDark }) {
     return (
-        <svg width="40" height="54" viewBox="0 0 40 54" fill="none">
-            <circle cx="20" cy="11" r="8" stroke={color} strokeWidth={isDark ? 1.2 : 2} fill={color + (isDark ? "22" : "33")} />
-            <path d="M6 40 C6 27 13 23 20 23 C27 23 34 27 34 40"
-                stroke={color} strokeWidth={isDark ? 1.2 : 2} fill={color + (isDark ? "12" : "22")} />
-            <path d="M11 32 L8 52" stroke={color} strokeWidth={isDark ? 1 : 1.5} strokeLinecap="round" opacity={isDark ? 0.5 : 0.7} />
-            <path d="M29 32 L32 52" stroke={color} strokeWidth={isDark ? 1 : 1.5} strokeLinecap="round" opacity={isDark ? 0.5 : 0.7} />
-            <line x1="6" y1="52" x2="34" y2="52" stroke={color} strokeWidth="1" opacity={isDark ? 0.3 : 0.5} />
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            {/* Left person */}
+            <circle cx="14" cy="12" r="5.5" stroke={color} strokeWidth={isDark ? 1.2 : 1.8} fill={color + (isDark ? "22" : "33")} />
+            <path d="M6 28 C6 21 10 18 14 18 C18 18 22 21 22 28 V38"
+                stroke={color} strokeWidth={isDark ? 1.2 : 1.8} fill="none" strokeLinecap="round" />
+
+            {/* Center person (elevated/leading) */}
+            <circle cx="24" cy="8" r="6.5" stroke={color} strokeWidth={isDark ? 1.4 : 2} fill={color + (isDark ? "33" : "44")} />
+            <path d="M14 26 C14 17 18 12 24 12 C30 12 34 17 34 26 V38"
+                stroke={color} strokeWidth={isDark ? 1.4 : 2} fill="none" strokeLinecap="round" />
+
+            {/* Right person */}
+            <circle cx="36" cy="12" r="5.5" stroke={color} strokeWidth={isDark ? 1.2 : 1.8} fill={color + (isDark ? "22" : "33")} />
+            <path d="M28 28 C28 21 32 18 36 18 C40 18 44 21 44 28 V38"
+                stroke={color} strokeWidth={isDark ? 1.2 : 1.8} fill="none" strokeLinecap="round" />
+
+            {/* Connection lines (network effect) */}
+            <line x1="19" y1="18" x2="29" y2="18" stroke={color} strokeWidth="0.8" opacity={isDark ? 0.4 : 0.6} />
+            <line x1="22" y1="26" x2="26" y2="26" stroke={color} strokeWidth="0.8" opacity={isDark ? 0.3 : 0.5} />
+
+            {/* Base line */}
+            <line x1="6" y1="38" x2="42" y2="38" stroke={color} strokeWidth="1.2" opacity={isDark ? 0.4 : 0.6} />
         </svg>
     );
 }
@@ -396,7 +407,7 @@ function Tile({ children, color, isDark, delay = 0, gridArea, fullHeight = false
 }
 
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
-export default function BentoGrid() {
+export default function VerticalsofExcellence() {
     const { theme } = useTheme();
     const isDark = theme === "dark";
     const lastRnD = "17 Mar 2026";
@@ -454,7 +465,7 @@ export default function BentoGrid() {
                             backgroundColor: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)",
                             border: `1px solid ${isDark ? "rgba(92, 189, 185, 0.3)" : "rgba(42, 158, 154, 0.3)"}`,
                             color: isDark ? "#5cbdb9" : "#2a9e9a",
-                            fontSize: "0.95em", 
+                            fontSize: "0.95em",
                             verticalAlign: "middle"
                         }}>
                             Excellence.
@@ -507,26 +518,27 @@ export default function BentoGrid() {
 
                 <div className="bento-grid">
 
-                    {/* ── TILE 1: The Stylist — narrow tall ── */}
+                    {/* ── TILE 1: The Leader — narrow tall ── */}
                     <Tile color={teal} isDark={isDark} delay={0} gridArea="stylist">
-                        <Tag label="Vertical 01 — The Stylist" color={teal} isDark={isDark} />
+                        <Tag label="Vertical 01 — The Leader" color={teal} isDark={isDark} />
                         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 }}>
-                            <TileTitle isDark={isDark}>Visual Communication{"\n"}& Self-Optimisation</TileTitle>
-                            <SilhouetteIcon color={isDark ? teal : tealD} isDark={isDark} />
+                            <TileTitle isDark={isDark}>Strategic Leadership{"\n"}& Team Empowerment</TileTitle>
+                            <PeopleTeamIcon color={isDark ? teal : tealD} isDark={isDark} />
                         </div>
-                        <PaletteSwatch isDark={isDark} />
                         <TileBody isDark={isDark}>
-                            Integrating design principles into lifestyle. Deep focus on visual storytelling,
-                            architectural fashion, and the psychology of presentation.
+                            Proven track record of driving collective excellence within high-stakes environments
+                            like the NCC and collegiate organizations.
+                            Skilled in aligning diverse groups under a shared vision,
+                            fostering collaborative cultures, and empowering individuals to exceed their performance benchmarks.
                         </TileBody>
                         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                            <StatusBadge label="Status: Aesthetic Refinement" color={teal} isDark={isDark} pulse />
+                            <StatusBadge label="Status: Elevating Teams" color={teal} isDark={isDark} pulse />
                             <span style={{
                                 fontFamily: "'Courier New', monospace", fontSize: 9,
                                 color: isDark ? teal + "55" : tealD + "88",
                                 letterSpacing: "0.22em", textTransform: "uppercase",
                             }}>
-                                CURATING IDENTITY
+                                MULTIPLYING IMPACT
                             </span>
                         </div>
                     </Tile>
@@ -602,30 +614,15 @@ export default function BentoGrid() {
                         </div>
 
                         <TileBody isDark={isDark}>
-                            Weekly deep-dives into emerging tech. This is my sandbox for testing
-                            what's next — before it becomes mainstream.
+                            Pursuing systematic innovation through rigorous experimentation and prototyping.
+                            Weekly deep-dives into cutting-edge technologies, emerging frameworks, and novel architectures.
+                            This is my sandbox for testing what's next before it becomes mainstream — combining technical rigor
+                            with creative exploration to drive excellence in innovation.
                         </TileBody>
 
-                        <div style={{
-                            background: isDark ? `${amber}10` : `${amberD}0f`,
-                            border: `1.5px solid ${isDark ? amber + "33" : amberD + "55"}`,
-                            borderRadius: 5, padding: "10px 14px",
-                            display: "flex", alignItems: "center", justifyContent: "space-between",
-                            boxShadow: isDark ? "none" : `0 2px 8px ${amberD}14`,
-                        }}>
-                            <span style={{
-                                fontFamily: "'Courier New', monospace", fontSize: 9,
-                                color: isDark ? amber + "77" : amberD + "88",
-                                letterSpacing: "0.22em", textTransform: "uppercase",
-                            }}>
-                                LAST R&D SESSION
-                            </span>
-                            <span style={{
-                                fontFamily: "'Courier New', monospace", fontSize: 12,
-                                color: isDark ? amber : amberD, fontWeight: 800,
-                            }}>
-                                {lastRnD}
-                            </span>
+                        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                            <StatusBadge label="Status: Innovation Pipeline" color={amber} isDark={isDark} pulse />
+                            <StatusBadge label="100+ Experiments" color={amber} isDark={isDark} />
                         </div>
                     </Tile>
 
@@ -637,7 +634,7 @@ export default function BentoGrid() {
                             <Battery color={isDark ? blush : blushD} isDark={isDark} pct={99} />
                         </div>
 
-                        {/* Heartbeat */}
+                        {/* Performance Metrics */}
                         <div style={{
                             width: "100%", height: "clamp(56px,8vw,80px)",
                             borderRadius: 6, overflow: "hidden",
@@ -645,7 +642,7 @@ export default function BentoGrid() {
                             background: isDark ? `${blush}08` : `${blushD}0a`,
                             boxShadow: isDark ? "none" : `inset 0 0 16px ${blushD}0a`,
                         }}>
-                            <HeartbeatCanvas color={isDark ? blush : blushD} isDark={isDark} />
+                            <PerformanceMetricsCanvas color={isDark ? blush : blushD} isDark={isDark} />
                         </div>
 
                         <TileBody isDark={isDark}>
