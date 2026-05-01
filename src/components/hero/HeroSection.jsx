@@ -20,7 +20,7 @@ const HeroSection = () => {
   const isDark = theme === "dark";
 
   return (
-    <section className="h-screen w-full flex flex-col justify-center items-center relative px-8 text-center overflow-hidden">
+    <section className="h-screen w-full flex flex-col justify-start items-center relative px-8 text-center overflow-hidden pt-58 md:pt-58 lg:pt-58 sm:pt-32">
 
       {/* Cursor Glow
       <div
@@ -62,7 +62,7 @@ const HeroSection = () => {
       </div>
 
       {/* Bottom Row */}
-      <div className="absolute bottom-28 w-full flex justify-between px-8 text-sm z-10">
+      <div className="absolute bottom-42 md:bottom-38 lg:bottom-22 w-full flex justify-between px-8 text-sm z-10">
 
         <div className="flex flex-col items-center gap-1">
           <FiMapPin className="text-[#5cbdb9]" />
@@ -87,7 +87,7 @@ const HeroSection = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-12 flex flex-col items-center gap-3">
+      <div className="absolute bottom-32 lg:bottom-18 flex flex-col items-center gap-3">
         {/* The Mouse Body */}
         <div className="w-5 h-8 border-2 border-[#5cbdb9] dark:border-[#fbe3e8] rounded-full relative flex justify-center p-1">
 
@@ -115,7 +115,7 @@ const HeroSection = () => {
         >
           Scroll
         </motion.span>
-      </div>  
+      </div>
 
     </section>
   );
