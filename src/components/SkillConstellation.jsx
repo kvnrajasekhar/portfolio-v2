@@ -21,7 +21,6 @@ const CATEGORIES = [
     position: { x: 0.72, y: 0.22 },
     skills: [
       { name: "React.js", level: 0.85 },
-      { name: "ASP.NET MVC", level: 0.68 },
       { name: "Spring Boot", level: 0.72 },
       { name: "Material-UI", level: 0.75 },
       { name: "Bootstrap", level: 0.80 },
@@ -63,7 +62,6 @@ const CATEGORIES = [
     skills: [
       { name: "Git / GitHub", level: 0.90 },
       { name: "Docker", level: 0.60 },
-      { name: "GitHub Actions", level: 0.60 },
       { name: "Vercel / Render", level: 0.75 },
       { name: "AWS (in progress)", level: 0.45 },
       { name: "Postman", level: 0.80 },
