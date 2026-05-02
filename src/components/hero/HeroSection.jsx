@@ -112,7 +112,7 @@ const HeroSection = () => {
             bottom: 178px;
           }
           .scroll-indicator{
-            bottom: 104px;
+            bottom: 131px;
           }
         }
         
@@ -122,7 +122,7 @@ const HeroSection = () => {
             bottom: 90px;
           }
           .scroll-indicator{
-            bottom: 24px;
+            bottom: 28px;
           }
         }
         
