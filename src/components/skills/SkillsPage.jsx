@@ -38,7 +38,7 @@ const LAYERS = [
             { name: "Spring Boot", years: 1, tooltip: "REST APIs, MVC, Hibernate ORM", icon: <SiSpringboot /> },
             { name: "Node.js", years: 2, tooltip: "Event-loop server architecture", icon: <SiNodedotjs /> },
             { name: "Express.js", years: 2, tooltip: "Middleware routing & REST design", icon: <SiExpress /> },
-            { name: "ASP.NET MVC", years: 0.5, tooltip: "C# based enterprise MVC pattern", icon: <SiDotnet /> },
+            // { name: "ASP.NET MVC", years: 0.5, tooltip: "C# based enterprise MVC pattern", icon: <SiDotnet /> },
         ],
         frontend: [
             { name: "React.js", years: 2, tooltip: "Hooks, Context API, component design", icon: <SiReact /> },
