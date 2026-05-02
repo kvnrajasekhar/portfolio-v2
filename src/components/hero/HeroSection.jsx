@@ -109,20 +109,20 @@ const HeroSection = () => {
         /* Medium Mobile (376px - 430px) */
         @media (min-width: 376px) and (max-width: 431px) {
           .bottom-row {
-            bottom: 158px;
+            bottom: 178px;
           }
           .scroll-indicator{
-            bottom: 84px;
+            bottom: 104px;
           }
         }
         
         /* Small Mobile (≤376px) */
         @media (max-width: 376px) {
           .bottom-row {
-            bottom: 88px;
+            bottom: 90px;
           }
           .scroll-indicator{
-            bottom: 22px;
+            bottom: 24px;
           }
         }
         
@@ -176,7 +176,8 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="uppercase tracking-[0.4em] text-sm text-gray-600 dark:text-gray-400"
+            // font family is courier new
+            className="font-mono tracking-[0.4em] text-[10px] text-gray-600 dark:text-gray-400"
           >
             Always chasing the next breakthrough
           </motion.p>
@@ -185,9 +186,9 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="text-4xl font-oleo text-[#5cbdb9] dark:text-[#fbe3e8] max-w-2xl drop-shadow-[0_0_0.3px_rgba(0,0,0,1)] dark:drop-shadow-[0_0_0.3px_white]"
+            className="text-md font-mono text-[#5cbdb9] dark:text-[#fbe3e8] max-w-2xl drop-shadow-[0_0_0.3px_rgba(0,0,0,1)] dark:drop-shadow-[0_0_0.3px_white]"
           >
-            learning, building, evolving.
+            Learning, Building, Evolving.
           </motion.p>
         </div>
 
@@ -196,8 +197,8 @@ const HeroSection = () => {
 
           <div className="flex flex-col items-center gap-1">
             <FiMapPin className="text-[#5cbdb9]" />
-            <p className="font-semibold uppercase">Hyderabad</p>
-            <p className="text-gray-400 uppercase text-xs">
+            <p className="font-semibold uppercase text-[10px] lg:text-[14px]">Hyderabad</p>
+            <p className="text-gray-400 uppercase text-[8px] lg:text-[12px]">
               <span className="text-orange-400 font-bold">I</span>
               <span className="text-orange-400 font-bold">N</span>
               <span className="dark:text-white font-bold">D</span>
@@ -208,8 +209,8 @@ const HeroSection = () => {
 
           <div className="flex flex-col items-center gap-1">
             <FiLayers className="text-[#5cbdb9]" />
-            <p className="font-semibold uppercase">Software Engineer</p>
-            <p className="text-black-400 dark:text-white uppercase text-xs">
+            <p className="font-semibold uppercase text-[10px] lg:text-[14px]">Software Engineer</p>
+            <p className="text-black-400 dark:text-white uppercase text-[8px] lg:text-[12px]">
               Full Stack Dev
             </p>
           </div>
