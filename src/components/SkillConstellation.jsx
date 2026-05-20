@@ -11,6 +11,7 @@ const CATEGORIES = [
     skills: [
       { name: "JavaScript (ES6+)", level: 0.70 },
       { name: "Java", level: 0.70 },
+      { name: "SQL", level: 0.71 },
       { name: "Python", level: 0.75 },
     ],
   },
@@ -21,8 +22,8 @@ const CATEGORIES = [
     position: { x: 0.72, y: 0.22 },
     skills: [
       { name: "React.js", level: 0.85 },
+      { name: "Express.js", level: 0.85 },
       { name: "Spring Boot", level: 0.72 },
-      { name: "Material-UI", level: 0.75 },
       { name: "Bootstrap", level: 0.80 },
       { name: "Tailwind CSS", level: 0.85 },
       { name: "Framer Motion", level: 0.65 },
@@ -37,9 +38,9 @@ const CATEGORIES = [
       { name: "HTML5", level: 0.90 },
       { name: "CSS3", level: 0.90 },
       { name: "Node.js", level: 0.88 },
-      { name: "Express.js", level: 0.85 },
       { name: "RESTful API", level: 0.85 },
       { name: "JWT Auth", level: 0.80 },
+      { name: "O Auth 2.0", level: 0.65 },
     ],
   },
   {
@@ -49,7 +50,7 @@ const CATEGORIES = [
     position: { x: 0.2, y: 0.72 },
     skills: [
       { name: "SQL Server", level: 0.80 },
-      { name: "Oracle / PL-SQL", level: 0.70 },
+      // { name: "Oracle / PL-SQL", level: 0.70 },
       { name: "MongoDB", level: 0.80 },
       { name: "Mongoose", level: 0.70 },
     ],
@@ -61,7 +62,7 @@ const CATEGORIES = [
     position: { x: 0.78, y: 0.70 },
     skills: [
       { name: "Git / GitHub", level: 0.90 },
-      { name: "Docker", level: 0.60 },
+      // { name: "Docker", level: 0.60 },
       { name: "Vercel / Render", level: 0.75 },
       { name: "AWS (in progress)", level: 0.45 },
       { name: "Postman", level: 0.80 },
