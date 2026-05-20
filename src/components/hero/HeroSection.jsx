@@ -109,10 +109,10 @@ const HeroSection = () => {
         /* Medium Mobile (376px - 430px) */
         @media (min-width: 376px) and (max-width: 431px) {
           .bottom-row {
-            bottom: 178px;
+            bottom: 192px;
           }
           .scroll-indicator{
-            bottom: 131px;
+            bottom: 151px;
           }
         }
         

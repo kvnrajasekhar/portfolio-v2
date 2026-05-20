@@ -25,7 +25,7 @@ const NAV_COLS = [
       { label: "Experience", href: "/experience" },
       { label: "Contact", href: "/contact" },
       { label: "Links", href: "/links" },
-      { label: "Guest Book", href: "/guestbook" },
+      { label: "Guest Book", href: "/registry" },
     ],
   },
 ];
