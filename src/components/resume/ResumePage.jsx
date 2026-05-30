@@ -17,12 +17,13 @@ const RESUME_JSON = {
   summary:
     "Software Engineer with enterprise experience at Cognizant specializing in financial data systems and middleware architecture. Expert in designing and maintaining complex data integration pipelines using SQL Server, Oracle, and Microsoft Access to power Business Intelligence (BI) reporting for international clients. Proficient in MongoDB, Express.js, React, and Node.js, with a professional focus on bridging middleware data synchronization with modern, data-driven business requirements within Scrum environments.",
   skills: {
-    programming: ["JavaScript (ES6+)", "Java", "Python"],
-    frameworks: ["React.js", "Spring Boot", "Material-UI", "Bootstrap", "Tailwind CSS", "Framer Motion"],
-    backend: ["Node.js", "Express.js", "RESTful APIs", "JWT Auth", "Middleware Architecture"],
-    databases: ["SQL Server", "Oracle SQL Developer", "MongoDB", "Mongoose"],
-    devops: ["Git/GitHub", "Docker", "Vercel", "Render", "AWS (in progress)"],
-    soft: ["Cross-functional Collaboration", "Problem-solving", "Adaptability", "Technical Communication"],
+    "programming": ["JavaScript (ES6+)", "Java", "Python"],
+    "Web & Backend": ["HTML5", "CSS3", "Node.js", "Express.js", "RESTful API design", "JWT authentication", "OAuth 2.0"],
+    "Frameworks & Libraries": ["React.js (Hooks, Context API)", "Spring Boot", "Tailwind CSS", "Framer Motion"],
+    "Databases & Data": ["SQL", "SQL Server", "MongoDB", "Mongoose (schema design, indexing)"],
+    "tools & devops": ["Git/GitHub", "Docker", "Vercel", "Render", "AWS (in progress)"],
+    "DSA & Problem Solving": ["Arrays", "Strings", "Hashing", "Linked List", "Trees", "Graphs", "Recursion", "230+ LeetCode & GeeksforGeeks-style problems solved", "daily DSA practice"],
+    "soft skills": ["Cross-functional Collaboration", "Problem-solving", "Adaptability", "Technical Communication"],
   },
   experience: [
     {
@@ -31,12 +32,11 @@ const RESUME_JSON = {
       company: "Cognizant Technology Solutions",
       period: "Sep 2025 – Present",
       location: "Hyderabad, India",
-      stack: ["SQL", "Oracle SQL Developer", "Microsoft Access"],
+      stack: ["SQL", "Oracle SQL Developer", "Scrum"],
       bullets: [
-        { text: "BI Data Pipeline Management: Architect and maintain a critical data synchronization layer using Microsoft Access as a middleware bridge; engineered complex SQL queries to transform and flow data from core backend servers to Business Intelligence (BI) platforms for client reporting.", metric: "Microsoft Access", metricType: "tool" },
-        { text: "Database Optimization for BI: Design and optimize database schemas and complex queries in Oracle SQL Developer, ensuring the delivery of highly accurate Business Intelligence (BI) customer reports as per evolving business requirements.", metric: "Oracle SQL Developer", metricType: "tool" },
-        { text: "Business Intelligence Reporting: Translate intricate client business requirements into functional database updates, modifying middleware queries to ensure real-time accuracy in Customer BI Reports and high-stakes financial dashboards", metric: "Real-time accuracy", metricType: "performance" },
-        { text: "Scrum Process & Collaboration: Actively participate in Scrum ceremonies, including daily stand-ups and sprint planning, collaborating with Business Analysts and QA Engineers to debug production data discrepancies and deploy schema updates with 99.5% system uptime.", metric: "99.5% uptime", metricType: "reliability" },
+        { text: "Collaborated with senior engineers on a data synchronization and staging layer that transformed and streamed financial datasets from backend servers to BI platforms", metric: "data synchronization", metricType: "tool" },
+        { text: "Worked with the database team to optimize complex Oracle SQL queries, improving execution speed and data accuracy for customer-facing financial dashboards.", metric: "Oracle SQL optimization", metricType: "tool" },
+        { text: "Partnered with Business Analysts and QA in Scrum ceremonies to debug data discrepancies, deploy schema updates, and maintain availability of client-facing platforms", metric: "Scrum ceremonies", metricType: "performance" },
       ],
     },
     {
@@ -47,14 +47,26 @@ const RESUME_JSON = {
       location: "Chennai, India",
       stack: ["Spring Boot", "Java", "JPA", "PostgreSQL", "JWT", "Docker", "Render"],
       bullets: [
-        { text: "Architected and led implementation of production-ready Food Ordering Management Platform using 3-tier design pattern with Spring Boot, JPA, and PostgreSQL.", metric: "Production deployed", metricType: "delivery" },
-        { text: "Engineered secure REST API ecosystem with 15+ endpoints implementing JWT stateless authentication, role-based authorization, and comprehensive security controls.", metric: "15+ endpoints", metricType: "scale" },
-        { text: "Containerized full application stack using Docker; orchestrated deployment to Render Cloud platform with environment-based configuration management.", metric: "Docker containerized", metricType: "devops" },
-        { text: "Completed intensive enterprise software development training achieving conversion to full-time Software Engineer role based on technical performance.", metric: "FTE conversion", metricType: "achievement" },
+        { text: "Built a production-ready Food Ordering Management Platform using Spring Boot, JPA, and PostgreSQL following a 3-tier architecture (presentation, business logic, data access).", metric: "3-tier architecture", metricType: "delivery" },
+        { text: "Developed 15+ RESTful APIs with JWT authentication, role-based access control, and security measures including input validation and CORS configuration.", metric: "15+ RESTful APIs", metricType: "scale" },
+        { text: "Containerized the application using Docker and deployed it on Render Cloud with environment-based configuration management.", metric: "Docker containerized", metricType: "devops" },
+        { text: "Completed enterprise Java, Agile/Scrum, and production deployment training and earned conversion to full-time Software Engineer role.", metric: "FTE conversion", metricType: "achievement" },
       ],
     },
   ],
   projects: [
+    {
+      id: "qotes",
+      name: "Qotes",
+      subtitle: "Quote Sharing Social Media App",
+      stack: ["Node.js", "Express.js", "MongoDB", "Redis", "Kafka", "JWT", "RESTful APIs"],
+      bullets: [
+        "Developing the backend forwq Qotes, a quote-sharing social media application, using Node.js and Express.js to support JWT authentication, quote CRUD, user profiles, likes, shares, comments, and feed generation for concurrent users.",
+        "Designed MongoDB schemas with Mongoose, including virtual properties, pre-save hooks for password hashing, and population for nested references; optimized queries with indexes and aggregation pipelines to support feed generation.",
+        "Integrated Apache Kafka for event-driven background processing and Redis for caching to improve backend responsiveness and scalability.",
+        "Built a modular middleware layer with auth guards, error handling, request validation, and rate limiting; defined API contracts and validated responses using Postman for core business logic.",
+      ],
+    },
     {
       id: "quickfix",
       name: "QuickFix",
@@ -65,18 +77,6 @@ const RESUME_JSON = {
         "Designed responsive, accessible UI with Tailwind CSS and Material-UI; integrated Framer Motion for smooth page transitions, tested across 5+ device sizes.",
         "Architected React Context API state management for user preferences, authentication state, and service booking flow with custom hooks (useLanguage, useAuth).",
         "Deployed to Vercel with continuous deployment from GitHub; implemented code splitting and environment-based configuration.",
-      ],
-    },
-    {
-      id: "qotes",
-      name: "Qotes-server",
-      subtitle: "Quote Sharing Social Media Backend",
-      stack: ["Node.js", "Express.js", "MongoDB", "Redis", "Kafka", "JWT", "RESTful APIs"],
-      bullets: [
-        "Developed scalable RESTful backend supporting JWT auth, quote CRUD, social interactions (likes, shares, comments), and real-time feed generation.",
-        "Designed MongoDB/Mongoose schema with virtual properties, pre-save hooks, population for nested references, and aggregation pipelines for feed generation.",
-        "Integrated Apache Kafka for event-driven architecture reducing API response times by 40% through non-blocking operations and Redis caching.",
-        "Built modular middleware with auth guards, error handling, rate limiting, and environment-specific configurations across development, staging, and production.",
       ],
     },
   ],
@@ -409,8 +409,8 @@ function DownloadButton({ isDark, floating = false }) {
 
     // Create download link for PDF file
     const link = document.createElement('a');
-    link.href = '/Rajasekhar_Software_Engineer_Apr26.pdf';
-    link.download = 'Rajasekhar_Software_Engineer_Apr26.pdf';
+    link.href = '/Rajasekhar_SWE.pdf';
+    link.download = 'Rajasekhar_SWE.pdf';
     link.style.display = 'none';
 
     document.body.appendChild(link);
