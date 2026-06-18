@@ -15,14 +15,15 @@ const RESUME_JSON = {
     github: "github.com/kvnrajasekhar",
   },
   summary:
-    "Software Engineer with enterprise experience at Cognizant specializing in financial data systems and middleware architecture. Expert in designing and maintaining complex data integration pipelines using SQL Server, Oracle, and Microsoft Access to power Business Intelligence (BI) reporting for international clients. Proficient in MongoDB, Express.js, React, and Node.js, with a professional focus on bridging middleware data synchronization with modern, data-driven business requirements within Scrum environments.",
+    "Software Engineer with enterprise experience at Cognizant, contributing to financial data synchronization, and Node.js backend development for a financial application. Experienced in working with senior engineers, DBAs, BAs, and QA to improve Oracle SQL performance, support schema updates, and help deliver backend API changes for client-facingsystems. Proficient in MERN stack (MongoDB, Express.js, React, Node.js) with hands-on experience in RESTful APIdesign, middleware architecture, and modern web technologies.",
   skills: {
     "programming": ["JavaScript (ES6+)", "Java", "Python"],
     "Web & Backend": ["HTML5", "CSS3", "Node.js", "Express.js", "RESTful API design", "JWT authentication", "OAuth 2.0"],
-    "Frameworks & Libraries": ["React.js (Hooks, Context API)", "Spring Boot", "Tailwind CSS", "Framer Motion"],
+    "Frameworks & Libraries": ["React.js", "Spring Boot", "Tailwind CSS", "Framer Motion"],
     "Databases & Data": ["SQL", "SQL Server", "MongoDB", "Mongoose (schema design, indexing)"],
     "tools & devops": ["Git/GitHub", "Docker", "Vercel", "Render", "AWS (in progress)"],
-    "DSA & Problem Solving": ["Arrays", "Strings", "Hashing", "Linked List", "Trees", "Graphs", "Recursion", "230+ LeetCode & GeeksforGeeks-style problems solved", "daily DSA practice"],
+    "testing & quality": ["Postman", "JUnit"],
+    // "DSA & Problem Solving": ["Arrays", "Strings", "Hashing", "Linked List", "Trees", "Graphs", "Recursion", "230+ LeetCode & GeeksforGeeks-style problems solved", "daily DSA practice"],
     "soft skills": ["Cross-functional Collaboration", "Problem-solving", "Adaptability", "Technical Communication"],
   },
   experience: [
@@ -34,9 +35,11 @@ const RESUME_JSON = {
       location: "Hyderabad, India",
       stack: ["SQL", "Oracle SQL Developer", "Scrum"],
       bullets: [
-        { text: "Collaborated with senior engineers on a data synchronization and staging layer that transformed and streamed financial datasets from backend servers to BI platforms", metric: "data synchronization", metricType: "tool" },
-        { text: "Worked with the database team to optimize complex Oracle SQL queries, improving execution speed and data accuracy for customer-facing financial dashboards.", metric: "Oracle SQL optimization", metricType: "tool" },
-        { text: "Partnered with Business Analysts and QA in Scrum ceremonies to debug data discrepancies, deploy schema updates, and maintain availability of client-facing platforms", metric: "Scrum ceremonies", metricType: "performance" },
+        { text: "Partnered with senior engineers on a data synchronization and staging layer that transformed and streamed financial datasets from backend systems to BI platforms.", metric: "data synchronization", metricType: "tool" },
+        { text: "Improved Oracle SQL query performance with the database team to enhance dashboard speed and data accuracy for client-facing reporting.", metric: "Oracle SQL optimization", metricType: "tool" },
+        { text: "Coordinated with Business Analysts and QA in Scrum ceremonies to debug data discrepancies, deploy schema updates, and keep reporting flows stable.", metric: "Scrum ceremonies", metricType: "performance" },
+        { text: "Supported backend development of a new Node.js API version for a financial application, contributing to service logic and integration updates.", metric: "Node.js API", metricType: "delivery" },
+        { text: "Worked with senior engineers and QA to troubleshoot issues, validate functionality, and align backend delivery with business requirements.", metric: "cross-functional delivery", metricType: "reliability" },
       ],
     },
     {
@@ -47,10 +50,10 @@ const RESUME_JSON = {
       location: "Chennai, India",
       stack: ["Spring Boot", "Java", "JPA", "PostgreSQL", "JWT", "Docker", "Render"],
       bullets: [
-        { text: "Built a production-ready Food Ordering Management Platform using Spring Boot, JPA, and PostgreSQL following a 3-tier architecture (presentation, business logic, data access).", metric: "3-tier architecture", metricType: "delivery" },
-        { text: "Developed 15+ RESTful APIs with JWT authentication, role-based access control, and security measures including input validation and CORS configuration.", metric: "15+ RESTful APIs", metricType: "scale" },
-        { text: "Containerized the application using Docker and deployed it on Render Cloud with environment-based configuration management.", metric: "Docker containerized", metricType: "devops" },
-        { text: "Completed enterprise Java, Agile/Scrum, and production deployment training and earned conversion to full-time Software Engineer role.", metric: "FTE conversion", metricType: "achievement" },
+        { text: "Built a production-ready Food Ordering Management Platform using SpringBoot, JPA, and PostgreSQL following a 3-tier architecture (presentation, business logic, data access).", metric: "3-tier architecture", metricType: "delivery" },
+        { text: "Developed 15+ RESTful APIs with JWT authentication, role-based access control, and security measures (input validation, CORS configuration).", metric: "15+ RESTful APIs", metricType: "scale" },
+        { text: "Containerized the application using Docker and deployed it on Render Cloud with environment-based configuration management, gaining hands-on exposure to deployment workflows.", metric: "Docker containerized", metricType: "devops" },
+        { text: "Completed training in enterprise Java development, JUnit testing fundamentals, Agile/Scrum, and deployment workflows, earning conversion to full-time based on performance.", metric: "training and conversion", metricType: "achievement" },
       ],
     },
   ],
@@ -59,9 +62,9 @@ const RESUME_JSON = {
       id: "qotes",
       name: "Qotes",
       subtitle: "Quote Sharing Social Media App",
-      stack: ["Node.js", "Express.js", "MongoDB", "Redis", "Kafka", "JWT", "RESTful APIs"],
+      stack: ["Node.js", "Express.js", "MongoDB", "Redis", "Kafka", "JWT", "RESTful APIs", "winston logger"],
       bullets: [
-        "Developing the backend forwq Qotes, a quote-sharing social media application, using Node.js and Express.js to support JWT authentication, quote CRUD, user profiles, likes, shares, comments, and feed generation for concurrent users.",
+        "Developing the backend for Qotes, a quote-sharing social media application, using Node.js and Express.js to support JWT authentication, quote CRUD, user profiles, likes, shares, comments, and feed generation for concurrent users.",
         "Designed MongoDB schemas with Mongoose, including virtual properties, pre-save hooks for password hashing, and population for nested references; optimized queries with indexes and aggregation pipelines to support feed generation.",
         "Integrated Apache Kafka for event-driven background processing and Redis for caching to improve backend responsiveness and scalability.",
         "Built a modular middleware layer with auth guards, error handling, request validation, and rate limiting; defined API contracts and validated responses using Postman for core business logic.",
@@ -73,10 +76,10 @@ const RESUME_JSON = {
       subtitle: "Multilingual Service Platform",
       stack: ["React.js", "Tailwind CSS", "Material-UI", "Framer Motion", "i18next", "Vercel"],
       bullets: [
-        "Built multilingual React.js application with real-time language switching (English, Telugu, Hindi) using i18next serving diverse user demographics.",
-        "Designed responsive, accessible UI with Tailwind CSS and Material-UI; integrated Framer Motion for smooth page transitions, tested across 5+ device sizes.",
-        "Architected React Context API state management for user preferences, authentication state, and service booking flow with custom hooks (useLanguage, useAuth).",
-        "Deployed to Vercel with continuous deployment from GitHub; implemented code splitting and environment-based configuration.",
+        "Built a multilingual React.js app using Hooks and Context API for state management, with real-time language switching (English, Telugu, Hindi) through i18next.",
+        "Designed responsive, accessible UI using Tailwind CSS and Material-UI, with Framer Motion for smooth transitions and micro-interactions, tested across 5+ device sizes.",
+        "Architected Context-based state management for user preferences (language), authentication, and service-booking flow, with custom hooks (useLanguage, useAuth) to reduce prop drilling.",
+        "Managed component lifecycle via useEffect for data fetching, event listeners, and side effects; deployed to Vercel with environment-based config, and optimized builds using code splitting.",
       ],
     },
   ],
@@ -92,8 +95,8 @@ const RESUME_JSON = {
     { name: "AWS Certified Developer Associate", issuer: "AWS", status: "In Progress", year: "2026" },
     { name: "The Complete Web Development Bootcamp", issuer: "Udemy", status: "Completed", year: "2024" },
     { name: "API Fundamentals Student Expert", issuer: "Postman", status: "Completed", year: "2024" },
-    { name: "Introduction to DevOps", issuer: "IBM / Coursera", status: "Completed", year: "2024" },
-    { name: "Git for Beginners", issuer: "KodeKloud", status: "Completed", year: "2024" },
+    // { name: "Introduction to DevOps", issuer: "IBM / Coursera", status: "Completed", year: "2024" },
+    // { name: "Git for Beginners", issuer: "KodeKloud", status: "Completed", year: "2024" },
   ],
   leadership: [
     { role: "Co-Organizer", org: "Google Developer Groups (GDG)", frame: "Ecosystem Orchestration", desc: "Bridging global Google technologies and local developer talent through structured knowledge-sharing frameworks and stakeholder management." },
@@ -409,8 +412,8 @@ function DownloadButton({ isDark, floating = false }) {
 
     // Create download link for PDF file
     const link = document.createElement('a');
-    link.href = '/Rajasekhar_SWE.pdf';
-    link.download = 'Rajasekhar_SWE.pdf';
+    link.href = '/Rajasekhar_Software_Engineer.pdf';
+    link.download = 'Rajasekhar_Software_Engineer.pdf';
     link.style.display = 'none';
 
     document.body.appendChild(link);
